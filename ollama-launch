@@ -102,3 +102,21 @@ esac
 # ── main ──────────────────────────────────────────────────────────────────────
 check_ollama
 print_header
+
+# ── selection ─────────────────────────────────────────────────────────────────
+if command -v fzf &>/dev/null; then
+  selected=$(print_models | fzf \
+    --height=40% \
+    --layout=reverse \
+    --border \
+    --prompt="  Model: " \
+    --header="  ↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" \
+    --color="header:italic,border:cyan" \
+    2>/dev/null || true)
+
+  if [ -z "$selected" ]; then
+    exit 0
+  fi
+
+  exec ollama run "$selected"
+fi
