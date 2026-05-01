@@ -120,3 +120,29 @@ if command -v fzf &>/dev/null; then
 
   exec ollama run "$selected"
 fi
+
+# ── numbered menu fallback ────────────────────────────────────────────────────
+echo -e "${BOLD_WHITE}Available models:${RESET}"
+echo
+
+total=${#MODELS[@]}
+for i in "${!MODELS[@]}"; do
+  printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${MODELS[$i]}"
+done
+
+echo
+selected=""
+while true; do
+  printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
+  read -r choice 2>/dev/null || { echo; exit 0; }
+
+  if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+    selected="${MODELS[$((choice - 1))]}"
+    break
+  fi
+
+  echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}."
+done
+
+echo
+exec ollama run "$selected"
