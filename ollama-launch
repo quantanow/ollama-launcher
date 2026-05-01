@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERSION="1.0.0"
+
+# ── colors (disabled when stdout is not a TTY) ────────────────────────────────
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_WHITE="${BOLD}${WHITE}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+
+# ── model list ────────────────────────────────────────────────────────────────
+MODELS=(
+  "codellama:7b"
+  "deepseek-coder:6.7b"
+  "deepseek-r1:7b"
+  "gemma3:1b"
+  "gemma3:4b"
+  "glm4:9b"
+  "llama3.2:1b"
+  "llama3.2:3b"
+  "llama3.3:70b"
+  "mistral:7b"
+  "mistral-nemo:12b"
+  "mixtral:8x7b"
+  "nomic-embed-text"
+  "phi4:14b"
+  "phi4-mini:3.8b"
+  "qwen2.5:0.5b"
+  "qwen2.5:7b"
+  "qwen2.5:14b"
+  "qwen2.5-coder:7b"
+  "qwen2.5-coder:14b"
+  "smollm2:135m"
+  "smollm2:1.7b"
+  "starcoder2:3b"
+  "starcoder2:7b"
+)
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+print_header() {
+  echo -e "${BOLD_CYAN}┌─────────────────────────────┐${RESET}"
+  echo -e "${BOLD_CYAN}│${RESET}  ${BOLD_WHITE}ollama-launch  🦙${RESET}           ${BOLD_CYAN}│${RESET}"
+  echo -e "${BOLD_CYAN}│${RESET}  ${WHITE}Pick a model to run${RESET}        ${BOLD_CYAN}│${RESET}"
+  echo -e "${BOLD_CYAN}└─────────────────────────────┘${RESET}"
+  echo
+}
+
+print_models() {
+  for model in "${MODELS[@]}"; do
+    echo "$model"
+  done
+}
+
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    echo "  Install it at: https://ollama.com/download"
+    exit 1
+  fi
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+case "${1:-}" in
+  --help|-h)
+    echo "Usage: ollama-launch [--help] [--version] [--list]"
+    echo
+    echo "  (no args)   Show interactive model picker"
+    echo "  --list      Print all available models and exit"
+    echo "  --version   Print version and exit"
+    echo "  --help      Show this help and exit"
+    exit 0
+    ;;
+  --version|-v)
+    echo "ollama-launch $VERSION"
+    exit 0
+    ;;
+  --list)
+    print_models
+    exit 0
+    ;;
+  "")
+    ;;
+  *)
+    echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+    echo "Run 'ollama-launch --help' for usage."
+    exit 1
+    ;;
+esac
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+print_header
