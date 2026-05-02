@@ -696,7 +696,8 @@ pick_variant() {
     return
   fi
 
-  local lines=()
+  local lines
+  lines=()
   local i
   for ((i=0; i<count; i++)); do
     local size context input_type
