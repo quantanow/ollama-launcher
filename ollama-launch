@@ -737,7 +737,7 @@ case "${1:-}" in
     echo "  --version       Print version and exit"
     echo "  --help          Show this help and exit"
     echo
-    echo "Example command run: ollama launch claude --model glm4:9b"
+    echo "Example command run: ollama launch claude --model granite4.1:8b"
     exit 0
     ;;
   --version|-v)
