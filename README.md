@@ -13,12 +13,12 @@ A fast, polished CLI for picking and launching [Ollama](https://ollama.com) mode
 
 **One-liner:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/ollama-launcher/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/isaleem/ollama-launcher/main/install.sh | bash
 ```
 
 **Manual:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/ollama-launcher
+git clone https://github.com/isaleem/ollama-launcher
 cp ollama-launch /usr/local/bin/ollama-launch
 chmod +x /usr/local/bin/ollama-launch
 ```

@@ -3,7 +3,7 @@ set -euo pipefail
 
 INSTALL_DIR="/usr/local/bin"
 SCRIPT_NAME="ollama-launch"
-REPO_URL="https://raw.githubusercontent.com/YOUR_USERNAME/ollama-launcher/main"
+REPO_URL="https://raw.githubusercontent.com/isaleem/ollama-launcher/main"
 
 echo "Installing ${SCRIPT_NAME}..."
 
