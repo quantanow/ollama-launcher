@@ -592,7 +592,7 @@ pick_fzf_raw() {
 }
 
 # pick_menu_raw <label>
-# Reads items from stdin into numbered menu. Sets PICK_RESULT to chosen line.
+# Reads items from stdin into numbered menu. Prints the selected line.
 pick_menu_raw() {
   local label="$1"
   local lines
@@ -614,13 +614,12 @@ pick_menu_raw() {
   done
   echo
 
-  PICK_RESULT=""
   while true; do
     printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
-    read -r choice </dev/tty 2>/dev/null || { echo; exit 0; }
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo; exit 0; }
 
     if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
-      PICK_RESULT="${lines[$((choice - 1))]}"
+      echo "${lines[$((choice - 1))]}"
       break
     fi
 
@@ -651,8 +650,7 @@ pick_model() {
   if command -v fzf &>/dev/null; then
     selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit")
   else
-    printf '%s\n' "${lines[@]}" | pick_menu_raw "model"
-    selected="$PICK_RESULT"
+    selected=$(printf '%s\n' "${lines[@]}" | pick_menu_raw "model")
   fi
 
   if [ -z "$selected" ]; then exit 0; fi
@@ -684,7 +682,7 @@ pick_variant() {
   local variants_name="MODEL_VARIANTS_${idx}[@]"
 
   local variants=()
-  eval "variants=(\"\${${variants_name}}\")"
+  eval "variants=(\"\${${variants_name}:-}\")" 2>/dev/null || true
 
   local count=${#variants[@]}
   if [ "$count" -eq 0 ]; then
@@ -711,8 +709,7 @@ pick_variant() {
   if command -v fzf &>/dev/null; then
     selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Variant" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit")
   else
-    printf '%s\n' "${lines[@]}" | pick_menu_raw "variant"
-    selected="$PICK_RESULT"
+    selected=$(printf '%s\n' "${lines[@]}" | pick_menu_raw "variant")
   fi
 
   if [ -z "$selected" ]; then exit 0; fi
