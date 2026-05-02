@@ -23,3 +23,67 @@
   [ "$status" -eq 0 ]
   [ "$output" = "granite4.1:3b 2.1GB 128K Text" ]
 }
+
+@test "MODEL_PULLS length matches MODEL_NAMES" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_PULLS[@]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "80" ]
+}
+
+@test "MODEL_TAGS length matches MODEL_NAMES" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_TAGS[@]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "80" ]
+}
+
+@test "MODEL_HAS_VARIANTS length matches MODEL_NAMES" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_HAS_VARIANTS[@]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "80" ]
+}
+
+@test "all 6 variant-bearing models have non-empty variant arrays" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch
+    for i in 0 1 2 3 4 5; do
+      eval "count=\${#MODEL_VARIANTS_${i}[@]}"
+      if [ "$count" -eq 0 ]; then echo "missing variants for index $i"; exit 1; fi
+    done
+    echo ok'
+  [ "$status" -eq 0 ]
+  [ "$output" = "ok" ]
+}
+
+@test "variant sub-arrays for index 0-5 each have matching sizes/contexts/inputs" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch
+    for i in 0 1 2 3 4 5; do
+      eval "nv=\${#MODEL_VARIANTS_${i}[@]}"
+      eval "ns=\${#MODEL_SIZES_${i}[@]}"
+      eval "nc=\${#MODEL_CONTEXTS_${i}[@]}"
+      eval "ni=\${#MODEL_INPUTS_${i}[@]}"
+      if [ "$nv" != "$ns" ] || [ "$nv" != "$nc" ] || [ "$nv" != "$ni" ]; then
+        echo "length mismatch at index $i: variants=$nv sizes=$ns contexts=$nc inputs=$ni"
+        exit 1
+      fi
+    done
+    echo ok'
+  [ "$status" -eq 0 ]
+  [ "$output" = "ok" ]
+}
+
+@test "mistral-medium-3.5 (index 1) has 2 variants" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_VARIANTS_1[@]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "2" ]
+}
+
+@test "kimi-k2.6 (index 4) has exactly 1 variant" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_VARIANTS_4[@]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "1" ]
+}
+
+@test "glm-5.1 (index 5) variant is cloud" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${MODEL_VARIANTS_5[0]}"'
+  [ "$status" -eq 0 ]
+  [ "$output" = "glm-5.1:cloud" ]
+}

@@ -70,3 +70,32 @@ teardown_file() {
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model granite4.1:8b"* ]]
 }
+
+@test "fzf path selects non-first agent (codex)" {
+  export FZF_SELECT="codex"
+  run bash -c "FZF_SELECT=codex OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"ollama launch codex --model"* ]]
+}
+
+@test "fzf path with 2-variant model auto-selects first variant" {
+  export FZF_SELECT="mistral-medium-3.5"
+  run bash -c 'FZF_SELECT="mistral-medium-3.5" OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"ollama launch claude --model mistral-medium-3.5:latest"* ]]
+}
+
+@test "menu path with 1-variant model auto-selects variant" {
+  mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
+  # agent=1 (claude), model=5 (kimi-k2.6, 1 variant — no sub-menu needed)
+  run bash -c 'echo -e "1\n5\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
+}
+
+@test "exits with error when ollama not in PATH" {
+  run bash -c 'PATH=/usr/bin:/bin OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"ollama is not installed"* ]]
+}
