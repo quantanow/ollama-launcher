@@ -791,19 +791,33 @@ echo -e "  Agent:  ${BOLD_GREEN}${agent}${RESET}"
 echo
 
 # ── step 2: pick model ────────────────────────────────────────────────────────
-if command -v fzf &>/dev/null; then
-  model=$(pick_fzf "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" print_models)
-  if [ -z "$model" ]; then exit 0; fi
-else
-  pick_menu "model" MODEL_NAMES
-  model="$PICK_RESULT"
-  if [ -z "$model" ]; then exit 0; fi
+pick_model
+model_name="$PICK_RESULT"
+if [ -z "$model_name" ]; then exit 0; fi
+
+echo -e "  Model:  ${BOLD_GREEN}${model_name}${RESET}"
+echo
+
+# ── step 2b: pick variant (if applicable) ───────────────────────────────────
+final_model="$model_name"
+if [ "$PICK_MODEL_INDEX" -ge 0 ] && [ "${MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX]}" -eq 1 ]; then
+  variant=$(pick_variant "$PICK_MODEL_INDEX")
+  if [ -n "$variant" ]; then
+    final_model="$variant"
+  fi
 fi
 
-echo -e "  Model:  ${BOLD_GREEN}${model}${RESET}"
-echo
+if [ "$final_model" != "$model_name" ]; then
+  echo -e "  Variant: ${BOLD_GREEN}${final_model}${RESET}"
+  echo
+fi
 
 # ── launch ────────────────────────────────────────────────────────────────────
-echo -e "${BOLD_CYAN}Running:${RESET} ollama launch ${agent} --model ${model}"
+if [ -n "${OLLAMA_LAUNCH_TEST:-}" ]; then
+  echo "ollama launch ${agent} --model ${final_model}"
+  exit 0
+fi
+
+echo -e "${BOLD_CYAN}Running:${RESET} ollama launch ${agent} --model ${final_model}"
 echo
-exec ollama launch "$agent" --model "$model"
+exec ollama launch "$agent" --model "$final_model"
