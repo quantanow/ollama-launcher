@@ -591,39 +591,41 @@ pick_fzf_raw() {
     2>/dev/null || true
 }
 
-# pick_menu_raw <label>
-# Reads items from stdin into numbered menu. Prints the selected line.
+# pick_menu_raw <label> <file>
+# Reads items from file into numbered menu. Prints the selected line to stdout.
+# UI output goes to stderr so callers can capture only the selection.
 pick_menu_raw() {
   local label="$1"
+  local file="$2"
   local lines
   lines=()
   while IFS= read -r line; do
     lines+=("$line")
-  done
+  done < "$file"
   local total=${#lines[@]}
 
   if [ "$total" -eq 0 ]; then
-    echo "No ${label}s available."
+    echo "No ${label}s available." >&2
     exit 0
   fi
 
-  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}"
-  echo
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}" >&2
+  echo >&2
   for ((i=0; i<total; i++)); do
-    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}"
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" >&2
   done
-  echo
+  echo >&2
 
   while true; do
-    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
-    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo; exit 0; }
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" >&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo >&2; exit 0; }
 
     if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
       echo "${lines[$((choice - 1))]}"
       break
     fi
 
-    echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}."
+    echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}." >&2
   done
 }
 
@@ -650,7 +652,11 @@ pick_model() {
   if command -v fzf &>/dev/null; then
     selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit")
   else
-    selected=$(printf '%s\n' "${lines[@]}" | pick_menu_raw "model")
+    local menu_file
+    menu_file="/tmp/ollama-launch-menu-$$"
+    printf '%s\n' "${lines[@]}" > "$menu_file"
+    selected=$(pick_menu_raw "model" "$menu_file")
+    rm -f "$menu_file"
   fi
 
   if [ -z "$selected" ]; then exit 0; fi
@@ -709,7 +715,11 @@ pick_variant() {
   if command -v fzf &>/dev/null; then
     selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Variant" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit")
   else
-    selected=$(printf '%s\n' "${lines[@]}" | pick_menu_raw "variant")
+    local menu_file
+    menu_file="/tmp/ollama-launch-variant-$$"
+    printf '%s\n' "${lines[@]}" > "$menu_file"
+    selected=$(pick_menu_raw "variant" "$menu_file")
+    rm -f "$menu_file"
   fi
 
   if [ -z "$selected" ]; then exit 0; fi
@@ -761,16 +771,18 @@ print_header
 
 # ── fzf check ─────────────────────────────────────────────────────────────────
 if ! command -v fzf &>/dev/null; then
-  echo -e "${BOLD_RED}fzf is not installed.${RESET}"
-  echo "  fzf provides a better selection experience with search/filter."
-  echo
-  printf "  Install fzf now? [y/N] "
-  read -r install_fzf_choice 2>/dev/null || { echo; exit 0; }
-  if [[ "$install_fzf_choice" =~ ^[Yy]$ ]]; then
-    install_fzf
-  else
-    echo -e "  ${WHITE}Continuing with menu-based selection...${RESET}"
+  if [ -z "${OLLAMA_LAUNCH_TEST:-}" ]; then
+    echo -e "${BOLD_RED}fzf is not installed.${RESET}"
+    echo "  fzf provides a better selection experience with search/filter."
     echo
+    printf "  Install fzf now? [y/N] "
+    read -r install_fzf_choice 2>/dev/null || { echo; exit 0; }
+    if [[ "$install_fzf_choice" =~ ^[Yy]$ ]]; then
+      install_fzf
+    else
+      echo -e "  ${WHITE}Continuing with menu-based selection...${RESET}"
+      echo
+    fi
   fi
 fi
 
