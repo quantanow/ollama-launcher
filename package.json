@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quantanow/ollama-launcher.git"
+    "url": "git+https://github.com/quantanow/ollama-launcher.git"
   },
   "homepage": "https://github.com/quantanow/ollama-launcher#readme",
   "bugs": {
@@ -20,7 +20,7 @@
     "models"
   ],
   "bin": {
-    "ollama-launch": "./ollama-launch"
+    "ollama-launch": "ollama-launch"
   },
   "files": [
     "ollama-launch"
