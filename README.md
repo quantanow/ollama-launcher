@@ -1,6 +1,6 @@
 # ollama-launch
 
-A fast, polished CLI for picking and launching [Ollama](https://ollama.com) agents interactively. Pick an agent, pick a model, start chatting — no config, no fuss.
+A fast, polished CLI for picking and launching [Ollama](https://ollama.com) agents interactively. Pick an agent, pick a model, pick a variant — start chatting. No config, no fuss.
 
 ```
 ┌─────────────────────────────┐
@@ -11,16 +11,18 @@ A fast, polished CLI for picking and launching [Ollama](https://ollama.com) agen
 
 Runs commands like:
 ```bash
-ollama launch claude --model glm4:9b
-ollama launch openclaw --model mistral:7b
+ollama launch claude --model granite4.1:8b
+ollama launch openclaw --model mistral-medium-3.5:latest
 ```
 
 ## Features
 
-- Two-step interactive picker: **agent** then **model**
+- Three-step interactive picker: **agent** → **model** → **variant**
 - **fzf** fuzzy search UI (type to filter, arrows to navigate)
 - Numbered menu fallback when fzf is not installed — works everywhere
-- 5 agents and 24 curated popular models ready to go
+- 5 agents and 80 popular models from the Ollama library ready to go
+- Metadata-rich model picker showing pulls, tags, and input type
+- Variant picker for models with multiple sizes
 - ANSI colors auto-disabled when output is piped or redirected
 - No config files, no runtime dependencies beyond bash and ollama
 
@@ -95,15 +97,15 @@ Run with no arguments to open the interactive picker:
 ollama-launch
 ```
 
-The picker runs in two steps: first pick an **agent**, then pick a **model**. The final command run will be:
+The picker runs in three steps: first pick an **agent**, then pick a **model**, then pick a **variant**. The final command run will be:
 
 ```bash
-ollama launch <agent> --model <model>
+ollama launch <agent> --model <model>:<variant>
 ```
 
 ### With fzf installed
 
-Step 1 — pick an agent:
+**Step 1 — pick an agent:**
 
 ```
   ↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit
@@ -116,15 +118,27 @@ Step 1 — pick an agent:
   opencode
 ```
 
-Step 2 — pick a model:
+**Step 2 — pick a model:**
+
+```
+  ↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit
+  Model: _
+
+  granite4.1          16K pulls    [tools]
+  mistral-medium-3.5  4,261 pulls  [vision, tools, thinking]
+  qwen3.6             736.2K pulls [vision, tools, thinking]
+  ...
+```
+
+**Step 3 — pick a variant:**
 
 ```
   ↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit
-  Model: _
+  Variant: _
 
-  codellama:7b
-  deepseek-coder:6.7b
-  ...
+  granite4.1:3b   2.1GB   128K context   Text
+  granite4.1:8b   5.3GB   128K context   Text
+  granite4.1:30b  17GB    128K context   Text
 ```
 
 Type any part of a name to filter in real time. Press **Enter** to confirm, **Esc** or **Ctrl-C** to quit.
@@ -145,7 +159,27 @@ Available agents:
 Enter number [1-5]: _
 ```
 
-Then the same for models. Invalid input re-prompts. Press **Ctrl-C** to quit at any point.
+Then the same for models and variants. Invalid input re-prompts. Press **Ctrl-C** to quit at any point.
+
+---
+
+## Model Selection
+
+The model picker displays rich metadata for each model:
+
+- **Pull count** — how many times the model has been pulled from Ollama
+- **Tags** — capabilities like `vision`, `tools`, `thinking`
+- **Input type** — `Text`, `Text, Image`, etc.
+
+Models with multiple size variants (e.g., `3b`, `8b`, `30b`) show a secondary variant picker after model selection. Models with a single variant skip this step and launch immediately.
+
+Example display format:
+
+```
+granite4.1          16K pulls    [tools]
+mistral-medium-3.5  4,261 pulls  [vision, tools, thinking]
+qwen3.6             736.2K pulls [vision, tools, thinking]
+```
 
 ---
 
@@ -178,8 +212,8 @@ ollama-launch --list-agents
 
 # List all models (pipe-friendly)
 ollama-launch --list-models
-# → codellama:7b
-#   deepseek-coder:6.7b
+# → granite4.1
+#   mistral-medium-3.5
 #   ...
 
 # Use with grep to check availability
@@ -202,40 +236,32 @@ ollama-launch --list-models | grep qwen
 
 ## Available Models
 
-The default model list (24 models, alphabetical):
+The default model list includes **80 popular models** from the Ollama library, with full metadata and variant information. A few examples:
 
 | Model | Description |
 |-------|-------------|
-| `codellama:7b` | Meta's code-focused Llama model |
-| `deepseek-coder:6.7b` | DeepSeek's coding model |
-| `deepseek-r1:7b` | DeepSeek R1 reasoning model |
-| `gemma3:1b` | Google Gemma 3 (1B) |
-| `gemma3:4b` | Google Gemma 3 (4B) |
-| `glm4:9b` | Zhipu GLM-4 |
-| `llama3.2:1b` | Meta Llama 3.2 (1B) |
-| `llama3.2:3b` | Meta Llama 3.2 (3B) |
-| `llama3.3:70b` | Meta Llama 3.3 (70B) |
-| `mistral:7b` | Mistral 7B |
-| `mistral-nemo:12b` | Mistral Nemo 12B |
-| `mixtral:8x7b` | Mistral MoE model |
-| `nomic-embed-text` | Nomic text embeddings |
-| `phi4:14b` | Microsoft Phi-4 (14B) |
-| `phi4-mini:3.8b` | Microsoft Phi-4 Mini |
-| `qwen2.5:0.5b` | Alibaba Qwen 2.5 (0.5B) |
-| `qwen2.5:7b` | Alibaba Qwen 2.5 (7B) |
-| `qwen2.5:14b` | Alibaba Qwen 2.5 (14B) |
-| `qwen2.5-coder:7b` | Qwen 2.5 Coder (7B) |
-| `qwen2.5-coder:14b` | Qwen 2.5 Coder (14B) |
-| `smollm2:135m` | HuggingFace SmolLM2 (135M) |
-| `smollm2:1.7b` | HuggingFace SmolLM2 (1.7B) |
-| `starcoder2:3b` | BigCode StarCoder2 (3B) |
-| `starcoder2:7b` | BigCode StarCoder2 (7B) |
+| `granite4.1` | IBM Granite 4.1 |
+| `mistral-medium-3.5` | Mistral Medium 3.5 |
+| `qwen3.6` | Qwen3.6 coding and thinking model |
+| `deepseek-r1` | DeepSeek R1 reasoning model |
+| `llama3.3` | Meta Llama 3.3 |
+| `gemma3` | Google Gemma 3 |
+
+See the full list with `ollama-launch --list-models`.
 
 ---
 
-## Adding or Removing Agents / Models
+## Adding or Removing Models
 
-Edit the `AGENTS` or `MODELS` array near the top of `ollama-launch`. Keep each sorted alphabetically:
+Model data is stored in `models.json`. To update the embedded model arrays in `ollama-launch`, edit `models.json` and then run the build script:
+
+```bash
+node scripts/generate-model-data.js
+```
+
+Then commit the updated `ollama-launch`.
+
+To add or remove agents, edit the `AGENTS` array near the top of `ollama-launch`. Keep the list sorted alphabetically:
 
 ```bash
 AGENTS=(
@@ -243,15 +269,37 @@ AGENTS=(
   "my-new-agent"   # ← add here, keep sorted
   ...
 )
-
-MODELS=(
-  "codellama:7b"
-  "my-custom-model:latest"   # ← add here, keep sorted
-  ...
-)
 ```
 
 After editing, either run the script directly or reinstall it.
+
+---
+
+## Updating Model Data
+
+Model metadata is stored in `models.json`. To regenerate the embedded bash arrays in `ollama-launch`:
+
+```bash
+node scripts/generate-model-data.js
+```
+
+Then commit the updated `ollama-launch`.
+
+---
+
+## Testing
+
+The test suite uses [bats](https://github.com/bats-core/bats-core):
+
+```bash
+bats tests/
+```
+
+Set `OLLAMA_LAUNCH_TEST=1` to print the command instead of executing it:
+
+```bash
+OLLAMA_LAUNCH_TEST=1 ./ollama-launch
+```
 
 ---
 
@@ -261,7 +309,8 @@ After editing, either run the script directly or reinstall it.
 2. Prints the header
 3. **Step 1 — Agent:** fzf picker or numbered menu → you pick an agent
 4. **Step 2 — Model:** fzf picker or numbered menu → you pick a model
-5. Runs `ollama launch <agent> --model <model>` — replacing the shell process (`exec`)
+5. **Step 3 — Variant:** fzf picker or numbered menu → you pick a variant (skipped for single-variant models)
+6. Runs `ollama launch <agent> --model <model>:<variant>` — replacing the shell process (`exec`)
 
 Colors are detected via `[ -t 1 ]` and suppressed automatically when stdout is not a terminal.
 
@@ -269,7 +318,7 @@ Colors are detected via `[ -t 1 ]` and suppressed automatically when stdout is n
 
 ## Contributing
 
-PRs welcome. To add a model to the default list, edit the `MODELS` array in `ollama-launch` and open a PR. Keep the list alphabetical.
+PRs welcome. To add a model to the default list, edit `models.json` and run `node scripts/generate-model-data.js`, then open a PR.
 
 To report a bug or request a feature, open an issue at [github.com/quantanow/ollama-launcher/issues](https://github.com/quantanow/ollama-launcher/issues).
 
