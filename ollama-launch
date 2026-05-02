@@ -672,7 +672,7 @@ pick_model() {
     exit 1
   fi
 
-  echo "$model_name"
+  PICK_RESULT="$model_name"
 }
 
 # pick_variant <model_index>
