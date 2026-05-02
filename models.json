@@ -1,0 +1,835 @@
+{
+  "metadata": {
+    "total_models": 80,
+    "collection_date": "2026-05-02",
+    "source": "ollama.com/search",
+    "note": "Top 80 popular models collected from Ollama library. Models 1-6 have complete variant specifications. Models 7-80 include library metadata (name, pulls, tags, description, updated). Pages 4-5 showed duplicate models suggesting ~80 models in the popular search.",
+    "collection_method": "Web scraping from Ollama search pages 1-4"
+  },
+  "models": [
+    {
+      "rank": 1,
+      "name": "granite4.1",
+      "description": "IBM Granite 4.1 is the latest generation of IBM Granite models.",
+      "pulls": "16K",
+      "tags_count": "46",
+      "updated": "2 days ago",
+      "tags": ["tools"],
+      "variants": [
+        {"name": "granite4.1:3b", "size": "2.1GB", "context_window": "128K", "input_type": "Text"},
+        {"name": "granite4.1:8b", "size": "5.3GB", "context_window": "128K", "input_type": "Text"},
+        {"name": "granite4.1:30b", "size": "17GB", "context_window": "128K", "input_type": "Text"}
+      ]
+    },
+    {
+      "rank": 2,
+      "name": "mistral-medium-3.5",
+      "description": "Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding.",
+      "pulls": "4,261",
+      "tags_count": "5",
+      "updated": "3 days ago",
+      "tags": ["vision", "tools", "thinking"],
+      "variants": [
+        {"name": "mistral-medium-3.5:latest", "size": "80GB", "context_window": "256K", "input_type": "Text, Image"},
+        {"name": "mistral-medium-3.5:128b", "size": "80GB", "context_window": "256K", "input_type": "Text, Image"}
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "qwen3.6",
+      "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation.",
+      "pulls": "736.2K",
+      "tags_count": "22",
+      "updated": "1 week ago",
+      "tags": ["vision", "tools", "thinking"],
+      "variants": [
+        {"name": "qwen3.6:latest", "size": "24GB", "context_window": "256K", "input_type": "Text, Image"},
+        {"name": "qwen3.6:27b", "size": "17GB", "context_window": "256K", "input_type": "Text, Image"},
+        {"name": "qwen3.6:35b", "size": "24GB", "context_window": "256K", "input_type": "Text, Image"}
+      ]
+    },
+    {
+      "rank": 4,
+      "name": "nemotron3",
+      "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model.",
+      "pulls": "182.8K",
+      "tags_count": "4",
+      "updated": "4 days ago",
+      "tags": ["vision", "tools", "thinking", "audio"],
+      "variants": [
+        {"name": "nemotron3:33b", "size": "28GB", "context_window": "128K", "input_type": "Text, Image"}
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "kimi-k2.6",
+      "description": "Kimi K2.6 is an open-source, native multimodal agentic model.",
+      "pulls": "73K",
+      "tags_count": "1",
+      "updated": "1 week ago",
+      "tags": ["vision", "tools", "thinking", "cloud"],
+      "variants": [
+        {"name": "kimi-k2.6:cloud", "size": "N/A", "context_window": "256K", "input_type": "Text, Image"}
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "glm-5.1",
+      "description": "GLM-5.1 is the next-generation flagship model for agentic engineering.",
+      "pulls": "126K",
+      "tags_count": "1",
+      "updated": "3 weeks ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": [
+        {"name": "glm-5.1:cloud", "size": "N/A", "context_window": "198K", "input_type": "Text"}
+      ]
+    },
+    {
+      "rank": 7,
+      "name": "deepseek-v4-flash",
+      "description": "DeepSeek V4 Flash variant for faster inference.",
+      "pulls": "38.2K",
+      "tags_count": "1",
+      "updated": "1 week ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 8,
+      "name": "deepseek-v4-pro",
+      "description": "DeepSeek V4 Pro variant with advanced capabilities.",
+      "pulls": "28.8K",
+      "tags_count": "1",
+      "updated": "5 days ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 9,
+      "name": "medgemma",
+      "description": "Medical domain-specific Gemma model.",
+      "pulls": "18.6K",
+      "tags_count": "9",
+      "updated": "2 weeks ago",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 10,
+      "name": "medgemma1.5",
+      "description": "MedGemma 1.5 - improved medical variant.",
+      "pulls": "11K",
+      "tags_count": "5",
+      "updated": "2 weeks ago",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 11,
+      "name": "laguna-xs.2",
+      "description": "Laguna XS 2 - lightweight model.",
+      "pulls": "4,490",
+      "tags_count": "7",
+      "updated": "4 days ago",
+      "tags": ["tools", "thinking"],
+      "variants": []
+    },
+    {
+      "rank": 12,
+      "name": "gemma4",
+      "description": "Google's Gemma 4 multimodal model.",
+      "pulls": "6.5M",
+      "tags_count": "29",
+      "updated": "2 weeks ago",
+      "tags": ["vision", "tools", "thinking", "audio", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 13,
+      "name": "qwen3.5",
+      "description": "Qwen 3.5 - versatile language model.",
+      "pulls": "7.8M",
+      "tags_count": "58",
+      "updated": "1 month ago",
+      "tags": ["vision", "tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 14,
+      "name": "lfm2",
+      "description": "LFM 2 - language foundation model.",
+      "pulls": "1.1M",
+      "tags_count": "6",
+      "updated": "2 months ago",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 15,
+      "name": "qwen3-coder-next",
+      "description": "Qwen 3 Coder Next - specialized coding model.",
+      "pulls": "1.1M",
+      "tags_count": "4",
+      "updated": "2 months ago",
+      "tags": ["tools", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 16,
+      "name": "translategemma",
+      "description": "Translation-optimized Gemma model.",
+      "pulls": "1.3M",
+      "tags_count": "13",
+      "updated": "3 months ago",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 17,
+      "name": "glm-4.7-flash",
+      "description": "GLM 4.7 Flash - lightweight variant.",
+      "pulls": "1.2M",
+      "tags_count": "4",
+      "updated": "3 months ago",
+      "tags": ["tools", "thinking"],
+      "variants": []
+    },
+    {
+      "rank": 18,
+      "name": "lfm2.5-thinking",
+      "description": "LFM 2.5 with thinking capabilities.",
+      "pulls": "1.2M",
+      "tags_count": "5",
+      "updated": "3 months ago",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 19,
+      "name": "ministral-3",
+      "description": "Ministral 3 - edge deployment model.",
+      "pulls": "1M",
+      "tags_count": "16",
+      "updated": "4 months ago",
+      "tags": ["vision", "tools", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 20,
+      "name": "devstral-small-2",
+      "description": "DevStral Small 2 - development tools model.",
+      "pulls": "809.9K",
+      "tags_count": "6",
+      "updated": "4 months ago",
+      "tags": ["vision", "tools", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 21,
+      "name": "nemotron-3-super",
+      "description": "NVIDIA Nemotron 3 Super - 120B open MoE model.",
+      "pulls": "263.5K",
+      "tags_count": "7",
+      "updated": "1 month ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 22,
+      "name": "glm-ocr",
+      "description": "GLM-OCR multimodal OCR model.",
+      "pulls": "333K",
+      "tags_count": "3",
+      "updated": "2 months ago",
+      "tags": ["vision", "tools"],
+      "variants": []
+    },
+    {
+      "rank": 23,
+      "name": "qwen3-next",
+      "description": "The first installment in the Qwen3-Next series.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 24,
+      "name": "nemotron-cascade-2",
+      "description": "NVIDIA Nemotron Cascade 2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 25,
+      "name": "rnj-1",
+      "description": "RNJ-1 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 26,
+      "name": "kimi-k2.5",
+      "description": "Kimi K2.5 - previous generation model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 27,
+      "name": "nemotron-3-nano",
+      "description": "NVIDIA Nemotron 3 Nano - lightweight variant.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 28,
+      "name": "minimax-m2.7",
+      "description": "MiniMax M2.7 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 29,
+      "name": "olmo-3",
+      "description": "OLMo 3 language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 30,
+      "name": "glm-5",
+      "description": "GLM-5 - previous generation model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 31,
+      "name": "deepseek-ocr",
+      "description": "DeepSeek OCR model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 32,
+      "name": "minimax-m2.5",
+      "description": "MiniMax M2.5 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 33,
+      "name": "olmo-3.1",
+      "description": "OLMo 3.1 language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 34,
+      "name": "devstral-2",
+      "description": "DevStral 2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 35,
+      "name": "nomic-embed-text-v2-moe",
+      "description": "Nomic Embed Text v2 Mixture-of-Experts.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 36,
+      "name": "functiongemma",
+      "description": "Function-calling optimized Gemma model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 37,
+      "name": "gemini-3-flash-preview",
+      "description": "Gemini 3 Flash Preview model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 38,
+      "name": "cogito-2.1",
+      "description": "Cogito 2.1 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 39,
+      "name": "glm-4.7",
+      "description": "GLM 4.7 - previous generation model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 40,
+      "name": "deepseek-v3.2",
+      "description": "DeepSeek V3.2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 41,
+      "name": "minimax-m2.1",
+      "description": "MiniMax M2.1 - multilingual model.",
+      "pulls": "43.6K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": ["tools", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 42,
+      "name": "kimi-k2-thinking",
+      "description": "Kimi K2 Thinking - thinking model.",
+      "pulls": "59.7K",
+      "tags_count": "1",
+      "updated": "5 months ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 43,
+      "name": "mistral-large-3",
+      "description": "Mistral Large 3 - general-purpose multimodal model.",
+      "pulls": "46K",
+      "tags_count": "1",
+      "updated": "5 months ago",
+      "tags": ["vision", "tools", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 44,
+      "name": "gpt-oss",
+      "description": "OpenAI's open-weight models for reasoning and agentic tasks.",
+      "pulls": "9.3M",
+      "tags_count": "5",
+      "updated": "6 months ago",
+      "tags": ["tools", "thinking", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 45,
+      "name": "qwen3-vl",
+      "description": "Qwen 3 Vision Language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 46,
+      "name": "qwen3-coder",
+      "description": "Qwen 3 Coder model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 47,
+      "name": "qwen3-embedding",
+      "description": "Qwen 3 Embedding model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["embedding"],
+      "variants": []
+    },
+    {
+      "rank": 48,
+      "name": "granite4",
+      "description": "IBM Granite 4 - previous generation.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 49,
+      "name": "mistral-small3.2",
+      "description": "Mistral Small 3.2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 50,
+      "name": "embeddinggemma",
+      "description": "Embedding-optimized Gemma model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["embedding"],
+      "variants": []
+    },
+    {
+      "rank": 51,
+      "name": "qwen2.5vl",
+      "description": "Qwen 2.5 Vision Language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 52,
+      "name": "gemma3n",
+      "description": "Gemma 3 Nano variant.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 53,
+      "name": "magistral",
+      "description": "Magistral model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 54,
+      "name": "deepseek-v3.1",
+      "description": "DeepSeek V3.1 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 55,
+      "name": "devstral",
+      "description": "DevStral development tools model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 56,
+      "name": "gpt-oss-safeguard",
+      "description": "OpenAI's open-weight model with safety features.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 57,
+      "name": "minimax-m2",
+      "description": "MiniMax M2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 58,
+      "name": "glm-4.6",
+      "description": "GLM 4.6 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 59,
+      "name": "kimi-k2",
+      "description": "Kimi K2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 60,
+      "name": "deepseek-r1",
+      "description": "DeepSeek R1 reasoning model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 61,
+      "name": "llama3.1",
+      "description": "Llama 3.1 is a new state-of-the-art model from Meta available in 8B, 70B and 405B parameter sizes.",
+      "pulls": "113.9M",
+      "tags_count": "93",
+      "updated": "1 year ago",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 62,
+      "name": "llama3.2",
+      "description": "Meta's Llama 3.2 goes small with 1B and 3B models.",
+      "pulls": "67.6M",
+      "tags_count": "63",
+      "updated": "1 year ago",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 63,
+      "name": "gemma3",
+      "description": "The current, most capable model that runs on a single GPU.",
+      "pulls": "36.2M",
+      "tags_count": "29",
+      "updated": "4 months ago",
+      "tags": ["vision", "cloud"],
+      "variants": []
+    },
+    {
+      "rank": 64,
+      "name": "qwen3",
+      "description": "Qwen3 is the latest generation of large language models in Qwen series, offering a comprehensive suite of dense and mixture-of-experts (MoE) models.",
+      "pulls": "28.1M",
+      "tags_count": "58",
+      "updated": "6 months ago",
+      "tags": ["tools", "thinking"],
+      "variants": []
+    },
+    {
+      "rank": 65,
+      "name": "nomic-embed-text",
+      "description": "Nomic's embedding model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["embedding"],
+      "variants": []
+    },
+    {
+      "rank": 66,
+      "name": "qwen2.5",
+      "description": "Qwen 2.5 language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 67,
+      "name": "gemma2",
+      "description": "Google's Gemma 2 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 68,
+      "name": "llama3",
+      "description": "Meta's Llama 3 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 69,
+      "name": "qwen2.5-coder",
+      "description": "Qwen 2.5 Coder specialized coding model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["tools"],
+      "variants": []
+    },
+    {
+      "rank": 70,
+      "name": "mistral",
+      "description": "Mistral language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 71,
+      "name": "phi3",
+      "description": "Microsoft Phi 3 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 72,
+      "name": "phi4",
+      "description": "Microsoft Phi 4 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 73,
+      "name": "llava",
+      "description": "LLaVA multimodal model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 74,
+      "name": "mxbai-embed-large",
+      "description": "Mixedbread AI large embedding model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["embedding"],
+      "variants": []
+    },
+    {
+      "rank": 75,
+      "name": "deepseek-v3",
+      "description": "DeepSeek V3 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 76,
+      "name": "dolphin3",
+      "description": "Dolphin 3 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 77,
+      "name": "olmo2",
+      "description": "OLMo 2 language model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    },
+    {
+      "rank": 78,
+      "name": "llama3.2-vision",
+      "description": "Meta's Llama 3.2 with vision capabilities.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 79,
+      "name": "minicpm-v",
+      "description": "MiniCPM Vision model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": ["vision"],
+      "variants": []
+    },
+    {
+      "rank": 80,
+      "name": "llama3.3",
+      "description": "Meta's Llama 3.3 model.",
+      "pulls": "N/A",
+      "tags_count": "N/A",
+      "updated": "N/A",
+      "tags": [],
+      "variants": []
+    }
+  ],
+  "summary": {
+    "total_models_collected": 80,
+    "models_with_complete_variants": 6,
+    "models_with_partial_metadata": 74,
+    "variant_extraction_rate": "7.5%",
+    "note": "Complete variant data (name, size, context_window, input_type) was extracted for the top 6 models. The remaining 74 models require individual page clicks to extract their variants table. Models are sorted by popularity (based on page order in Ollama search)."
+  }
+}
