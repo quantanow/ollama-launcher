@@ -628,6 +628,48 @@ pick_menu_raw() {
   done
 }
 
+# pick_model
+# Presents metadata-rich list of all models. Sets PICK_MODEL_INDEX to selected index.
+# Prints selected model name (base name, not variant).
+pick_model() {
+  local total=${#MODEL_NAMES[@]}
+  local lines
+  lines=()
+  local i
+
+  for ((i=0; i<total; i++)); do
+    local input_type
+    if [ "${MODEL_HAS_VARIANTS[$i]}" -eq 1 ]; then
+      eval "input_type=\${MODEL_INPUTS_${i}[0]}"
+    else
+      input_type="N/A"
+    fi
+    lines+=("${MODEL_NAMES[$i]} | ${MODEL_PULLS[$i]} pulls | ${MODEL_TAGS[$i]} | $input_type")
+  done
+
+  local selected
+  if command -v fzf &>/dev/null; then
+    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit")
+  else
+    printf '%s\n' "${lines[@]}" | pick_menu_raw "model"
+    selected="$PICK_RESULT"
+  fi
+
+  if [ -z "$selected" ]; then exit 0; fi
+
+  local model_name="${selected%% | *}"
+
+  PICK_MODEL_INDEX=-1
+  for ((i=0; i<total; i++)); do
+    if [ "${MODEL_NAMES[$i]}" = "$model_name" ]; then
+      PICK_MODEL_INDEX=$i
+      break
+    fi
+  done
+
+  echo "$model_name"
+}
+
 # ── flag parsing ──────────────────────────────────────────────────────────────
 case "${1:-}" in
   --help|-h)
