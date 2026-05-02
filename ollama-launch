@@ -160,11 +160,17 @@ pick_fzf_raw() {
 # Reads items from stdin into numbered menu. Sets PICK_RESULT to chosen line.
 pick_menu_raw() {
   local label="$1"
-  local lines=()
+  local lines
+  lines=()
   while IFS= read -r line; do
     lines+=("$line")
   done
   local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available."
+    exit 0
+  fi
 
   echo -e "${BOLD_WHITE}Available ${label}s:${RESET}"
   echo
@@ -235,7 +241,7 @@ if ! command -v fzf &>/dev/null; then
   echo -e "${BOLD_RED}fzf is not installed.${RESET}"
   echo "  fzf provides a better selection experience with search/filter."
   echo
-  read -p "  Install fzf now? [y/N] " -r install_fzf_choice
+  read -p "  Install fzf now? [y/N] " -r install_fzf_choice 2>/dev/null || { echo; exit 0; }
   if [[ "$install_fzf_choice" =~ ^[Yy]$ ]]; then
     install_fzf
   else
@@ -262,8 +268,9 @@ if command -v fzf &>/dev/null; then
   model=$(pick_fzf "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" print_models)
   if [ -z "$model" ]; then exit 0; fi
 else
-  pick_menu "model" MODELS
+  pick_menu "model" MODEL_NAMES
   model="$PICK_RESULT"
+  if [ -z "$model" ]; then exit 0; fi
 fi
 
 echo -e "  Model:  ${BOLD_GREEN}${model}${RESET}"
