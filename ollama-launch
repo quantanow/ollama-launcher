@@ -617,7 +617,7 @@ pick_menu_raw() {
   PICK_RESULT=""
   while true; do
     printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
-    read -r choice 2>/dev/null || { echo; exit 0; }
+    read -r choice </dev/tty 2>/dev/null || { echo; exit 0; }
 
     if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
       PICK_RESULT="${lines[$((choice - 1))]}"
@@ -666,6 +666,11 @@ pick_model() {
       break
     fi
   done
+
+  if [ "$PICK_MODEL_INDEX" -eq -1 ]; then
+    echo "Error: could not resolve model index for '$model_name'" >&2
+    exit 1
+  fi
 
   echo "$model_name"
 }
