@@ -241,7 +241,8 @@ if ! command -v fzf &>/dev/null; then
   echo -e "${BOLD_RED}fzf is not installed.${RESET}"
   echo "  fzf provides a better selection experience with search/filter."
   echo
-  read -p "  Install fzf now? [y/N] " -r install_fzf_choice 2>/dev/null || { echo; exit 0; }
+  printf "  Install fzf now? [y/N] "
+  read -r install_fzf_choice 2>/dev/null || { echo; exit 0; }
   if [[ "$install_fzf_choice" =~ ^[Yy]$ ]]; then
     install_fzf
   else
