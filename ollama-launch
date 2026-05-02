@@ -687,7 +687,8 @@ pick_variant() {
   local idx="$1"
   local variants_name="MODEL_VARIANTS_${idx}[@]"
 
-  local variants=()
+  local variants
+  variants=()
   eval "variants=(\"\${${variants_name}:-}\")" 2>/dev/null || true
 
   local count=${#variants[@]}
