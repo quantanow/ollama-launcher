@@ -1,0 +1,32 @@
+{
+  "name": "ollama-launch",
+  "version": "1.0.0",
+  "description": "A fast, polished CLI for picking and launching Ollama agents and models interactively",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quantanow/ollama-launcher.git"
+  },
+  "homepage": "https://github.com/quantanow/ollama-launcher#readme",
+  "bugs": {
+    "url": "https://github.com/quantanow/ollama-launcher/issues"
+  },
+  "keywords": [
+    "ollama",
+    "llm",
+    "cli",
+    "launcher",
+    "ai",
+    "models"
+  ],
+  "bin": {
+    "ollama-launch": "./ollama-launch"
+  },
+  "files": [
+    "ollama-launch"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "preferGlobal": true
+}

@@ -38,7 +38,13 @@ ollama launch openclaw --model mistral:7b
 
 ## Install
 
-### One-liner (recommended)
+### npm (recommended)
+
+```bash
+npm install -g ollama-launch
+```
+
+### One-liner (no npm)
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/quantanow/ollama-launcher/main/install.sh | bash
@@ -55,9 +61,7 @@ cp ollama-launch /usr/local/bin/ollama-launch
 chmod +x /usr/local/bin/ollama-launch
 ```
 
-### Homebrew / local dev
-
-If you just want to run it from the repo without installing:
+### Local dev (no install)
 
 ```bash
 git clone https://github.com/quantanow/ollama-launcher
