@@ -675,6 +675,49 @@ pick_model() {
   echo "$model_name"
 }
 
+# pick_variant <model_index>
+# If model has 0 variants, returns empty string.
+# If model has 1 variant, returns it directly.
+# If model has 2+ variants, presents a sub-picker and returns selected variant name.
+pick_variant() {
+  local idx="$1"
+  local variants_name="MODEL_VARIANTS_${idx}[@]"
+
+  local variants=()
+  eval "variants=(\"\${${variants_name}}\")"
+
+  local count=${#variants[@]}
+  if [ "$count" -eq 0 ]; then
+    echo ""
+    return
+  fi
+  if [ "$count" -eq 1 ]; then
+    echo "${variants[0]}"
+    return
+  fi
+
+  local lines=()
+  local i
+  for ((i=0; i<count; i++)); do
+    local size context input_type
+    eval "size=\${MODEL_SIZES_${idx}[\$i]}"
+    eval "context=\${MODEL_CONTEXTS_${idx}[\$i]}"
+    eval "input_type=\${MODEL_INPUTS_${idx}[\$i]}"
+    lines+=("${variants[$i]} | $size | $context context | $input_type")
+  done
+
+  local selected
+  if command -v fzf &>/dev/null; then
+    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Variant" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit")
+  else
+    printf '%s\n' "${lines[@]}" | pick_menu_raw "variant"
+    selected="$PICK_RESULT"
+  fi
+
+  if [ -z "$selected" ]; then exit 0; fi
+  echo "${selected%% | *}"
+}
+
 # ── flag parsing ──────────────────────────────────────────────────────────────
 case "${1:-}" in
   --help|-h)
