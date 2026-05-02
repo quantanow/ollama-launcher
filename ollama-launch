@@ -20,6 +20,15 @@ BOLD_WHITE="${BOLD}${WHITE}"
 BOLD_GREEN="${BOLD}${GREEN}"
 BOLD_RED="${BOLD}${RED}"
 
+# ── agent list ────────────────────────────────────────────────────────────────
+AGENTS=(
+  "claude"
+  "codex"
+  "hermes"
+  "openclaw"
+  "opencode"
+)
+
 # ── model list ────────────────────────────────────────────────────────────────
 MODELS=(
   "codellama:7b"
@@ -52,9 +61,15 @@ MODELS=(
 print_header() {
   echo -e "${BOLD_CYAN}┌─────────────────────────────┐${RESET}"
   echo -e "${BOLD_CYAN}│${RESET}  ${BOLD_WHITE}ollama-launch  🦙${RESET}           ${BOLD_CYAN}│${RESET}"
-  echo -e "${BOLD_CYAN}│${RESET}  ${WHITE}Pick a model to run${RESET}        ${BOLD_CYAN}│${RESET}"
+  echo -e "${BOLD_CYAN}│${RESET}  ${WHITE}Pick an agent and model${RESET}     ${BOLD_CYAN}│${RESET}"
   echo -e "${BOLD_CYAN}└─────────────────────────────┘${RESET}"
   echo
+}
+
+print_agents() {
+  for agent in "${AGENTS[@]}"; do
+    echo "$agent"
+  done
 }
 
 print_models() {
@@ -71,22 +86,73 @@ check_ollama() {
   fi
 }
 
+# pick_fzf <prompt_label> <header_text> <items_fn>
+# Prints the selected item, or exits 0 if cancelled.
+pick_fzf() {
+  local label="$1" header="$2" items_fn="$3"
+  local result
+  result=$("$items_fn" | fzf \
+    --height=40% \
+    --layout=reverse \
+    --border \
+    --prompt="  ${label}: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    2>/dev/null || true)
+  echo "$result"
+}
+
+# pick_menu <label> <items_array_name>
+# Sets PICK_RESULT to the chosen item, or exits 0 if cancelled.
+pick_menu() {
+  local label="$1"
+  local -n items_ref="$2"
+  local total=${#items_ref[@]}
+
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}"
+  echo
+  for i in "${!items_ref[@]}"; do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${items_ref[$i]}"
+  done
+  echo
+
+  PICK_RESULT=""
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
+    read -r choice 2>/dev/null || { echo; exit 0; }
+
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      PICK_RESULT="${items_ref[$((choice - 1))]}"
+      break
+    fi
+
+    echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}."
+  done
+}
+
 # ── flag parsing ──────────────────────────────────────────────────────────────
 case "${1:-}" in
   --help|-h)
-    echo "Usage: ollama-launch [--help] [--version] [--list]"
+    echo "Usage: ollama-launch [--help] [--version] [--list-agents] [--list-models]"
     echo
-    echo "  (no args)   Show interactive model picker"
-    echo "  --list      Print all available models and exit"
-    echo "  --version   Print version and exit"
-    echo "  --help      Show this help and exit"
+    echo "  (no args)       Pick an agent and model interactively, then launch"
+    echo "  --list-agents   Print all available agents and exit"
+    echo "  --list-models   Print all available models and exit"
+    echo "  --version       Print version and exit"
+    echo "  --help          Show this help and exit"
+    echo
+    echo "Example command run: ollama launch claude --model glm4:9b"
     exit 0
     ;;
   --version|-v)
     echo "ollama-launch $VERSION"
     exit 0
     ;;
-  --list)
+  --list-agents)
+    print_agents
+    exit 0
+    ;;
+  --list-models)
     print_models
     exit 0
     ;;
@@ -103,46 +169,31 @@ esac
 check_ollama
 print_header
 
-# ── selection ─────────────────────────────────────────────────────────────────
+# ── step 1: pick agent ────────────────────────────────────────────────────────
 if command -v fzf &>/dev/null; then
-  selected=$(print_models | fzf \
-    --height=40% \
-    --layout=reverse \
-    --border \
-    --prompt="  Model: " \
-    --header="  ↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" \
-    --color="header:italic,border:cyan" \
-    2>/dev/null || true)
-
-  if [ -z "$selected" ]; then
-    exit 0
-  fi
-
-  exec ollama run "$selected"
+  agent=$(pick_fzf "Agent" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit" print_agents)
+  if [ -z "$agent" ]; then exit 0; fi
+else
+  pick_menu "agent" AGENTS
+  agent="$PICK_RESULT"
 fi
 
-# ── numbered menu fallback ────────────────────────────────────────────────────
-echo -e "${BOLD_WHITE}Available models:${RESET}"
+echo -e "  Agent:  ${BOLD_GREEN}${agent}${RESET}"
 echo
 
-total=${#MODELS[@]}
-for i in "${!MODELS[@]}"; do
-  printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${MODELS[$i]}"
-done
+# ── step 2: pick model ────────────────────────────────────────────────────────
+if command -v fzf &>/dev/null; then
+  model=$(pick_fzf "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" print_models)
+  if [ -z "$model" ]; then exit 0; fi
+else
+  pick_menu "model" MODELS
+  model="$PICK_RESULT"
+fi
 
+echo -e "  Model:  ${BOLD_GREEN}${model}${RESET}"
 echo
-selected=""
-while true; do
-  printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
-  read -r choice 2>/dev/null || { echo; exit 0; }
 
-  if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
-    selected="${MODELS[$((choice - 1))]}"
-    break
-  fi
-
-  echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}."
-done
-
+# ── launch ────────────────────────────────────────────────────────────────────
+echo -e "${BOLD_CYAN}Running:${RESET} ollama launch ${agent} --model ${model}"
 echo
-exec ollama run "$selected"
+exec ollama launch "$agent" --model "$model"

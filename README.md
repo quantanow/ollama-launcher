@@ -1,19 +1,26 @@
 # ollama-launch
 
-A fast, polished CLI for picking and launching [Ollama](https://ollama.com) models interactively. No config, no fuss — run it, pick a model, start chatting.
+A fast, polished CLI for picking and launching [Ollama](https://ollama.com) agents interactively. Pick an agent, pick a model, start chatting — no config, no fuss.
 
 ```
 ┌─────────────────────────────┐
 │  ollama-launch  🦙           │
-│  Pick a model to run        │
+│  Pick an agent and model    │
 └─────────────────────────────┘
+```
+
+Runs commands like:
+```bash
+ollama launch claude --model glm4:9b
+ollama launch openclaw --model mistral:7b
 ```
 
 ## Features
 
-- Interactive model picker with **fzf** fuzzy search (type to filter, arrows to navigate)
+- Two-step interactive picker: **agent** then **model**
+- **fzf** fuzzy search UI (type to filter, arrows to navigate)
 - Numbered menu fallback when fzf is not installed — works everywhere
-- 24 curated popular models ready to go, sorted alphabetically
+- 5 agents and 24 curated popular models ready to go
 - ANSI colors auto-disabled when output is piped or redirected
 - No config files, no runtime dependencies beyond bash and ollama
 
@@ -75,18 +82,37 @@ sudo pacman -S fzf        # Arch
 ## Usage
 
 ```
-ollama-launch [--help | --version | --list]
+ollama-launch [--help | --version | --list-agents | --list-models]
 ```
 
-Run with no arguments to open the interactive model picker:
+Run with no arguments to open the interactive picker:
 
 ```bash
 ollama-launch
 ```
 
+The picker runs in two steps: first pick an **agent**, then pick a **model**. The final command run will be:
+
+```bash
+ollama launch <agent> --model <model>
+```
+
 ### With fzf installed
 
-An interactive fuzzy finder opens:
+Step 1 — pick an agent:
+
+```
+  ↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit
+  Agent: _
+
+  claude
+  codex
+  hermes
+  openclaw
+  opencode
+```
+
+Step 2 — pick a model:
 
 ```
   ↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit
@@ -94,30 +120,28 @@ An interactive fuzzy finder opens:
 
   codellama:7b
   deepseek-coder:6.7b
-  deepseek-r1:7b
-  gemma3:1b
   ...
 ```
 
-Type any part of a model name to filter in real time. Press **Enter** to launch, **Esc** or **Ctrl-C** to quit without launching.
+Type any part of a name to filter in real time. Press **Enter** to confirm, **Esc** or **Ctrl-C** to quit.
 
 ### Without fzf
 
-A numbered list is shown:
+Numbered menus are shown for each step:
 
 ```
-Available models:
+Available agents:
 
-   1  codellama:7b
-   2  deepseek-coder:6.7b
-   3  deepseek-r1:7b
-  ...
-  24  starcoder2:7b
+   1  claude
+   2  codex
+   3  hermes
+   4  openclaw
+   5  opencode
 
-Enter number [1-24]:
+Enter number [1-5]: _
 ```
 
-Enter the number and press **Enter**. Invalid input re-prompts — it won't exit on a bad number. Press **Ctrl-C** to quit.
+Then the same for models. Invalid input re-prompts. Press **Ctrl-C** to quit at any point.
 
 ---
 
@@ -127,7 +151,8 @@ Enter the number and press **Enter**. Invalid input re-prompts — it won't exit
 |--------|-------|-------------|
 | `--help` | `-h` | Show usage and exit |
 | `--version` | `-v` | Print version string and exit |
-| `--list` | | Print all available models, one per line, and exit |
+| `--list-agents` | | Print all available agents, one per line, and exit |
+| `--list-models` | | Print all available models, one per line, and exit |
 
 ### Examples
 
@@ -139,15 +164,35 @@ ollama-launch --help
 ollama-launch --version
 # → ollama-launch 1.0.0
 
-# List all models (scriptable, pipe-friendly)
-ollama-launch --list
+# List all agents
+ollama-launch --list-agents
+# → claude
+#   codex
+#   hermes
+#   openclaw
+#   opencode
+
+# List all models (pipe-friendly)
+ollama-launch --list-models
 # → codellama:7b
 #   deepseek-coder:6.7b
 #   ...
 
-# Use --list with grep to check if a model is available
-ollama-launch --list | grep qwen
+# Use with grep to check availability
+ollama-launch --list-models | grep qwen
 ```
+
+---
+
+## Available Agents
+
+| Agent | Command |
+|-------|---------|
+| `claude` | `ollama launch claude --model ...` |
+| `codex` | `ollama launch codex --model ...` |
+| `hermes` | `ollama launch hermes --model ...` |
+| `openclaw` | `ollama launch openclaw --model ...` |
+| `opencode` | `ollama launch opencode --model ...` |
 
 ---
 
@@ -184,15 +229,20 @@ The default model list (24 models, alphabetical):
 
 ---
 
-## Adding or Removing Models
+## Adding or Removing Agents / Models
 
-Edit the `MODELS` array near the top of `ollama-launch`. Keep it sorted alphabetically:
+Edit the `AGENTS` or `MODELS` array near the top of `ollama-launch`. Keep each sorted alphabetically:
 
 ```bash
+AGENTS=(
+  "claude"
+  "my-new-agent"   # ← add here, keep sorted
+  ...
+)
+
 MODELS=(
   "codellama:7b"
   "my-custom-model:latest"   # ← add here, keep sorted
-  "deepseek-coder:6.7b"
   ...
 )
 ```
@@ -205,9 +255,9 @@ After editing, either run the script directly or reinstall it.
 
 1. Checks that `ollama` is in your PATH (exits with a clear error if not)
 2. Prints the header
-3. If `fzf` is available: pipes the model list into fzf and waits for selection
-4. If `fzf` is not available: prints a numbered menu and reads your input
-5. Runs `ollama run <selected-model>` — replacing the shell process (`exec`)
+3. **Step 1 — Agent:** fzf picker or numbered menu → you pick an agent
+4. **Step 2 — Model:** fzf picker or numbered menu → you pick a model
+5. Runs `ollama launch <agent> --model <model>` — replacing the shell process (`exec`)
 
 Colors are detected via `[ -t 1 ]` and suppressed automatically when stdout is not a terminal.
 
