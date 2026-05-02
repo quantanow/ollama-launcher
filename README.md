@@ -34,7 +34,7 @@ A fast, polished CLI for picking and launching [Ollama](https://ollama.com) mode
 ### One-liner (recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/isaleem/ollama-launcher/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/quantanow/ollama-launcher/main/install.sh | bash
 ```
 
 This downloads `ollama-launch` to `/usr/local/bin` and makes it executable. Uses `sudo` automatically if `/usr/local/bin` is not writable.
@@ -42,7 +42,7 @@ This downloads `ollama-launch` to `/usr/local/bin` and makes it executable. Uses
 ### Manual
 
 ```bash
-git clone https://github.com/isaleem/ollama-launcher
+git clone https://github.com/quantanow/ollama-launcher
 cd ollama-launcher
 cp ollama-launch /usr/local/bin/ollama-launch
 chmod +x /usr/local/bin/ollama-launch
@@ -53,7 +53,7 @@ chmod +x /usr/local/bin/ollama-launch
 If you just want to run it from the repo without installing:
 
 ```bash
-git clone https://github.com/isaleem/ollama-launcher
+git clone https://github.com/quantanow/ollama-launcher
 cd ollama-launcher
 ./ollama-launch
 ```
@@ -217,7 +217,7 @@ Colors are detected via `[ -t 1 ]` and suppressed automatically when stdout is n
 
 PRs welcome. To add a model to the default list, edit the `MODELS` array in `ollama-launch` and open a PR. Keep the list alphabetical.
 
-To report a bug or request a feature, open an issue at [github.com/isaleem/ollama-launcher/issues](https://github.com/isaleem/ollama-launcher/issues).
+To report a bug or request a feature, open an issue at [github.com/quantanow/ollama-launcher/issues](https://github.com/quantanow/ollama-launcher/issues).
 
 ---
 
