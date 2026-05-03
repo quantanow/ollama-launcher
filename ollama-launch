@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 # ── colors (disabled when stdout is not a TTY) ────────────────────────────────
 if [ -t 1 ]; then
@@ -3155,21 +3155,27 @@ pick_model() {
   local i
 
   for ((i=0; i<total; i++)); do
-    local input_type variant_search _vref
+    local input_type tags _vref variant_search cloud_tag
     if [ "${MODEL_HAS_VARIANTS[$i]}" -eq 1 ]; then
       eval "input_type=\${MODEL_INPUTS_${i}[0]}"
       _vref="MODEL_VARIANTS_${i}[@]"
       variant_search="${!_vref}"
+      if [[ "$variant_search" == *:cloud* ]]; then
+        cloud_tag=" cloud"
+      else
+        cloud_tag=""
+      fi
     else
       input_type="N/A"
-      variant_search=""
+      cloud_tag=""
     fi
-    lines+=("${FZF_NAME}${MODEL_NAMES[$i]}${FZF_RST} | ${FZF_META}${MODEL_PULLS[$i]} pulls | ${MODEL_TAGS[$i]} | $input_type${FZF_RST}"$'\t'"$variant_search")
+    tags="${MODEL_TAGS[$i]}${cloud_tag}"
+    lines+=("${FZF_NAME}${MODEL_NAMES[$i]}${FZF_RST} | ${FZF_META}${MODEL_PULLS[$i]} pulls | $tags | $input_type${FZF_RST}")
   done
 
   local selected
   if command -v fzf &>/dev/null; then
-    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit" --delimiter=$'\t' --with-nth=1)
+    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit")
   else
     local menu_file
     menu_file="/tmp/ollama-launch-menu-$$"

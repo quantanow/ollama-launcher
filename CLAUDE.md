@@ -13,7 +13,7 @@ Single bash script CLI (`ollama-launch`) that presents a three-step interactive 
 | `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.1.0) |
+| `package.json` | npm package config (`ollama-launch` v1.1.1) |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
 | `.github/workflows/publish.yml` | CD: publishes to npm on `v*` tag push |
@@ -53,7 +53,7 @@ All 100 models have full variant data (332 total variants across all models).
 
 1. `pick_fzf` / `pick_menu` → agent selection
 2. `pick_model` → sets `PICK_RESULT` (model name) and `PICK_MODEL_INDEX`
-3. `pick_variant` → if `MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX] == 1`, shows sub-picker; 1-variant models auto-select without showing a menu
+3. `pick_variant` → if `MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX] == 1`, shows sub-picker for 2+ variants; single-variant models auto-select without a menu
 4. `exec ollama launch <agent> --model <final_model>`
 
 fzf is used when available; falls back to numbered menus (`pick_menu`, `pick_menu_raw`). ANSI colors are suppressed when stdout is not a TTY (`[ -t 1 ]`).
@@ -61,7 +61,8 @@ fzf is used when available; falls back to numbered menus (`pick_menu`, `pick_men
 #### fzf display
 - `pick_fzf_raw` accepts extra fzf flags via `"$@"` (shift 2 after label/header).
 - Model/variant names are rendered in bold bright cyan (`FZF_NAME=$'\033[1;96m'`); metadata is dimmed (`FZF_META=$'\033[2m'`). These are always defined (not TTY-gated) because fzf reads from a pipe.
-- The model picker appends all variant names after a `\t` separator and uses `--delimiter=$'\t' --with-nth=1` so variants are searchable but not visible. After fzf returns, ANSI codes are stripped from the model name before the index lookup (`sed "s/${esc}\[[0-9;]*m//g"`).
+- Models with `:cloud` variants have `cloud` appended to their tags column at display time (not stored in `MODEL_TAGS[]`), so searching "cloud" in fzf finds them. Do not use `--with-nth` in the model picker — fzf ≥0.62 restricts search to displayed fields when `--with-nth` is set, breaking hidden-field search.
+- After fzf returns, ANSI codes are stripped from the selected name before index lookup (`sed "s/${esc}\[[0-9;]*m//g"`).
 
 ## Agents
 

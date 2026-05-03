@@ -17,13 +17,13 @@
 @test "--version exits 0 and prints version" {
   run ./ollama-launch --version
   [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama-launch 1.0.0"* ]]
+  [[ "$output" == *"ollama-launch 1.1.1"* ]]
 }
 
 @test "-v exits 0 and prints version" {
   run ./ollama-launch -v
   [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama-launch 1.0.0"* ]]
+  [[ "$output" == *"ollama-launch 1.1.1"* ]]
 }
 
 @test "--list-agents exits 0 and prints all 5 agents" {
