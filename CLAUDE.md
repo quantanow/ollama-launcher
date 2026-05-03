@@ -10,9 +10,10 @@ Single bash script CLI (`ollama-launch`) that presents a three-step interactive 
 |------|---------|
 | `ollama-launch` | The entire CLI — one self-contained bash script |
 | `models.json` | Source of truth for model metadata |
+| `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.0.0) |
+| `package.json` | npm package config (`ollama-launch` v1.1.0) |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
 | `.github/workflows/publish.yml` | CD: publishes to npm on `v*` tag push |
@@ -40,13 +41,13 @@ node scripts/generate-model-data.js
 
 The script is entirely self-contained. Model data is embedded as parallel bash arrays (no external files at runtime):
 
-- `MODEL_NAMES[]` — base names (80 entries)
+- `MODEL_NAMES[]` — base names (100 entries)
 - `MODEL_PULLS[]` — pull counts
 - `MODEL_TAGS[]` — capability tags (vision, tools, thinking, etc.)
 - `MODEL_HAS_VARIANTS[]` — 1 if model has a sub-picker, 0 otherwise
 - `MODEL_VARIANTS_N[]`, `MODEL_SIZES_N[]`, `MODEL_CONTEXTS_N[]`, `MODEL_INPUTS_N[]` — per-model variant data (only for models where `HAS_VARIANTS=1`)
 
-Currently 6 models have variants (indices 0–5): granite4.1, mistral-medium-3.5, qwen3.6, nemotron3, kimi-k2.6, glm-5.1.
+All 100 models have full variant data (332 total variants across all models).
 
 ### Picker flow
 
@@ -57,16 +58,39 @@ Currently 6 models have variants (indices 0–5): granite4.1, mistral-medium-3.5
 
 fzf is used when available; falls back to numbered menus (`pick_menu`, `pick_menu_raw`). ANSI colors are suppressed when stdout is not a TTY (`[ -t 1 ]`).
 
+#### fzf display
+- `pick_fzf_raw` accepts extra fzf flags via `"$@"` (shift 2 after label/header).
+- Model/variant names are rendered in bold bright cyan (`FZF_NAME=$'\033[1;96m'`); metadata is dimmed (`FZF_META=$'\033[2m'`). These are always defined (not TTY-gated) because fzf reads from a pipe.
+- The model picker appends all variant names after a `\t` separator and uses `--delimiter=$'\t' --with-nth=1` so variants are searchable but not visible. After fzf returns, ANSI codes are stripped from the model name before the index lookup (`sed "s/${esc}\[[0-9;]*m//g"`).
+
 ## Agents
 
 `claude`, `codex`, `hermes`, `openclaw`, `opencode` — keep sorted alphabetically in the `AGENTS` array.
 
 ## CLI Flags
 
-`--help` / `-h`, `--version` / `-v`, `--list-agents`, `--list-models`. Unknown flags exit 1.
+| Flag | Description |
+|------|-------------|
+| `--help` / `-h` | Show usage and exit |
+| `--version` / `-v` | Print version and exit |
+| `--list-agents` | Print all agent names and exit |
+| `--list-models` | Print all 100 model names and exit |
+| `--list-models --cloud` | Print only models that have a `:cloud` variant and exit |
 
-## Adding Models
+Unknown flags exit 1.
 
+## Refreshing Model Data
+
+To pull a fresh top-100 list from ollama.com:
+
+```bash
+node scripts/fetch-models.js              # fetches 100 models, writes models.json
+node scripts/fetch-models.js --dry-run    # preview without writing
+node scripts/fetch-models.js --count 50  # fetch fewer models
+node scripts/generate-model-data.js       # regenerate bash arrays from models.json
+```
+
+To add or edit a model manually:
 1. Edit `models.json`
 2. Run `node scripts/generate-model-data.js` — rewrites the `# MODEL DATA BEGIN … END` block in `ollama-launch`
 3. Commit the updated `ollama-launch`

@@ -37,10 +37,10 @@
   [ "$(echo "$output" | wc -l | tr -d ' ')" -eq 5 ]
 }
 
-@test "--list-models exits 0 and prints all 80 models" {
+@test "--list-models exits 0 and prints all 100 models" {
   run ./ollama-launch --list-models
   [ "$status" -eq 0 ]
-  [ "$(echo "$output" | wc -l | tr -d ' ')" -eq 80 ]
+  [ "$(echo "$output" | wc -l | tr -d ' ')" -eq 100 ]
 }
 
 @test "--list-models output contains granite4.1 and llama3" {

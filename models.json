@@ -1,628 +1,1905 @@
 {
   "metadata": {
-    "total_models": 80,
-    "collection_date": "2026-05-02",
-    "source": "ollama.com/search",
-    "note": "Top 80 popular models collected from Ollama library. Models 1-6 have complete variant specifications. Models 7-80 include library metadata (name, pulls, tags, description, updated). Pages 4-5 showed duplicate models suggesting ~80 models in the popular search.",
-    "collection_method": "Web scraping from Ollama search pages 1-4"
+    "total_models": 100,
+    "collection_date": "2026-05-03",
+    "source": "https://ollama.com/search and https://ollama.com/library/<model>",
+    "collection_method": "HTML scraping — search pages 1-5 + per-model variant pages"
   },
   "models": [
     {
       "rank": 1,
       "name": "granite4.1",
-      "description": "IBM Granite 4.1 is the latest generation of IBM Granite models.",
-      "pulls": "16K",
+      "description": "",
+      "pulls": "19.2K",
       "tags_count": "46",
-      "updated": "2 days ago",
-      "tags": ["tools"],
+      "updated": "3 days ago",
+      "tags": [
+        "tools"
+      ],
       "variants": [
-        {"name": "granite4.1:3b", "size": "2.1GB", "context_window": "128K", "input_type": "Text"},
-        {"name": "granite4.1:8b", "size": "5.3GB", "context_window": "128K", "input_type": "Text"},
-        {"name": "granite4.1:30b", "size": "17GB", "context_window": "128K", "input_type": "Text"}
+        {
+          "name": "granite4.1:3b",
+          "size": "2.1GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4.1:8b",
+          "size": "5.3GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4.1:30b",
+          "size": "17GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
       ]
     },
     {
       "rank": 2,
       "name": "mistral-medium-3.5",
-      "description": "Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding.",
-      "pulls": "4,261",
+      "description": "Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding in a single set of 128B weights.",
+      "pulls": "7,018",
       "tags_count": "5",
-      "updated": "3 days ago",
-      "tags": ["vision", "tools", "thinking"],
+      "updated": "4 days ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
       "variants": [
-        {"name": "mistral-medium-3.5:latest", "size": "80GB", "context_window": "256K", "input_type": "Text, Image"},
-        {"name": "mistral-medium-3.5:128b", "size": "80GB", "context_window": "256K", "input_type": "Text, Image"}
+        {
+          "name": "mistral-medium-3.5:latest",
+          "size": "80GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "mistral-medium-3.5:128b",
+          "size": "80GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        }
       ]
     },
     {
       "rank": 3,
       "name": "qwen3.6",
-      "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation.",
-      "pulls": "736.2K",
+      "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation than previous Qwen models.",
+      "pulls": "755.8K",
       "tags_count": "22",
       "updated": "1 week ago",
-      "tags": ["vision", "tools", "thinking"],
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
       "variants": [
-        {"name": "qwen3.6:latest", "size": "24GB", "context_window": "256K", "input_type": "Text, Image"},
-        {"name": "qwen3.6:27b", "size": "17GB", "context_window": "256K", "input_type": "Text, Image"},
-        {"name": "qwen3.6:35b", "size": "24GB", "context_window": "256K", "input_type": "Text, Image"}
+        {
+          "name": "qwen3.6:latest",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.6:27b",
+          "size": "17GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.6:35b",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.6:27b-coding-mxfp8",
+          "size": "31GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:27b-coding-nvfp4",
+          "size": "20GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:27b-coding-bf16",
+          "size": "55GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:27b-mlx-bf16",
+          "size": "55GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:35b-a3b-coding-mxfp8",
+          "size": "38GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:35b-a3b-coding-nvfp4",
+          "size": "22GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:35b-a3b-coding-bf16",
+          "size": "70GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3.6:35b-a3b-mlx-bf16",
+          "size": "70GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
       ]
     },
     {
       "rank": 4,
       "name": "nemotron3",
-      "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model.",
-      "pulls": "182.8K",
+      "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.",
+      "pulls": "246.5K",
       "tags_count": "4",
-      "updated": "4 days ago",
-      "tags": ["vision", "tools", "thinking", "audio"],
+      "updated": "5 days ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking",
+        "audio"
+      ],
       "variants": [
-        {"name": "nemotron3:33b", "size": "28GB", "context_window": "128K", "input_type": "Text, Image"}
+        {
+          "name": "nemotron3:33b",
+          "size": "28GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
       ]
     },
     {
       "rank": 5,
       "name": "kimi-k2.6",
-      "description": "Kimi K2.6 is an open-source, native multimodal agentic model.",
-      "pulls": "73K",
+      "description": "Kimi K2.6 is an open-source, native multimodal agentic model that advances practical capabilities in long-horizon coding, coding-driven design, proactive autonomous execution, and swarm-based task orchestration.",
+      "pulls": "75.3K",
       "tags_count": "1",
       "updated": "1 week ago",
-      "tags": ["vision", "tools", "thinking", "cloud"],
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
       "variants": [
-        {"name": "kimi-k2.6:cloud", "size": "N/A", "context_window": "256K", "input_type": "Text, Image"}
+        {
+          "name": "kimi-k2.6:cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "1 week ago"
+        }
       ]
     },
     {
       "rank": 6,
       "name": "glm-5.1",
-      "description": "GLM-5.1 is the next-generation flagship model for agentic engineering.",
-      "pulls": "126K",
+      "description": "GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.",
+      "pulls": "127.1K",
       "tags_count": "1",
       "updated": "3 weeks ago",
-      "tags": ["tools", "thinking", "cloud"],
+      "tags": [
+        "tools",
+        "thinking"
+      ],
       "variants": [
-        {"name": "glm-5.1:cloud", "size": "N/A", "context_window": "198K", "input_type": "Text"}
+        {
+          "name": "glm-5.1:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "3 weeks ago"
+        }
       ]
     },
     {
       "rank": 7,
       "name": "deepseek-v4-flash",
-      "description": "DeepSeek V4 Flash variant for faster inference.",
-      "pulls": "38.2K",
+      "description": "DeepSeek-V4-Flash is a preview of the DeepSeek-V4 series, a Mixture-of-Experts model with 284B total parameters and 13B activated, built for efficient reasoning across a 1M-token context window.",
+      "pulls": "39.4K",
       "tags_count": "1",
       "updated": "1 week ago",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-v4-flash:cloud",
+          "size": "1M context window",
+          "context_window": "Text",
+          "input_type": "1 week ago"
+        }
+      ]
     },
     {
       "rank": 8,
       "name": "deepseek-v4-pro",
-      "description": "DeepSeek V4 Pro variant with advanced capabilities.",
-      "pulls": "28.8K",
+      "description": "DeepSeek-V4-Pro is a frontier Mixture-of-Experts model with a 1M-token context window and three reasoning modes.",
+      "pulls": "30K",
       "tags_count": "1",
-      "updated": "5 days ago",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "updated": "6 days ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-v4-pro:cloud",
+          "size": "1M context window",
+          "context_window": "Text",
+          "input_type": "6 days ago"
+        }
+      ]
     },
     {
       "rank": 9,
       "name": "medgemma",
-      "description": "Medical domain-specific Gemma model.",
-      "pulls": "18.6K",
+      "description": "MedGemma is a collection of Gemma 3 variants that are trained for performance on medical text and image comprehension.",
+      "pulls": "19.2K",
       "tags_count": "9",
       "updated": "2 weeks ago",
-      "tags": ["vision"],
-      "variants": []
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "medgemma:latest",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "medgemma:4b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "medgemma:27b",
+          "size": "17GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 10,
       "name": "medgemma1.5",
-      "description": "MedGemma 1.5 - improved medical variant.",
-      "pulls": "11K",
+      "description": "MedGemma 1.5 4B is an updated version of the MedGemma 4B model.",
+      "pulls": "11.1K",
       "tags_count": "5",
       "updated": "2 weeks ago",
-      "tags": ["vision"],
-      "variants": []
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "medgemma1.5:latest",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "medgemma1.5:4b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 11,
       "name": "laguna-xs.2",
-      "description": "Laguna XS 2 - lightweight model.",
-      "pulls": "4,490",
+      "description": "Laguna XS.2 is a 33B total parameter Mixture-of-Experts model with 3B activated parameters per token designed for agentic coding and long-horizon work on a local machine.",
+      "pulls": "4,790",
       "tags_count": "7",
-      "updated": "4 days ago",
-      "tags": ["tools", "thinking"],
-      "variants": []
+      "updated": "5 days ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "laguna-xs.2:latest",
+          "size": "23GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:mxfp8",
+          "size": "36GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:nvfp4",
+          "size": "22GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:q4_K_M",
+          "size": "23GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:q8_0",
+          "size": "37GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:bf16",
+          "size": "67GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "laguna-xs.2:mlx-bf16",
+          "size": "67GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 12,
       "name": "gemma4",
-      "description": "Google's Gemma 4 multimodal model.",
-      "pulls": "6.5M",
+      "description": "Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.",
+      "pulls": "6.6M",
       "tags_count": "29",
       "updated": "2 weeks ago",
-      "tags": ["vision", "tools", "thinking", "audio", "cloud"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools",
+        "thinking",
+        "audio"
+      ],
+      "variants": [
+        {
+          "name": "gemma4:latest",
+          "size": "9.6GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma4:e2b",
+          "size": "7.2GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma4:e4b",
+          "size": "9.6GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma4:26b",
+          "size": "18GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma4:31b",
+          "size": "20GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma4:31b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "3 weeks ago"
+        }
+      ]
     },
     {
       "rank": 13,
       "name": "qwen3.5",
-      "description": "Qwen 3.5 - versatile language model.",
-      "pulls": "7.8M",
+      "description": "Qwen 3.5 is a family of open-source multimodal models that delivers exceptional utility and performance.",
+      "pulls": "7.9M",
       "tags_count": "58",
       "updated": "1 month ago",
-      "tags": ["vision", "tools", "thinking", "cloud"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "qwen3.5:latest",
+          "size": "6.6GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:0.8b",
+          "size": "1.0GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:2b",
+          "size": "2.7GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:4b",
+          "size": "3.4GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:9b",
+          "size": "6.6GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:27b",
+          "size": "17GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:35b",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:122b",
+          "size": "81GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3.5:cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "2 months ago"
+        },
+        {
+          "name": "qwen3.5:397b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "2 months ago"
+        }
+      ]
     },
     {
       "rank": 14,
       "name": "lfm2",
-      "description": "LFM 2 - language foundation model.",
+      "description": "LFM2 is a family of hybrid models designed for on-device deployment. LFM2-24B-A2B is the largest model in the family, scaling the architecture to 24 billion parameters while keeping inference efficient.",
       "pulls": "1.1M",
       "tags_count": "6",
       "updated": "2 months ago",
-      "tags": ["tools"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "lfm2:latest",
+          "size": "14GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "lfm2:24b",
+          "size": "14GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 15,
       "name": "qwen3-coder-next",
-      "description": "Qwen 3 Coder Next - specialized coding model.",
+      "description": "Qwen3-Coder-Next is a coding-focused language model from Alibaba&#39;s Qwen team, optimized for agentic coding workflows and local development.",
       "pulls": "1.1M",
       "tags_count": "4",
       "updated": "2 months ago",
-      "tags": ["tools", "cloud"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwen3-coder-next:latest",
+          "size": "52GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-coder-next:cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "2 months ago"
+        },
+        {
+          "name": "qwen3-coder-next:q4_K_M",
+          "size": "52GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-coder-next:q8_0",
+          "size": "85GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 16,
       "name": "translategemma",
-      "description": "Translation-optimized Gemma model.",
+      "description": "A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.",
       "pulls": "1.3M",
       "tags_count": "13",
       "updated": "3 months ago",
-      "tags": ["vision"],
-      "variants": []
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "translategemma:latest",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "translategemma:4b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "translategemma:12b",
+          "size": "8.1GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "translategemma:27b",
+          "size": "17GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 17,
       "name": "glm-4.7-flash",
-      "description": "GLM 4.7 Flash - lightweight variant.",
+      "description": "As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for lightweight deployment that balances performance and efficiency.",
       "pulls": "1.2M",
       "tags_count": "4",
       "updated": "3 months ago",
-      "tags": ["tools", "thinking"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-4.7-flash:latest",
+          "size": "19GB",
+          "context_window": "198K",
+          "input_type": "Text"
+        },
+        {
+          "name": "glm-4.7-flash:q4_K_M",
+          "size": "19GB",
+          "context_window": "198K",
+          "input_type": "Text"
+        },
+        {
+          "name": "glm-4.7-flash:q8_0",
+          "size": "32GB",
+          "context_window": "198K",
+          "input_type": "Text"
+        },
+        {
+          "name": "glm-4.7-flash:bf16",
+          "size": "60GB",
+          "context_window": "198K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 18,
       "name": "lfm2.5-thinking",
-      "description": "LFM 2.5 with thinking capabilities.",
+      "description": "LFM2.5 is a new family of hybrid models designed for on-device deployment.",
       "pulls": "1.2M",
       "tags_count": "5",
       "updated": "3 months ago",
-      "tags": ["tools"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "lfm2.5-thinking:latest",
+          "size": "731MB",
+          "context_window": "125K",
+          "input_type": "Text"
+        },
+        {
+          "name": "lfm2.5-thinking:1.2b",
+          "size": "731MB",
+          "context_window": "125K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 19,
       "name": "ministral-3",
-      "description": "Ministral 3 - edge deployment model.",
-      "pulls": "1M",
+      "description": "The Ministral 3 family is designed for edge deployment, capable of running on a wide range of hardware.",
+      "pulls": "1.1M",
       "tags_count": "16",
       "updated": "4 months ago",
-      "tags": ["vision", "tools", "cloud"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "ministral-3:latest",
+          "size": "6.0GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "ministral-3:3b",
+          "size": "3.0GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "ministral-3:8b",
+          "size": "6.0GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "ministral-3:14b",
+          "size": "9.1GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "ministral-3:3b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "5 months ago"
+        },
+        {
+          "name": "ministral-3:8b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "5 months ago"
+        },
+        {
+          "name": "ministral-3:14b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "5 months ago"
+        }
+      ]
     },
     {
       "rank": 20,
       "name": "devstral-small-2",
-      "description": "DevStral Small 2 - development tools model.",
-      "pulls": "809.9K",
+      "description": "24B model that excels at using tools to explore codebases, editing multiple files and power software engineering agents.",
+      "pulls": "810.9K",
       "tags_count": "6",
       "updated": "4 months ago",
-      "tags": ["vision", "tools", "cloud"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "devstral-small-2:latest",
+          "size": "15GB",
+          "context_window": "384K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "devstral-small-2:24b",
+          "size": "15GB",
+          "context_window": "384K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "devstral-small-2:24b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 21,
       "name": "nemotron-3-super",
-      "description": "NVIDIA Nemotron 3 Super - 120B open MoE model.",
-      "pulls": "263.5K",
+      "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
+      "pulls": "266.3K",
       "tags_count": "7",
       "updated": "1 month ago",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-3-super:latest",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:120b",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "1 month ago"
+        }
+      ]
     },
     {
       "rank": 22,
       "name": "glm-ocr",
-      "description": "GLM-OCR multimodal OCR model.",
-      "pulls": "333K",
+      "description": "GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.",
+      "pulls": "333.6K",
       "tags_count": "3",
       "updated": "2 months ago",
-      "tags": ["vision", "tools"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "glm-ocr:latest",
+          "size": "2.2GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "glm-ocr:q8_0",
+          "size": "1.6GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "glm-ocr:bf16",
+          "size": "2.2GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 23,
       "name": "qwen3-next",
-      "description": "The first installment in the Qwen3-Next series.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "description": "The first installment in the Qwen3-Next series with strong performance in terms of both parameter efficiency and inference speed.",
+      "pulls": "533.2K",
+      "tags_count": "10",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "qwen3-next:latest",
+          "size": "50GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-next:80b",
+          "size": "50GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-next:80b-cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 24,
       "name": "nemotron-cascade-2",
-      "description": "NVIDIA Nemotron Cascade 2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "An open 30B MoE model from NVIDIA with 3B activated parameters that delivers strong reasoning and agentic capabilities.",
+      "pulls": "109.3K",
+      "tags_count": "3",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-cascade-2:latest",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-cascade-2:30b",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 25,
       "name": "rnj-1",
-      "description": "RNJ-1 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Rnj-1 is a family of 8B parameter open-weight, dense models trained from scratch by Essential AI, optimized for code and STEM with capabilities on par with SOTA open-weight models.",
+      "pulls": "453.2K",
+      "tags_count": "6",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "rnj-1:latest",
+          "size": "5.1GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "rnj-1:8b",
+          "size": "5.1GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "rnj-1:8b-cloud",
+          "size": "32K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 26,
       "name": "kimi-k2.5",
-      "description": "Kimi K2.5 - previous generation model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Kimi K2.5 is an open-source, native multimodal agentic model that seamlessly integrates vision and language understanding with advanced agentic capabilities, instant and thinking modes, as well as conversational and agentic paradigms.",
+      "pulls": "267.7K",
+      "tags_count": "1",
+      "updated": "3 months ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2.5:cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "3 months ago"
+        }
+      ]
     },
     {
       "rank": 27,
       "name": "nemotron-3-nano",
-      "description": "NVIDIA Nemotron 3 Nano - lightweight variant.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Nemotron-3-Nano is a new Standard for Efficient, Open, and Intelligent Agentic Models, now updated with a 4B parameter count model.",
+      "pulls": "418.8K",
+      "tags_count": "9",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-3-nano:latest",
+          "size": "24GB",
+          "context_window": "1M",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-nano:4b",
+          "size": "2.8GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-nano:30b",
+          "size": "24GB",
+          "context_window": "1M",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-nano:30b-cloud",
+          "size": "1M context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 28,
-      "name": "minimax-m2.7",
-      "description": "MiniMax M2.7 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "name": "olmo-3",
+      "description": "Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.",
+      "pulls": "419.6K",
+      "tags_count": "15",
+      "updated": "4 months ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "olmo-3:latest",
+          "size": "4.5GB",
+          "context_window": "64K",
+          "input_type": "Text"
+        },
+        {
+          "name": "olmo-3:7b",
+          "size": "4.5GB",
+          "context_window": "64K",
+          "input_type": "Text"
+        },
+        {
+          "name": "olmo-3:32b",
+          "size": "19GB",
+          "context_window": "64K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 29,
-      "name": "olmo-3",
-      "description": "OLMo 3 language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "name": "minimax-m2.7",
+      "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
+      "pulls": "105.8K",
+      "tags_count": "1",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.7:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "1 month ago"
+        }
+      ]
     },
     {
       "rank": 30,
       "name": "glm-5",
-      "description": "GLM-5 - previous generation model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
+      "pulls": "199.7K",
+      "tags_count": "1",
+      "updated": "2 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-5:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "2 months ago"
+        }
+      ]
     },
     {
       "rank": 31,
       "name": "deepseek-ocr",
-      "description": "DeepSeek OCR model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "DeepSeek-OCR is a vision-language model that can perform token-efficient OCR.",
+      "pulls": "434K",
+      "tags_count": "3",
+      "updated": "5 months ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-ocr:latest",
+          "size": "6.7GB",
+          "context_window": "8K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "deepseek-ocr:3b",
+          "size": "6.7GB",
+          "context_window": "8K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 32,
       "name": "minimax-m2.5",
-      "description": "MiniMax M2.5 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
+      "pulls": "170.5K",
+      "tags_count": "1",
+      "updated": "2 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.5:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "2 months ago"
+        }
+      ]
     },
     {
       "rank": 33,
       "name": "olmo-3.1",
-      "description": "OLMo 3.1 language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.",
+      "pulls": "267.5K",
+      "tags_count": "10",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "olmo-3.1:latest",
+          "size": "19GB",
+          "context_window": "64K",
+          "input_type": "Text"
+        },
+        {
+          "name": "olmo-3.1:32b",
+          "size": "19GB",
+          "context_window": "64K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 34,
       "name": "devstral-2",
-      "description": "DevStral 2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "123B model that excels at using tools to explore codebases, editing multiple files and power software engineering agents.",
+      "pulls": "207.9K",
+      "tags_count": "6",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "devstral-2:latest",
+          "size": "75GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "devstral-2:123b",
+          "size": "75GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "devstral-2:123b-cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 35,
       "name": "nomic-embed-text-v2-moe",
-      "description": "Nomic Embed Text v2 Mixture-of-Experts.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "nomic-embed-text-v2-moe is a multilingual MoE text embedding model that excels at multilingual retrieval.",
+      "pulls": "195.3K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "nomic-embed-text-v2-moe:latest",
+          "size": "958MB",
+          "context_window": "512",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 36,
       "name": "functiongemma",
-      "description": "Function-calling optimized Gemma model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "FunctionGemma is a specialized version of Google&#39;s Gemma 3 270M model fine-tuned explicitly for function calling.",
+      "pulls": "153.4K",
+      "tags_count": "4",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "functiongemma:latest",
+          "size": "301MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "functiongemma:270m",
+          "size": "301MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 37,
       "name": "gemini-3-flash-preview",
-      "description": "Gemini 3 Flash Preview model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Gemini 3 Flash offers frontier intelligence built for speed at a fraction of the cost.",
+      "pulls": "147.2K",
+      "tags_count": "2",
+      "updated": "4 months ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "gemini-3-flash-preview:latest",
+          "size": "1M context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        },
+        {
+          "name": "gemini-3-flash-preview:cloud",
+          "size": "1M context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 38,
       "name": "cogito-2.1",
-      "description": "Cogito 2.1 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "The Cogito v2.1 LLMs are instruction tuned generative models. All models are released under MIT license for commercial use.",
+      "pulls": "177.9K",
+      "tags_count": "6",
+      "updated": "5 months ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "cogito-2.1:latest",
+          "size": "1.3TB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito-2.1:671b",
+          "size": "1.3TB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito-2.1:671b-cloud",
+          "size": "160K context window",
+          "context_window": "Text",
+          "input_type": "5 months ago"
+        }
+      ]
     },
     {
       "rank": 39,
       "name": "glm-4.7",
-      "description": "GLM 4.7 - previous generation model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Advancing the Coding Capability",
+      "pulls": "97.1K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-4.7:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 40,
       "name": "deepseek-v3.2",
-      "description": "DeepSeek V3.2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "DeepSeek-V3.2, a model that harmonizes high computational efficiency with superior reasoning and agent performance.",
+      "pulls": "90.7K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-v3.2:cloud",
+          "size": "160K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 41,
       "name": "minimax-m2.1",
-      "description": "MiniMax M2.1 - multilingual model.",
-      "pulls": "43.6K",
+      "description": "Exceptional multilingual capabilities to elevate code engineering",
+      "pulls": "43.9K",
       "tags_count": "1",
       "updated": "4 months ago",
-      "tags": ["tools", "cloud"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.1:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 42,
       "name": "kimi-k2-thinking",
-      "description": "Kimi K2 Thinking - thinking model.",
-      "pulls": "59.7K",
+      "description": "Kimi K2 Thinking, Moonshot AI&#39;s best open-source thinking model.",
+      "pulls": "60.1K",
       "tags_count": "1",
       "updated": "5 months ago",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2-thinking:cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "5 months ago"
+        }
+      ]
     },
     {
       "rank": 43,
       "name": "mistral-large-3",
-      "description": "Mistral Large 3 - general-purpose multimodal model.",
-      "pulls": "46K",
+      "description": "A general-purpose multimodal mixture-of-experts model for production-grade tasks and enterprise workloads.",
+      "pulls": "46.1K",
       "tags_count": "1",
       "updated": "5 months ago",
-      "tags": ["vision", "tools", "cloud"],
-      "variants": []
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral-large-3:675b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "5 months ago"
+        }
+      ]
     },
     {
       "rank": 44,
       "name": "gpt-oss",
-      "description": "OpenAI's open-weight models for reasoning and agentic tasks.",
+      "description": "OpenAI’s open-weight models designed for powerful reasoning, agentic tasks, and versatile developer use cases.",
       "pulls": "9.3M",
       "tags_count": "5",
       "updated": "6 months ago",
-      "tags": ["tools", "thinking", "cloud"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "gpt-oss:latest",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gpt-oss:20b",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gpt-oss:120b",
+          "size": "65GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gpt-oss:20b-cloud",
+          "size": "128K context window",
+          "context_window": "Text",
+          "input_type": "7 months ago"
+        },
+        {
+          "name": "gpt-oss:120b-cloud",
+          "size": "128K context window",
+          "context_window": "Text",
+          "input_type": "7 months ago"
+        }
+      ]
     },
     {
       "rank": 45,
       "name": "qwen3-vl",
-      "description": "Qwen 3 Vision Language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["vision"],
-      "variants": []
+      "description": "The most powerful vision-language model in the Qwen model family to date.",
+      "pulls": "3.6M",
+      "tags_count": "59",
+      "updated": "6 months ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "qwen3-vl:latest",
+          "size": "6.1GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:2b",
+          "size": "1.9GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:4b",
+          "size": "3.3GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:8b",
+          "size": "6.1GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:30b",
+          "size": "20GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:32b",
+          "size": "21GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:235b",
+          "size": "143GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen3-vl:235b-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "6 months ago"
+        },
+        {
+          "name": "qwen3-vl:235b-instruct-cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "6 months ago"
+        }
+      ]
     },
     {
       "rank": 46,
       "name": "qwen3-coder",
-      "description": "Qwen 3 Coder model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["tools"],
-      "variants": []
+      "description": "Alibaba&#39;s performant long context models for agentic and coding tasks.",
+      "pulls": "5.1M",
+      "tags_count": "10",
+      "updated": "7 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwen3-coder:latest",
+          "size": "19GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-coder:30b",
+          "size": "19GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-coder:480b",
+          "size": "290GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-coder:480b-cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "7 months ago"
+        }
+      ]
     },
     {
       "rank": 47,
       "name": "qwen3-embedding",
-      "description": "Qwen 3 Embedding model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["embedding"],
-      "variants": []
+      "description": "Building upon the foundational models of the Qwen3 series, Qwen3 Embedding provides a comprehensive range of text embeddings models in various sizes",
+      "pulls": "1.8M",
+      "tags_count": "12",
+      "updated": "7 months ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "qwen3-embedding:latest",
+          "size": "4.7GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-embedding:0.6b",
+          "size": "639MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-embedding:4b",
+          "size": "2.5GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3-embedding:8b",
+          "size": "4.7GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 48,
       "name": "granite4",
-      "description": "IBM Granite 4 - previous generation.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Granite 4 features improved instruction following (IF) and tool-calling capabilities, making them more effective in enterprise applications.",
+      "pulls": "1.2M",
+      "tags_count": "17",
+      "updated": "6 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "granite4:latest",
+          "size": "2.1GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4:350m",
+          "size": "708MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4:1b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4:3b",
+          "size": "2.1GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 49,
       "name": "mistral-small3.2",
-      "description": "Mistral Small 3.2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "An update to Mistral Small that improves on function calling, instruction following, and less repetition errors.",
+      "pulls": "1.9M",
+      "tags_count": "5",
+      "updated": "10 months ago",
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral-small3.2:latest",
+          "size": "15GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "mistral-small3.2:24b",
+          "size": "15GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 50,
       "name": "embeddinggemma",
-      "description": "Embedding-optimized Gemma model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["embedding"],
-      "variants": []
+      "description": "EmbeddingGemma is a 300M parameter embedding model from Google.",
+      "pulls": "1.1M",
+      "tags_count": "5",
+      "updated": "7 months ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "embeddinggemma:latest",
+          "size": "622MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        },
+        {
+          "name": "embeddinggemma:300m",
+          "size": "622MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 51,
       "name": "qwen2.5vl",
-      "description": "Qwen 2.5 Vision Language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["vision"],
-      "variants": []
+      "description": "Flagship vision-language model of Qwen and also a significant leap from the previous Qwen2-VL.",
+      "pulls": "1.9M",
+      "tags_count": "17",
+      "updated": "11 months ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "qwen2.5vl:latest",
+          "size": "6.0GB",
+          "context_window": "125K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen2.5vl:3b",
+          "size": "3.2GB",
+          "context_window": "125K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen2.5vl:7b",
+          "size": "6.0GB",
+          "context_window": "125K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen2.5vl:32b",
+          "size": "21GB",
+          "context_window": "125K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "qwen2.5vl:72b",
+          "size": "49GB",
+          "context_window": "125K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 52,
       "name": "gemma3n",
-      "description": "Gemma 3 Nano variant.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Gemma 3n models are designed for efficient execution on everyday devices such as laptops, tablets or phones.",
+      "pulls": "1.6M",
+      "tags_count": "9",
+      "updated": "10 months ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "gemma3n:latest",
+          "size": "7.5GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma3n:e2b",
+          "size": "5.6GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma3n:e4b",
+          "size": "7.5GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 53,
       "name": "magistral",
-      "description": "Magistral model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Magistral is a small, efficient reasoning model with 24B parameters.",
+      "pulls": "1.4M",
+      "tags_count": "5",
+      "updated": "10 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "magistral:latest",
+          "size": "14GB",
+          "context_window": "39K",
+          "input_type": "Text"
+        },
+        {
+          "name": "magistral:24b",
+          "size": "14GB",
+          "context_window": "39K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 54,
       "name": "deepseek-v3.1",
-      "description": "DeepSeek V3.1 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "DeepSeek-V3.1-Terminus is a hybrid model that supports both thinking mode and non-thinking mode.",
+      "pulls": "665.7K",
+      "tags_count": "8",
+      "updated": "7 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-v3.1:latest",
+          "size": "404GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-v3.1:671b",
+          "size": "404GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-v3.1:671b-cloud",
+          "size": "160K context window",
+          "context_window": "Text",
+          "input_type": "7 months ago"
+        }
+      ]
     },
     {
       "rank": 55,
       "name": "devstral",
-      "description": "DevStral development tools model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Devstral: the best open source model for coding agents",
+      "pulls": "932.1K",
+      "tags_count": "5",
+      "updated": "10 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "devstral:latest",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "devstral:24b",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 56,
       "name": "gpt-oss-safeguard",
-      "description": "OpenAI's open-weight model with safety features.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "gpt-oss-safeguard-20b and gpt-oss-safeguard-120b are safety reasoning models built-upon gpt-oss",
+      "pulls": "137.2K",
+      "tags_count": "3",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "gpt-oss-safeguard:latest",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gpt-oss-safeguard:20b",
+          "size": "14GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gpt-oss-safeguard:120b",
+          "size": "65GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 57,
       "name": "minimax-m2",
-      "description": "MiniMax M2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "MiniMax M2 is a high-efficiency large language model built for coding and agentic workflows.",
+      "pulls": "105.6K",
+      "tags_count": "1",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "6 months ago"
+        }
+      ]
     },
     {
       "rank": 58,
       "name": "glm-4.6",
-      "description": "GLM 4.6 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Advanced agentic, reasoning and coding capabilities.",
+      "pulls": "109.8K",
+      "tags_count": "1",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-4.6:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "6 months ago"
+        }
+      ]
     },
     {
       "rank": 59,
       "name": "kimi-k2",
-      "description": "Kimi K2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "A state-of-the-art mixture-of-experts (MoE) language model. Kimi K2-Instruct-0905 demonstrates significant improvements in performance on public benchmarks and real-world coding agent tasks.",
+      "pulls": "62.7K",
+      "tags_count": "1",
+      "updated": "7 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2:1t-cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "7 months ago"
+        }
+      ]
     },
     {
       "rank": 60,
       "name": "deepseek-r1",
-      "description": "DeepSeek R1 reasoning model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "DeepSeek-R1 is a family of open reasoning models with performance approaching that of leading models, such as O3 and Gemini 2.5 Pro.",
+      "pulls": "84.4M",
+      "tags_count": "35",
+      "updated": "10 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-r1:latest",
+          "size": "5.2GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:1.5b",
+          "size": "1.1GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:7b",
+          "size": "4.7GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:8b",
+          "size": "5.2GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:14b",
+          "size": "9.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:32b",
+          "size": "20GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:70b",
+          "size": "43GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-r1:671b",
+          "size": "404GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 61,
@@ -631,205 +1908,1416 @@
       "pulls": "113.9M",
       "tags_count": "93",
       "updated": "1 year ago",
-      "tags": ["tools"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "llama3.1:latest",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.1:8b",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.1:70b",
+          "size": "43GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.1:405b",
+          "size": "243GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 62,
       "name": "llama3.2",
-      "description": "Meta's Llama 3.2 goes small with 1B and 3B models.",
-      "pulls": "67.6M",
+      "description": "Meta&#39;s Llama 3.2 goes small with 1B and 3B models.",
+      "pulls": "67.7M",
       "tags_count": "63",
       "updated": "1 year ago",
-      "tags": ["tools"],
-      "variants": []
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "llama3.2:latest",
+          "size": "2.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.2:1b",
+          "size": "1.3GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.2:3b",
+          "size": "2.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 63,
       "name": "gemma3",
       "description": "The current, most capable model that runs on a single GPU.",
-      "pulls": "36.2M",
+      "pulls": "36.3M",
       "tags_count": "29",
       "updated": "4 months ago",
-      "tags": ["vision", "cloud"],
-      "variants": []
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "gemma3:latest",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma3:270m",
+          "size": "292MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma3:1b",
+          "size": "815MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma3:4b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma3:12b",
+          "size": "8.1GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma3:27b",
+          "size": "17GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "gemma3:4b-cloud",
+          "size": "32K context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        },
+        {
+          "name": "gemma3:12b-cloud",
+          "size": "32K context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        },
+        {
+          "name": "gemma3:27b-cloud",
+          "size": "128K context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        }
+      ]
     },
     {
       "rank": 64,
       "name": "qwen3",
       "description": "Qwen3 is the latest generation of large language models in Qwen series, offering a comprehensive suite of dense and mixture-of-experts (MoE) models.",
-      "pulls": "28.1M",
+      "pulls": "28.2M",
       "tags_count": "58",
       "updated": "6 months ago",
-      "tags": ["tools", "thinking"],
-      "variants": []
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "qwen3:latest",
+          "size": "5.2GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:0.6b",
+          "size": "523MB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:1.7b",
+          "size": "1.4GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:4b",
+          "size": "2.5GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:8b",
+          "size": "5.2GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:14b",
+          "size": "9.3GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:30b",
+          "size": "19GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:32b",
+          "size": "20GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen3:235b",
+          "size": "142GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 65,
       "name": "nomic-embed-text",
-      "description": "Nomic's embedding model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["embedding"],
-      "variants": []
+      "description": "A high-performing open embedding model with a large token context window.",
+      "pulls": "67.9M",
+      "tags_count": "3",
+      "updated": "2 years ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "nomic-embed-text:latest",
+          "size": "274MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nomic-embed-text:v1.5",
+          "size": "274MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nomic-embed-text:137m-v1.5-fp16",
+          "size": "274MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 66,
       "name": "qwen2.5",
-      "description": "Qwen 2.5 language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "Qwen2.5 models are pretrained on Alibaba&#39;s latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.",
+      "pulls": "29M",
+      "tags_count": "133",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwen2.5:latest",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:0.5b",
+          "size": "398MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:1.5b",
+          "size": "986MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:3b",
+          "size": "1.9GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:7b",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:14b",
+          "size": "9.0GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:32b",
+          "size": "20GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5:72b",
+          "size": "47GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 67,
       "name": "gemma2",
-      "description": "Google's Gemma 2 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Google Gemma 2 is a high-performing and efficient model available in three sizes: 2B, 9B, and 27B.",
+      "pulls": "22.2M",
+      "tags_count": "94",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "gemma2:latest",
+          "size": "5.4GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma2:2b",
+          "size": "1.6GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma2:9b",
+          "size": "5.4GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma2:27b",
+          "size": "16GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 68,
       "name": "llama3",
-      "description": "Meta's Llama 3 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Meta Llama 3: The most capable openly available LLM to date",
+      "pulls": "23.7M",
+      "tags_count": "68",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "llama3:latest",
+          "size": "4.7GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3:8b",
+          "size": "4.7GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3:70b",
+          "size": "40GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 69,
       "name": "qwen2.5-coder",
-      "description": "Qwen 2.5 Coder specialized coding model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["tools"],
-      "variants": []
+      "description": "The latest series of Code-Specific Qwen models, with significant improvements in code generation, code reasoning, and code fixing.",
+      "pulls": "15M",
+      "tags_count": "199",
+      "updated": "11 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwen2.5-coder:latest",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:0.5b",
+          "size": "398MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:1.5b",
+          "size": "986MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:3b",
+          "size": "1.9GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:7b",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:14b",
+          "size": "9.0GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2.5-coder:32b",
+          "size": "20GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 70,
       "name": "mistral",
-      "description": "Mistral language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": [],
-      "variants": []
+      "description": "The 7B model released by Mistral AI, updated to version 0.3.",
+      "pulls": "28.9M",
+      "tags_count": "84",
+      "updated": "9 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral:latest",
+          "size": "4.4GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "mistral:7b",
+          "size": "4.4GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 71,
       "name": "phi3",
-      "description": "Microsoft Phi 3 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Phi-3 is a family of lightweight 3B (Mini) and 14B (Medium) state-of-the-art open models by Microsoft.",
+      "pulls": "17.4M",
+      "tags_count": "72",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "phi3:latest",
+          "size": "2.2GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "phi3:3.8b",
+          "size": "2.2GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "phi3:14b",
+          "size": "7.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 72,
       "name": "phi4",
-      "description": "Microsoft Phi 4 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Phi-4 is a 14B parameter, state-of-the-art open model from Microsoft.",
+      "pulls": "7.5M",
+      "tags_count": "5",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "phi4:latest",
+          "size": "9.1GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "phi4:14b",
+          "size": "9.1GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 73,
       "name": "llava",
-      "description": "LLaVA multimodal model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["vision"],
-      "variants": []
+      "description": "🌋 LLaVA is a novel end-to-end trained large multimodal model that combines a vision encoder and Vicuna for general-purpose visual and language understanding. Updated to version 1.6.",
+      "pulls": "14M",
+      "tags_count": "98",
+      "updated": "2 years ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "llava:latest",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llava:7b",
+          "size": "4.7GB",
+          "context_window": "32K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llava:13b",
+          "size": "8.0GB",
+          "context_window": "4K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llava:34b",
+          "size": "20GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 74,
       "name": "mxbai-embed-large",
-      "description": "Mixedbread AI large embedding model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["embedding"],
-      "variants": []
+      "description": "State-of-the-art large embedding model from mixedbread.ai",
+      "pulls": "10.2M",
+      "tags_count": "4",
+      "updated": "1 year ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "mxbai-embed-large:latest",
+          "size": "670MB",
+          "context_window": "512",
+          "input_type": "Text"
+        },
+        {
+          "name": "mxbai-embed-large:335m",
+          "size": "670MB",
+          "context_window": "512",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 75,
       "name": "deepseek-v3",
-      "description": "DeepSeek V3 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "A strong Mixture-of-Experts (MoE) language model with 671B total parameters with 37B activated for each token.",
+      "pulls": "3.8M",
+      "tags_count": "5",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "deepseek-v3:latest",
+          "size": "404GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-v3:671b",
+          "size": "404GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 76,
       "name": "dolphin3",
-      "description": "Dolphin 3 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "Dolphin 3.0 Llama 3.1 8B 🐬 is the next generation of the Dolphin series of instruct-tuned models designed to be the ultimate general purpose local model, enabling coding, math, agentic, function calling, and general use cases.",
+      "pulls": "3.8M",
+      "tags_count": "5",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "dolphin3:latest",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "dolphin3:8b",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 77,
       "name": "olmo2",
-      "description": "OLMo 2 language model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "OLMo 2 is a new family of 7B and 13B models trained on up to 5T tokens. These models are on par with or better than equivalently sized fully open models, and competitive with open-weight models such as Llama 3.1 on English academic benchmarks.",
+      "pulls": "3.7M",
+      "tags_count": "9",
+      "updated": "1 year ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "olmo2:latest",
+          "size": "4.5GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        },
+        {
+          "name": "olmo2:7b",
+          "size": "4.5GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        },
+        {
+          "name": "olmo2:13b",
+          "size": "8.4GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 78,
       "name": "llama3.2-vision",
-      "description": "Meta's Llama 3.2 with vision capabilities.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["vision"],
-      "variants": []
+      "description": "Llama 3.2 Vision is a collection of instruction-tuned image reasoning generative models in 11B and 90B sizes.",
+      "pulls": "4.4M",
+      "tags_count": "9",
+      "updated": "11 months ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "llama3.2-vision:latest",
+          "size": "7.8GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llama3.2-vision:11b",
+          "size": "7.8GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llama3.2-vision:90b",
+          "size": "55GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
     },
     {
       "rank": 79,
       "name": "minicpm-v",
-      "description": "MiniCPM Vision model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
-      "tags": ["vision"],
-      "variants": []
+      "description": "A series of multimodal LLMs (MLLMs) designed for vision-language understanding.",
+      "pulls": "5.1M",
+      "tags_count": "17",
+      "updated": "1 year ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "minicpm-v:latest",
+          "size": "5.5GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "minicpm-v:8b",
+          "size": "5.5GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
     },
     {
       "rank": 80,
       "name": "llama3.3",
-      "description": "Meta's Llama 3.3 model.",
-      "pulls": "N/A",
-      "tags_count": "N/A",
-      "updated": "N/A",
+      "description": "New state of the art 70B model. Llama 3.3 70B offers similar performance compared to the Llama 3.1 405B model.",
+      "pulls": "3.8M",
+      "tags_count": "14",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "llama3.3:latest",
+          "size": "43GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama3.3:70b",
+          "size": "43GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 81,
+      "name": "qwen2",
+      "description": "Qwen2 is a new series of large language models from Alibaba group",
+      "pulls": "5.8M",
+      "tags_count": "97",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwen2:latest",
+          "size": "4.4GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2:0.5b",
+          "size": "352MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2:1.5b",
+          "size": "935MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2:7b",
+          "size": "4.4GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen2:72b",
+          "size": "41GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 82,
+      "name": "gemma",
+      "description": "Gemma is a family of lightweight, state-of-the-art open models built by Google DeepMind. Updated to version 1.1",
+      "pulls": "6.9M",
+      "tags_count": "102",
+      "updated": "2 years ago",
       "tags": [],
-      "variants": []
+      "variants": [
+        {
+          "name": "gemma:latest",
+          "size": "5.0GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma:2b",
+          "size": "1.7GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "gemma:7b",
+          "size": "5.0GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 83,
+      "name": "qwen",
+      "description": "Qwen 1.5 is a series of large language models by Alibaba Cloud spanning from 0.5B to 110B parameters",
+      "pulls": "6.6M",
+      "tags_count": "379",
+      "updated": "2 years ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "qwen:latest",
+          "size": "2.3GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:0.5b",
+          "size": "395MB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:1.8b",
+          "size": "1.1GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:4b",
+          "size": "2.3GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:7b",
+          "size": "4.5GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:14b",
+          "size": "8.2GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:32b",
+          "size": "18GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:72b",
+          "size": "41GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwen:110b",
+          "size": "63GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 84,
+      "name": "smollm2",
+      "description": "SmolLM2 is a family of compact language models available in three size: 135M, 360M, and 1.7B parameters.",
+      "pulls": "3.4M",
+      "tags_count": "49",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "smollm2:latest",
+          "size": "1.8GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "smollm2:135m",
+          "size": "271MB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "smollm2:360m",
+          "size": "726MB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "smollm2:1.7b",
+          "size": "1.8GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 85,
+      "name": "granite3.1-moe",
+      "description": "The IBM Granite 1B and 3B models are long-context mixture of experts (MoE) Granite models from IBM designed for low latency usage.",
+      "pulls": "2.9M",
+      "tags_count": "33",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "granite3.1-moe:latest",
+          "size": "2.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite3.1-moe:1b",
+          "size": "1.4GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite3.1-moe:3b",
+          "size": "2.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 86,
+      "name": "mistral-nemo",
+      "description": "A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.",
+      "pulls": "4.3M",
+      "tags_count": "17",
+      "updated": "9 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral-nemo:latest",
+          "size": "7.1GB",
+          "context_window": "1000K",
+          "input_type": "Text"
+        },
+        {
+          "name": "mistral-nemo:12b",
+          "size": "7.1GB",
+          "context_window": "1000K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 87,
+      "name": "bge-m3",
+      "description": "BGE-M3 is a new model from BAAI distinguished for its versatility in Multi-Functionality, Multi-Linguality, and Multi-Granularity.",
+      "pulls": "4M",
+      "tags_count": "3",
+      "updated": "1 year ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "bge-m3:latest",
+          "size": "1.2GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "bge-m3:567m",
+          "size": "1.2GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 88,
+      "name": "cogito",
+      "description": "Cogito v1 Preview is a family of hybrid reasoning models by Deep Cogito that outperform the best available open models of the same size, including counterparts from LLaMA, DeepSeek, and Qwen across most standard benchmarks.",
+      "pulls": "2M",
+      "tags_count": "20",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "cogito:latest",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito:3b",
+          "size": "2.2GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito:8b",
+          "size": "4.9GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito:14b",
+          "size": "9.0GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito:32b",
+          "size": "20GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "cogito:70b",
+          "size": "43GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 89,
+      "name": "falcon3",
+      "description": "A family of efficient AI models under 10B parameters performant in science, math, and coding through innovative training techniques.",
+      "pulls": "2.5M",
+      "tags_count": "17",
+      "updated": "1 year ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "falcon3:latest",
+          "size": "4.6GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "falcon3:1b",
+          "size": "1.8GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "falcon3:3b",
+          "size": "2.0GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "falcon3:7b",
+          "size": "4.6GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "falcon3:10b",
+          "size": "6.3GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 90,
+      "name": "llama2",
+      "description": "Llama 2 is a collection of foundation language models ranging from 7B to 70B parameters.",
+      "pulls": "6.8M",
+      "tags_count": "102",
+      "updated": "2 years ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "llama2:latest",
+          "size": "3.8GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama2:7b",
+          "size": "3.8GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama2:13b",
+          "size": "7.4GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        },
+        {
+          "name": "llama2:70b",
+          "size": "39GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 91,
+      "name": "phi4-reasoning",
+      "description": "Phi 4 reasoning and reasoning plus are 14-billion parameter open-weight reasoning models that rival much larger models on complex reasoning tasks.",
+      "pulls": "1.5M",
+      "tags_count": "9",
+      "updated": "1 year ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "phi4-reasoning:latest",
+          "size": "11GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "phi4-reasoning:14b",
+          "size": "11GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 92,
+      "name": "mistral-small",
+      "description": "Mistral Small 3 sets a new benchmark in the “small” Large Language Models category below 70B.",
+      "pulls": "3M",
+      "tags_count": "21",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral-small:latest",
+          "size": "14GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "mistral-small:22b",
+          "size": "13GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "mistral-small:24b",
+          "size": "14GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 93,
+      "name": "llama4",
+      "description": "Meta&#39;s latest collection of multimodal models.",
+      "pulls": "1.6M",
+      "tags_count": "11",
+      "updated": "10 months ago",
+      "tags": [
+        "vision",
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "llama4:latest",
+          "size": "67GB",
+          "context_window": "10M",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llama4:16x17b",
+          "size": "67GB",
+          "context_window": "10M",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "llama4:128x17b",
+          "size": "245GB",
+          "context_window": "1M",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 94,
+      "name": "tinyllama",
+      "description": "The TinyLlama project is an open endeavor to train a compact 1.1B Llama model on 3 trillion tokens.",
+      "pulls": "4.8M",
+      "tags_count": "36",
+      "updated": "2 years ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "tinyllama:latest",
+          "size": "638MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        },
+        {
+          "name": "tinyllama:1.1b",
+          "size": "638MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 95,
+      "name": "qwq",
+      "description": "QwQ is the reasoning model of the Qwen series.",
+      "pulls": "2.2M",
+      "tags_count": "8",
+      "updated": "1 year ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "qwq:latest",
+          "size": "20GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        },
+        {
+          "name": "qwq:32b",
+          "size": "20GB",
+          "context_window": "40K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 96,
+      "name": "codellama",
+      "description": "A large language model that can use text prompts to generate and discuss code.",
+      "pulls": "5.5M",
+      "tags_count": "199",
+      "updated": "1 year ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "codellama:latest",
+          "size": "3.8GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codellama:7b",
+          "size": "3.8GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codellama:13b",
+          "size": "7.4GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codellama:34b",
+          "size": "19GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codellama:70b",
+          "size": "39GB",
+          "context_window": "2K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 97,
+      "name": "deepseek-coder",
+      "description": "DeepSeek Coder is a capable coding model trained on two trillion code and natural language tokens.",
+      "pulls": "4.1M",
+      "tags_count": "102",
+      "updated": "2 years ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "deepseek-coder:latest",
+          "size": "776MB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-coder:1.3b",
+          "size": "776MB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-coder:6.7b",
+          "size": "3.8GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-coder:33b",
+          "size": "19GB",
+          "context_window": "16K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 98,
+      "name": "snowflake-arctic-embed",
+      "description": "A suite of text embedding models by Snowflake, optimized for performance.",
+      "pulls": "3.1M",
+      "tags_count": "16",
+      "updated": "2 years ago",
+      "tags": [
+        "embedding"
+      ],
+      "variants": [
+        {
+          "name": "snowflake-arctic-embed:latest",
+          "size": "669MB",
+          "context_window": "512",
+          "input_type": "Text"
+        },
+        {
+          "name": "snowflake-arctic-embed:22m",
+          "size": "46MB",
+          "context_window": "512",
+          "input_type": "Text"
+        },
+        {
+          "name": "snowflake-arctic-embed:33m",
+          "size": "67MB",
+          "context_window": "512",
+          "input_type": "Text"
+        },
+        {
+          "name": "snowflake-arctic-embed:110m",
+          "size": "219MB",
+          "context_window": "512",
+          "input_type": "Text"
+        },
+        {
+          "name": "snowflake-arctic-embed:137m",
+          "size": "274MB",
+          "context_window": "2K",
+          "input_type": "Text"
+        },
+        {
+          "name": "snowflake-arctic-embed:335m",
+          "size": "669MB",
+          "context_window": "512",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 99,
+      "name": "codegemma",
+      "description": "CodeGemma is a collection of powerful, lightweight models that can perform a variety of coding tasks like fill-in-the-middle code completion, code generation, natural language understanding, mathematical reasoning, and instruction following.",
+      "pulls": "3M",
+      "tags_count": "85",
+      "updated": "1 year ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "codegemma:latest",
+          "size": "5.0GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codegemma:2b",
+          "size": "1.6GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        },
+        {
+          "name": "codegemma:7b",
+          "size": "5.0GB",
+          "context_window": "8K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 100,
+      "name": "deepseek-coder-v2",
+      "description": "An open-source Mixture-of-Experts code language model that achieves performance comparable to GPT4-Turbo in code-specific tasks.",
+      "pulls": "2.5M",
+      "tags_count": "64",
+      "updated": "1 year ago",
+      "tags": [],
+      "variants": [
+        {
+          "name": "deepseek-coder-v2:latest",
+          "size": "8.9GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-coder-v2:16b",
+          "size": "8.9GB",
+          "context_window": "160K",
+          "input_type": "Text"
+        },
+        {
+          "name": "deepseek-coder-v2:236b",
+          "size": "133GB",
+          "context_window": "4K",
+          "input_type": "Text"
+        }
+      ]
     }
   ],
   "summary": {
-    "total_models_collected": 80,
-    "models_with_complete_variants": 6,
-    "models_with_partial_metadata": 74,
-    "variant_extraction_rate": "7.5%",
-    "note": "Complete variant data (name, size, context_window, input_type) was extracted for the top 6 models. The remaining 74 models require individual page clicks to extract their variants table. Models are sorted by popularity (based on page order in Ollama search)."
+    "total_models": 100,
+    "models_with_variants": 100,
+    "total_variants": 332,
+    "capability_tags": [
+      "audio",
+      "embedding",
+      "thinking",
+      "tools",
+      "vision"
+    ]
   }
 }

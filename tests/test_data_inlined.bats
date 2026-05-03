@@ -1,9 +1,9 @@
 #!/usr/bin/env bats
 
-@test "MODEL_NAMES contains 80 models" {
+@test "MODEL_NAMES contains 100 models" {
   run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_NAMES[@]}"'
   [ "$status" -eq 0 ]
-  [ "$output" = "80" ]
+  [ "$output" = "100" ]
 }
 
 @test "first 6 models have variants" {
@@ -12,10 +12,10 @@
   [ "$output" = "1 1 1 1 1 1" ]
 }
 
-@test "model 7 (deepseek-v4-flash) has no variants" {
+@test "model 7 (deepseek-v4-flash) has variants" {
   run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${MODEL_HAS_VARIANTS[6]}"'
   [ "$status" -eq 0 ]
-  [ "$output" = "0" ]
+  [ "$output" = "1" ]
 }
 
 @test "granite4.1 has 3 variants with correct metadata" {
@@ -27,19 +27,19 @@
 @test "MODEL_PULLS length matches MODEL_NAMES" {
   run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_PULLS[@]}"'
   [ "$status" -eq 0 ]
-  [ "$output" = "80" ]
+  [ "$output" = "100" ]
 }
 
 @test "MODEL_TAGS length matches MODEL_NAMES" {
   run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_TAGS[@]}"'
   [ "$status" -eq 0 ]
-  [ "$output" = "80" ]
+  [ "$output" = "100" ]
 }
 
 @test "MODEL_HAS_VARIANTS length matches MODEL_NAMES" {
   run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_HAS_VARIANTS[@]}"'
   [ "$status" -eq 0 ]
-  [ "$output" = "80" ]
+  [ "$output" = "100" ]
 }
 
 @test "all 6 variant-bearing models have non-empty variant arrays" {
