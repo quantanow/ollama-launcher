@@ -13,7 +13,8 @@ Single bash script CLI (`ollama-launch`) that presents a three-step interactive 
 | `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.1.1) |
+| `package.json` | npm package config (`ollama-launch` v1.1.2) |
+| `index.html` | GitHub Pages site — usage and features landing page |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
 | `.github/workflows/publish.yml` | CD: publishes to npm on `v*` tag push |
