@@ -13,7 +13,7 @@ Single bash script CLI (`ollama-launch`) that presents a three-step interactive 
 | `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.1.2) |
+| `package.json` | npm package config (`ollama-launch` v1.1.3) |
 | `index.html` | GitHub Pages site — usage and features landing page |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
@@ -75,6 +75,7 @@ fzf is used when available; falls back to numbered menus (`pick_menu`, `pick_men
 |------|-------------|
 | `--help` / `-h` | Show usage and exit |
 | `--version` / `-v` | Print version and exit |
+| `-p` / `--print` | Print the ollama command instead of executing it |
 | `--list-agents` | Print all agent names and exit |
 | `--list-models` | Print all 100 model names and exit |
 | `--list-models --cloud` | Print only models that have a `:cloud` variant and exit |

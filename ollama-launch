@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="1.1.1"
+VERSION="1.1.4"
 
 # ── colors (disabled when stdout is not a TTY) ────────────────────────────────
 if [ -t 1 ]; then
@@ -10,14 +10,16 @@ if [ -t 1 ]; then
   WHITE='\033[37m'
   GREEN='\033[32m'
   RED='\033[31m'
+  AMBER='\033[38;5;214m'
   RESET='\033[0m'
 else
-  BOLD='' CYAN='' WHITE='' GREEN='' RED='' RESET=''
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
 fi
 
 BOLD_CYAN="${BOLD}${CYAN}"
 BOLD_WHITE="${BOLD}${WHITE}"
 BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_AMBER="${BOLD}${AMBER}"
 
 # fzf display colors — always defined (not TTY-gated) because fzf reads from a pipe
 FZF_NAME=$'\033[1;96m'  # bold bright cyan — model/variant name
@@ -3145,6 +3147,98 @@ pick_menu_raw() {
   done
 }
 
+# ── recent history ─────────────────────────────────────────────────────────────
+HISTORY_ENTRIES=()
+
+history_file() { printf '%s/.ollama-launch-history' "$HOME"; }
+
+load_history() {
+  HISTORY_ENTRIES=()
+  local f; f=$(history_file)
+  [ -f "$f" ] || return 0
+  local line
+  while IFS= read -r line; do
+    [ -n "$line" ] && HISTORY_ENTRIES+=("$line")
+  done < "$f"
+}
+
+save_history() {
+  local agent="$1" model="$2"
+  local new_entry="${agent}|${model}"
+  local f; f=$(history_file)
+  load_history
+  local updated=("$new_entry")
+  local entry
+  if [ "${#HISTORY_ENTRIES[@]}" -gt 0 ]; then
+    for entry in "${HISTORY_ENTRIES[@]}"; do
+      [ "$entry" = "$new_entry" ] && continue
+      [ "${#updated[@]}" -ge 5 ] && break
+      updated+=("$entry")
+    done
+  fi
+  printf '%s\n' "${updated[@]}" > "$f"
+}
+
+RECENT_NEW_SENTINEL="✦ New selection..."
+
+# pick_recent
+# Presents the 5 most-recent agent+model combos. Sets RECENT_AGENT/RECENT_MODEL
+# on selection, or leaves them empty if the user chooses "New selection...".
+pick_recent() {
+  local total=${#HISTORY_ENTRIES[@]}
+  [ "$total" -eq 0 ] && return 0
+
+  RECENT_AGENT=""
+  RECENT_MODEL=""
+
+  local lines=()
+  local entry agent_part model_part
+  for entry in "${HISTORY_ENTRIES[@]}"; do
+    agent_part="${entry%%|*}"
+    model_part="${entry##*|}"
+    lines+=("${FZF_NAME}${agent_part}${FZF_RST}  ${FZF_META}│  ${model_part}${FZF_RST}")
+  done
+
+  local selected
+  if command -v fzf &>/dev/null; then
+    local separator="${FZF_META}  ──────────────────────────────────────${FZF_RST}"
+    local new_opt="${FZF_NAME}${RECENT_NEW_SENTINEL}${FZF_RST}"
+    selected=$(
+      { printf '%s\n' "${lines[@]}"; printf '%s\n' "$separator" "$new_opt"; } \
+      | pick_fzf_raw "Recent" "↑↓ navigate  /  Enter to select  /  Esc for new selection"
+    )
+  else
+    local tmpfile; tmpfile=$(mktemp /tmp/ollama-launch-recent-XXXXXX)
+    local i
+    for i in "${!lines[@]}"; do
+      local agent_part="${HISTORY_ENTRIES[$i]%%|*}"
+      local model_part="${HISTORY_ENTRIES[$i]##*|}"
+      printf '%s  │  %s\n' "$agent_part" "$model_part" >> "$tmpfile"
+    done
+    printf '%s\n' "$RECENT_NEW_SENTINEL" >> "$tmpfile"
+    selected=$(pick_menu_raw "recent launch" "$tmpfile")
+    rm -f "$tmpfile"
+  fi
+
+  local esc=$'\033'
+  local clean; clean=$(printf '%s' "$selected" | sed "s/${esc}\[[0-9;]*m//g")
+
+  if [ -z "$clean" ] \
+     || [[ "$clean" == *"──"* ]] \
+     || [[ "$clean" == *"${RECENT_NEW_SENTINEL}"* ]]; then
+    return 0
+  fi
+
+  local raw_agent raw_model
+  raw_agent=$(printf '%s' "$clean" | sed 's/[[:space:]]*│.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+  raw_model=$(printf '%s' "$clean" | sed 's/.*│[[:space:]]*//')
+
+  if [ -n "$raw_agent" ] && [ -n "$raw_model" ]; then
+    RECENT_AGENT="$raw_agent"
+    RECENT_MODEL="$raw_model"
+  fi
+}
+
 # pick_model
 # Presents metadata-rich list of all models. Sets PICK_MODEL_INDEX to selected index.
 # Prints selected model name (base name, not variant).
@@ -3260,9 +3354,10 @@ pick_variant() {
 # ── flag parsing ──────────────────────────────────────────────────────────────
 case "${1:-}" in
   --help|-h)
-    echo "Usage: ollama-launch [--help] [--version] [--list-agents] [--list-models [--cloud]]"
+    echo "Usage: ollama-launch [--help] [--version] [--list-agents] [--list-models [--cloud]] [-p]"
     echo
     echo "  (no args)              Pick an agent and model interactively, then launch"
+    echo "  -p, --print            Print the ollama command instead of executing it"
     echo "  --list-agents          Print all available agents and exit"
     echo "  --list-models          Print all available models and exit"
     echo "  --list-models --cloud  Print only models that have a :cloud variant and exit"
@@ -3287,6 +3382,9 @@ case "${1:-}" in
       print_models
     fi
     exit 0
+    ;;
+  -p|--print)
+    OLLAMA_LAUNCH_PRINT=1
     ;;
   "")
     ;;
@@ -3322,44 +3420,64 @@ if ! command -v fzf &>/dev/null; then
   fi
 fi
 
-# ── step 1: pick agent ────────────────────────────────────────────────────────
-if command -v fzf &>/dev/null; then
-  agent=$(pick_fzf "Agent" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit" print_agents)
-  if [ -z "$agent" ]; then exit 0; fi
-else
-  pick_menu "agent" AGENTS
-  agent="$PICK_RESULT"
-  if [ -z "$agent" ]; then exit 0; fi
+# ── recent quick-launch ───────────────────────────────────────────────────────
+load_history
+RECENT_AGENT=""
+RECENT_MODEL=""
+if [ "${#HISTORY_ENTRIES[@]}" -gt 0 ]; then
+  pick_recent
 fi
 
-echo -e "  Agent:  ${BOLD_GREEN}${agent}${RESET}"
-echo
+if [ -n "$RECENT_AGENT" ]; then
+  agent="$RECENT_AGENT"
+  final_model="$RECENT_MODEL"
+  echo -e "  ${BOLD_CYAN}Recent:${RESET}  ${BOLD_GREEN}${agent}${RESET}  →  ${BOLD_GREEN}${final_model}${RESET}"
+  echo
+else
+  # ── step 1: pick agent ──────────────────────────────────────────────────────
+  if command -v fzf &>/dev/null; then
+    agent=$(pick_fzf "Agent" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit" print_agents)
+    if [ -z "$agent" ]; then exit 0; fi
+  else
+    pick_menu "agent" AGENTS
+    agent="$PICK_RESULT"
+    if [ -z "$agent" ]; then exit 0; fi
+  fi
 
-# ── step 2: pick model ────────────────────────────────────────────────────────
-pick_model
-model_name="$PICK_RESULT"
-if [ -z "$model_name" ]; then exit 0; fi
+  echo -e "  Agent:  ${BOLD_GREEN}${agent}${RESET}"
+  echo
 
-echo -e "  Model:  ${BOLD_GREEN}${model_name}${RESET}"
-echo
+  # ── step 2: pick model ──────────────────────────────────────────────────────
+  pick_model
+  model_name="$PICK_RESULT"
+  if [ -z "$model_name" ]; then exit 0; fi
 
-# ── step 2b: pick variant (if applicable) ───────────────────────────────────
-final_model="$model_name"
-if [ "$PICK_MODEL_INDEX" -ge 0 ] && [ "${MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX]}" -eq 1 ]; then
-  variant=$(pick_variant "$PICK_MODEL_INDEX")
-  if [ -n "$variant" ]; then
-    final_model="$variant"
+  echo -e "  Model:  ${BOLD_GREEN}${model_name}${RESET}"
+  echo
+
+  # ── step 2b: pick variant (if applicable) ─────────────────────────────────
+  final_model="$model_name"
+  if [ "$PICK_MODEL_INDEX" -ge 0 ] && [ "${MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX]}" -eq 1 ]; then
+    variant=$(pick_variant "$PICK_MODEL_INDEX")
+    if [ -n "$variant" ]; then
+      final_model="$variant"
+    fi
+  fi
+
+  if [ "$final_model" != "$model_name" ]; then
+    echo -e "  Variant: ${BOLD_GREEN}${final_model}${RESET}"
+    echo
   fi
 fi
 
-if [ "$final_model" != "$model_name" ]; then
-  echo -e "  Variant: ${BOLD_GREEN}${final_model}${RESET}"
-  echo
-fi
-
 # ── launch ────────────────────────────────────────────────────────────────────
+save_history "$agent" "$final_model"
 if [ -n "${OLLAMA_LAUNCH_TEST:-}" ]; then
   echo "ollama launch ${agent} --model ${final_model}"
+  exit 0
+fi
+if [ -n "${OLLAMA_LAUNCH_PRINT:-}" ]; then
+  echo -e "\n${BOLD_CYAN}Command:${RESET} ${BOLD_AMBER}ollama launch ${agent} --model ${final_model}${RESET}\n"
   exit 0
 fi
 
