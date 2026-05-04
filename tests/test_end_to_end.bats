@@ -138,11 +138,12 @@ teardown_file() {
   [[ "$output" == *"ollama launch claude --model qwen3:14b"* ]]
 }
 
-@test "new selection from recent picker proceeds to normal flow (menu path)" {
+@test "selecting an agent from recent popup proceeds to model picker (menu path)" {
   printf 'claude|qwen3:14b\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # recent menu: 2=New selection..., agent: 1=claude, model: 7=deepseek-v4-flash (auto-variant)
-  run bash -c 'echo -e "2\n1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  # menu: 1=recent(claude|qwen3:14b), 2=separator, 3=claude(agent), 4=codex...
+  # select 3 (claude agent), then model 7 (deepseek-v4-flash, auto-variant)
+  run bash -c 'echo -e "3\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
@@ -162,8 +163,8 @@ teardown_file() {
 @test "history keeps at most 5 entries" {
   printf 'fake1|x1\nfake2|x2\nfake3|x3\nfake4|x4\nfake5|x5\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # recent menu: 6=New selection..., agent: 1=claude, model: 1=granite4.1, variant: 1=first
-  run bash -c 'echo -e "6\n1\n1\n1\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model: 1=granite4.1, variant: 1=first
+  run bash -c 'echo -e "7\n1\n1\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   local lines; lines=$(wc -l < "$HOME/.ollama-launch-history")

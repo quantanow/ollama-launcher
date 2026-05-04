@@ -3179,11 +3179,11 @@ save_history() {
   printf '%s\n' "${updated[@]}" > "$f"
 }
 
-RECENT_NEW_SENTINEL="✦ New selection..."
-
 # pick_recent
-# Presents the 5 most-recent agent+model combos. Sets RECENT_AGENT/RECENT_MODEL
-# on selection, or leaves them empty if the user chooses "New selection...".
+# Shows recent agent+model combos followed by the agent list in one fzf popup.
+# - Selecting a recent entry sets both RECENT_AGENT and RECENT_MODEL (skips all pickers).
+# - Selecting an agent sets only RECENT_AGENT (proceeds to model+variant pickers).
+# - Selecting a separator or cancelling leaves both empty (full 3-step flow).
 pick_recent() {
   local total=${#HISTORY_ENTRIES[@]}
   [ "$total" -eq 0 ] && return 0
@@ -3193,29 +3193,35 @@ pick_recent() {
 
   local lines=()
   local entry agent_part model_part
-  for entry in "${HISTORY_ENTRIES[@]}"; do
-    agent_part="${entry%%|*}"
-    model_part="${entry##*|}"
-    lines+=("${FZF_NAME}${agent_part}${FZF_RST}  ${FZF_META}│  ${model_part}${FZF_RST}")
-  done
+  if [ "${#HISTORY_ENTRIES[@]}" -gt 0 ]; then
+    for entry in "${HISTORY_ENTRIES[@]}"; do
+      agent_part="${entry%%|*}"
+      model_part="${entry##*|}"
+      lines+=("${FZF_NAME}${agent_part}${FZF_RST}  ${FZF_META}│  ${model_part}${FZF_RST}")
+    done
+  fi
 
   local selected
   if command -v fzf &>/dev/null; then
     local separator="${FZF_META}  ──────────────────────────────────────${FZF_RST}"
-    local new_opt="${FZF_NAME}${RECENT_NEW_SENTINEL}${FZF_RST}"
+    local a
     selected=$(
-      { printf '%s\n' "${lines[@]}"; printf '%s\n' "$separator" "$new_opt"; } \
-      | pick_fzf_raw "Recent" "↑↓ navigate  /  Enter to select  /  Esc for new selection"
+      {
+        printf '%s\n' "$separator"
+        printf '%s\n' "${lines[@]}"
+        printf '%s\n' "$separator"
+        for a in "${AGENTS[@]}"; do printf '%s\n' "${FZF_NAME}${a}${FZF_RST}"; done
+      } | pick_fzf_raw "Recent" "↑↓ navigate  /  Enter to select  /  Esc to quit"
     )
   else
     local tmpfile; tmpfile=$(mktemp /tmp/ollama-launch-recent-XXXXXX)
-    local i
-    for i in "${!lines[@]}"; do
-      local agent_part="${HISTORY_ENTRIES[$i]%%|*}"
-      local model_part="${HISTORY_ENTRIES[$i]##*|}"
-      printf '%s  │  %s\n' "$agent_part" "$model_part" >> "$tmpfile"
+    local e
+    for e in "${HISTORY_ENTRIES[@]}"; do
+      printf '%s  │  %s\n' "${e%%|*}" "${e##*|}" >> "$tmpfile"
     done
-    printf '%s\n' "$RECENT_NEW_SENTINEL" >> "$tmpfile"
+    printf '%s\n' "──────────────────────────────────────" >> "$tmpfile"
+    local a
+    for a in "${AGENTS[@]}"; do printf '%s\n' "$a" >> "$tmpfile"; done
     selected=$(pick_menu_raw "recent launch" "$tmpfile")
     rm -f "$tmpfile"
   fi
@@ -3223,20 +3229,32 @@ pick_recent() {
   local esc=$'\033'
   local clean; clean=$(printf '%s' "$selected" | sed "s/${esc}\[[0-9;]*m//g")
 
-  if [ -z "$clean" ] \
-     || [[ "$clean" == *"──"* ]] \
-     || [[ "$clean" == *"${RECENT_NEW_SENTINEL}"* ]]; then
+  # Empty or separator line → cancel (full 3-step flow)
+  if [ -z "$clean" ] || [[ "$clean" == *"──"* ]]; then
     return 0
   fi
 
-  local raw_agent raw_model
-  raw_agent=$(printf '%s' "$clean" | sed 's/[[:space:]]*│.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
-  raw_model=$(printf '%s' "$clean" | sed 's/.*│[[:space:]]*//')
-
-  if [ -n "$raw_agent" ] && [ -n "$raw_model" ]; then
-    RECENT_AGENT="$raw_agent"
-    RECENT_MODEL="$raw_model"
+  # Recent entry: contains │
+  if [[ "$clean" == *"│"* ]]; then
+    local raw_agent raw_model
+    raw_agent=$(printf '%s' "$clean" | sed 's/[[:space:]]*│.*//' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+    raw_model=$(printf '%s' "$clean" | sed 's/.*│[[:space:]]*//')
+    if [ -n "$raw_agent" ] && [ -n "$raw_model" ]; then
+      RECENT_AGENT="$raw_agent"
+      RECENT_MODEL="$raw_model"
+    fi
+    return 0
   fi
+
+  # Agent name selected → set agent only, model picker follows
+  local agent_name; agent_name=$(printf '%s' "$clean" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+  local a
+  for a in "${AGENTS[@]}"; do
+    if [ "$agent_name" = "$a" ]; then
+      RECENT_AGENT="$agent_name"
+      return 0
+    fi
+  done
 }
 
 # pick_model
@@ -3428,14 +3446,17 @@ if [ "${#HISTORY_ENTRIES[@]}" -gt 0 ]; then
   pick_recent
 fi
 
-if [ -n "$RECENT_AGENT" ]; then
+if [ -n "$RECENT_AGENT" ] && [ -n "$RECENT_MODEL" ]; then
+  # ── recent entry selected: skip all pickers ──────────────────────────────────
   agent="$RECENT_AGENT"
   final_model="$RECENT_MODEL"
   echo -e "  ${BOLD_CYAN}Recent:${RESET}  ${BOLD_GREEN}${agent}${RESET}  →  ${BOLD_GREEN}${final_model}${RESET}"
   echo
 else
-  # ── step 1: pick agent ──────────────────────────────────────────────────────
-  if command -v fzf &>/dev/null; then
+  # ── step 1: pick agent (skip if chosen from recent popup) ───────────────────
+  if [ -n "$RECENT_AGENT" ]; then
+    agent="$RECENT_AGENT"
+  elif command -v fzf &>/dev/null; then
     agent=$(pick_fzf "Agent" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit" print_agents)
     if [ -z "$agent" ]; then exit 0; fi
   else
