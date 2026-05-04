@@ -13,7 +13,7 @@ Single bash script CLI (`ollama-launch`) that presents an interactive launcher f
 | `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.1.4) |
+| `package.json` | npm package config (`ollama-launch` v1.1.12) |
 | `index.html` | GitHub Pages site — usage and features landing page |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
@@ -118,15 +118,17 @@ End-to-end tests use a mock `fzf` and mock `ollama` in `tests/mock_bin/` (create
 
 ## Publishing to npm
 
-Requires an npm access token stored as a GitHub secret named `NPM_TOKEN`. Publish by tagging:
+Requires an npm access token stored as a GitHub secret named `NPM_TOKEN`. Publish by bumping version (which creates a tag) and pushing:
 
 ```bash
-# Bump version in package.json first, then:
-git tag v1.0.1
-git push origin v1.0.1
+npm version patch -m "chore: bump version to %s"
+git push origin main
+git push origin v1.x.x
 ```
 
 The CI workflow verifies the tag matches `package.json` version before publishing.
+
+**Note:** The script reads its `VERSION` from `package.json` at runtime (resolves symlinks so it works under `npm install -g`). Do not hardcode the version string in the script.
 
 ## Bash Compatibility
 
