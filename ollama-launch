@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="1.1.9"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+pkg_ver=$(grep '"version"' "$SCRIPT_DIR/package.json" 2>/dev/null | sed 's/.*"version": "\([^"]*\)".*/\1/')
+VERSION="${pkg_ver:-1.1.10}"
 
 # ── colors (disabled when stdout is not a TTY) ────────────────────────────────
 if [ -t 1 ]; then
