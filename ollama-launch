@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="1.1.7"
+VERSION="1.1.8"
 
 # ── colors (disabled when stdout is not a TTY) ────────────────────────────────
 if [ -t 1 ]; then
