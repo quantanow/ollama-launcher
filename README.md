@@ -18,9 +18,10 @@ ollama launch openclaw --model mistral-medium-3.5:latest
 ## Features
 
 - Three-step interactive picker: **agent** → **model** → **variant**
+- **Recent-launches quick-pick** — jump straight to your last 5 agent+model combos
 - **fzf** fuzzy search UI (type to filter, arrows to navigate)
 - Numbered menu fallback when fzf is not installed — works everywhere
-- 5 agents and 80 popular models from the Ollama library ready to go
+- 5 agents and 100 popular models from the Ollama library ready to go
 - Metadata-rich model picker showing pulls, tags, and input type
 - Variant picker for models with multiple sizes
 - ANSI colors auto-disabled when output is piped or redirected
@@ -88,7 +89,7 @@ sudo pacman -S fzf        # Arch
 ## Usage
 
 ```
-ollama-launch [--help | --version | --list-agents | --list-models]
+ollama-launch [--help | --version | --list-agents | --list-models] [-p]
 ```
 
 Run with no arguments to open the interactive picker:
@@ -97,13 +98,29 @@ Run with no arguments to open the interactive picker:
 ollama-launch
 ```
 
-The picker runs in three steps: first pick an **agent**, then pick a **model**, then pick a **variant**. The final command run will be:
+If you have recent launches in `~/.ollama-launch-history`, a **quick-pick popup** appears first showing your last 5 agent+model combos. Selecting a recent entry skips all other steps and launches immediately. Selecting an agent from the popup proceeds straight to the model picker. If there is no history (or you cancel), the picker runs in three steps: first pick an **agent**, then pick a **model**, then pick a **variant**. The final command run will be:
 
 ```bash
 ollama launch <agent> --model <model>:<variant>
 ```
 
 ### With fzf installed
+
+When you have launch history, the first screen shows recent combos and agents together:
+
+```
+  ↑↓ navigate  /  Enter to select  /  Esc to quit
+  Recent: _
+
+  ──────────────────────────────────────
+  claude            │  qwen3:14b
+  codex             │  granite4.1:8b
+  ──────────────────────────────────────
+  claude
+  codex
+  hermes
+  ...
+```
 
 **Step 1 — pick an agent:**
 
@@ -191,6 +208,8 @@ qwen3.6             736.2K pulls [vision, tools, thinking]
 | `--version` | `-v` | Print version string and exit |
 | `--list-agents` | | Print all available agents, one per line, and exit |
 | `--list-models` | | Print all available models, one per line, and exit |
+| `--list-models --cloud` | | Print only models that have a `:cloud` variant and exit |
+| `--print` | `-p` | Print the `ollama launch` command instead of executing it |
 
 ### Examples
 
@@ -218,6 +237,13 @@ ollama-launch --list-models
 
 # Use with grep to check availability
 ollama-launch --list-models | grep qwen
+
+# List only cloud-hosted models
+ollama-launch --list-models --cloud
+
+# Print the command without running it
+ollama-launch -p
+# → ollama launch claude --model granite4.1:8b
 ```
 
 ---
@@ -236,7 +262,7 @@ ollama-launch --list-models | grep qwen
 
 ## Available Models
 
-The default model list includes **80 popular models** from the Ollama library, with full metadata and variant information. A few examples:
+The default model list includes **100 popular models** from the Ollama library, with full metadata and variant information. A few examples:
 
 | Model | Description |
 |-------|-------------|
@@ -307,10 +333,12 @@ OLLAMA_LAUNCH_TEST=1 ./ollama-launch
 
 1. Checks that `ollama` is in your PATH (exits with a clear error if not)
 2. Prints the header
-3. **Step 1 — Agent:** fzf picker or numbered menu → you pick an agent
-4. **Step 2 — Model:** fzf picker or numbered menu → you pick a model
-5. **Step 3 — Variant:** fzf picker or numbered menu → you pick a variant (skipped for single-variant models)
-6. Runs `ollama launch <agent> --model <model>:<variant>` — replacing the shell process (`exec`)
+3. **Step 0 — Recent quick-pick:** if history exists, shows recent agent+model combos alongside the full agent list. Selecting a recent entry skips all other steps.
+4. **Step 1 — Agent:** fzf picker or numbered menu → you pick an agent
+5. **Step 2 — Model:** fzf picker or numbered menu → you pick a model
+6. **Step 3 — Variant:** fzf picker or numbered menu → you pick a variant (skipped for single-variant models)
+7. Saves the agent+model combo to `~/.ollama-launch-history` (last 5 entries kept)
+8. Runs `ollama launch <agent> --model <model>:<variant>` — replacing the shell process (`exec`)
 
 Colors are detected via `[ -t 1 ]` and suppressed automatically when stdout is not a terminal.
 
