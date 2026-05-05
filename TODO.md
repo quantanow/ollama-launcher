@@ -10,7 +10,7 @@
 
 ## Pending Tasks
 
-- [ ] Commit all new tools and version bump
+- [x] Commit all new tools and version bump
 
 ## Completed Tasks
 
