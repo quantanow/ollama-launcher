@@ -20,10 +20,27 @@
     "models"
   ],
   "bin": {
-    "ollama-launch": "ollama-launch"
+    "ollama-launch": "bin/ollama-launch",
+    "ollama-clean": "bin/ollama-clean",
+    "ollama-compare": "bin/ollama-compare",
+    "ollama-batch": "bin/ollama-batch",
+    "ollama-bench": "bin/ollama-bench",
+    "ollama-chat": "bin/ollama-chat",
+    "ollama-modelfile": "bin/ollama-modelfile",
+    "ollama-vision": "bin/ollama-vision",
+    "ollama-pipe": "bin/ollama-pipe"
   },
   "files": [
-    "ollama-launch"
+    "bin/ollama-launch",
+    "bin/ollama-clean",
+    "bin/ollama-compare",
+    "bin/ollama-batch",
+    "bin/ollama-bench",
+    "bin/ollama-chat",
+    "bin/ollama-modelfile",
+    "bin/ollama-vision",
+    "bin/ollama-pipe",
+    "models.json"
   ],
   "engines": {
     "node": ">=14"

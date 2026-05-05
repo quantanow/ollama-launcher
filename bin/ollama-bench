@@ -1,0 +1,327 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+# ── defaults ──────────────────────────────────────────────────────────────────
+DEFAULT_PROMPT="Write a short story about a robot learning to paint in 3 paragraphs."
+DEFAULT_RUNS=1
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_local_models() {
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}'
+}
+
+pick_fzf() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu() {
+  local file="$1"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No models available." &&2
+    exit 0
+  fi
+
+  echo -e "${BOLD_WHITE}Available models:${RESET}" &&2
+  echo &&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" &&2
+  done
+  echo &&2
+
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" &&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo &&2; exit 0; }
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      echo "${lines[$((choice - 1))]}"
+      break
+    fi
+    echo -e "${BOLD_RED}Invalid choice.${RESET}" &&2
+  done
+}
+
+# Return nanoseconds since epoch
+nanotime() {
+  if command -v perl &>/dev/null; then
+    perl -MTime::HiRes=time -e 'printf "%d\n", time * 1_000_000_000'
+  elif command -v python3 &>/dev/null; then
+    python3 -c 'import time; print(int(time.time() * 1_000_000_000))'
+  else
+    # Fallback to seconds with decimal
+    date +%s
+  fi
+}
+
+# Convert ns or s to human-readable
+fmt_time() {
+  local raw="$1"
+  # ns timestamps are ~1.7e18; s timestamps are ~1.7e9.
+  # Use 1 billion seconds (~31 years) as threshold.
+  if [ "$raw" -gt 999999999 ]; then
+    local sec=$((raw / 1000000000))
+    local ms=$(((raw % 1000000000) / 1000000))
+    printf '%d.%03ds' "$sec" "$ms"
+  else
+    printf '%ss' "$raw"
+  fi
+}
+
+bench_file() { printf '%s/.ollama-bench-history' "$HOME"; }
+
+save_result() {
+  local model="$1" prompt="$2" runs="$3" total_ns="$4"
+  local f; f=$(bench_file)
+  local ts; ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  local sec; sec=$((total_ns / 1000000000))
+  printf '{"ts":"%s","model":"%s","prompt_length":%d,"runs":%d,"total_sec":%d}\n' \
+    "$ts" "$model" "${#prompt}" "$runs" "$sec" >> "$f"
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+MODEL=""
+PROMPT=""
+RUNS=""
+SHOW_HISTORY=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-bench [--help] [--version] [--model <name>] [--prompt <text>] [--runs <n>] [--history]"
+      echo
+      echo "  (no args)              Interactive: pick model, run benchmark"
+      echo "  --model <name>         Model to benchmark (default: interactive picker)"
+      echo "  --prompt <text>         Benchmark prompt (default: built-in story prompt)"
+      echo "  --runs <n>             Number of benchmark runs (default: 1)"
+      echo "  --history              Show past benchmark results and exit"
+      echo "  OLLAMA_BENCH_TEST=1  Print command without executing"
+      echo "  --version              Print version and exit"
+      echo "  --help                 Show this help and exit"
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-bench $VERSION"
+      exit 0
+      ;;
+    --model)
+      MODEL="$2"
+      shift 2
+      ;;
+    --prompt)
+      PROMPT="$2"
+      shift 2
+      ;;
+    --runs)
+      RUNS="$2"
+      shift 2
+      ;;
+    --history)
+      SHOW_HISTORY=1
+      shift
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-bench --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# ── history display ───────────────────────────────────────────────────────────
+if [ -n "$SHOW_HISTORY" ]; then
+  f=$(bench_file)
+  if [ ! -f "$f" ]; then
+    echo -e "${BOLD}No benchmark history found.${RESET}"
+    exit 0
+  fi
+
+  echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+  echo -e "${BOLD_WHITE}  Benchmark History${RESET}"
+  echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+  echo
+
+  while IFS= read -r line; do
+    local ts model total_sec
+    ts=$(printf '%s' "$line" | sed 's/.*"ts":"\([^"]*\)".*/\1/')
+    model=$(printf '%s' "$line" | sed 's/.*"model":"\([^"]*\)".*/\1/')
+    total_sec=$(printf '%s' "$line" | sed 's/.*"total_sec":\([0-9]*\).*/\1/')
+    local total_str
+    if [ "$total_sec" -ge 60 ]; then
+      local min=$((total_sec / 60))
+      local sec=$((total_sec % 60))
+      total_str="${min}m ${sec}s"
+    else
+      total_str="${total_sec}s"
+    fi
+    printf "  ${FZF_META}%s${RESET}  ${WHITE}%-40s${RESET}  ${BOLD_GREEN}%s${RESET}\n" "$ts" "$model" "$total_str"
+  done < "$f"
+
+  exit 0
+fi
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+
+# Resolve model
+if [ -z "$MODEL" ]; then
+  models=$(get_local_models)
+  if [ -z "$models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found. Run 'ollama pull <model>' first."
+    exit 1
+  fi
+
+  tmpfile=$(mktemp)
+  printf '%s\n' "$models" > "$tmpfile"
+
+  selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(cat "$tmpfile" | pick_fzf "Pick a model to benchmark")
+  else
+    selected=$(pick_menu "$tmpfile")
+  fi
+
+  rm -f "$tmpfile"
+
+  if [ -z "$selected" ]; then
+    echo -e "${BOLD}Cancelled.${RESET}"
+    exit 0
+  fi
+
+  MODEL="$selected"
+fi
+
+# Resolve prompt
+[ -z "$PROMPT" ] && PROMPT="$DEFAULT_PROMPT"
+
+# Resolve runs
+[ -z "$RUNS" ] && RUNS="$DEFAULT_RUNS"
+if ! [[ "$RUNS" =~ ^[0-9]+$ ]] || [ "$RUNS" -lt 1 ]; then
+  echo -e "${BOLD_RED}Error:${RESET} --runs must be a positive integer"
+  exit 1
+fi
+
+echo
+echo -e "${BOLD_CYAN}Benchmark Setup:${RESET}"
+echo -e "  ${FZF_META}Model:${RESET}  ${WHITE}$MODEL${RESET}"
+echo -e "  ${FZF_META}Runs:${RESET}   ${WHITE}$RUNS${RESET}"
+echo -e "  ${FZF_META}Prompt:${RESET} ${WHITE}${PROMPT:0:60}...${RESET}"
+echo
+
+# Warmup
+if [ -z "${OLLAMA_BENCH_TEST:-}" ]; then
+  echo -e "  ${BOLD_AMBER}Warmup:${RESET} running single inference..."
+  ollama run "$MODEL" "Hi" > /dev/null 2>&1 || true
+  echo -e "  ${BOLD_GREEN}Warmup complete.${RESET}"
+  echo
+fi
+
+# Benchmark runs
+results=()
+for ((run=1; run<=RUNS; run++)); do
+  if [ "$RUNS" -gt 1 ]; then
+    echo -e "  ${BOLD_AMBER}Run ${run}/${RUNS}...${RESET}"
+  else
+    echo -e "  ${BOLD_AMBER}Benchmarking...${RESET}"
+  fi
+
+  if [ -n "${OLLAMA_BENCH_TEST:-}" ]; then
+    echo -e "    ${FZF_META}Would run:${RESET} ollama run $MODEL \"$PROMPT\""
+    results+=("5000000000")  # fake 5s
+  else
+    local start end elapsed
+    start=$(nanotime)
+    ollama run "$MODEL" "$PROMPT" > /dev/null 2>&1 || true
+    end=$(nanotime)
+    elapsed=$((end - start))
+    results+=("$elapsed")
+    echo -e "    ${BOLD_GREEN}Done:${RESET} $(fmt_time "$elapsed")"
+  fi
+done
+
+# Compute average
+total_ns=0
+for t in "${results[@]}"; do
+  total_ns=$((total_ns + t))
+done
+avg_ns=$((total_ns / RUNS))
+
+# Save result
+if [ -z "${OLLAMA_BENCH_TEST:-}" ]; then
+  save_result "$MODEL" "$PROMPT" "$RUNS" "$avg_ns"
+fi
+
+# Display results
+echo
+echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+echo -e "${BOLD_WHITE}  Results${RESET}"
+echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+echo
+echo -e "  ${BOLD}Model:${RESET}  ${WHITE}$MODEL${RESET}"
+echo -e "  ${BOLD}Runs:${RESET}   ${WHITE}$RUNS${RESET}"
+if [ "$RUNS" -gt 1 ]; then
+  echo -e "  ${BOLD}Avg:${RESET}    ${BOLD_GREEN}$(fmt_time "$avg_ns")${RESET}"
+  echo -e "  ${BOLD}Total:${RESET}  ${WHITE}$(fmt_time "$total_ns")${RESET}"
+else
+  echo -e "  ${BOLD}Time:${RESET}   ${BOLD_GREEN}$(fmt_time "$avg_ns")${RESET}"
+fi
+echo

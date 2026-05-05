@@ -1,0 +1,331 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+FZF_META='\033[2m'
+
+# Chain definitions (parallel arrays)
+CHAIN_NAMES=(
+  "summarize"
+  "translate"
+  "json"
+  "polish"
+  "extract"
+)
+
+CHAIN_PROMPTS=(
+  "Summarize the following text concisely:"
+  "Translate the following text to French:"
+  "Format the following as a JSON object with keys 'title', 'summary', and 'key_points':"
+  "Improve the writing style of the following text:"
+  "Extract the key facts and entities from the following text:"
+)
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_local_models() {
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}'
+}
+
+pick_fzf() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_pipe_model() {
+  local models; models=$(get_local_models)
+  if [ -z "$models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found. Run 'ollama pull <model>' first." >&2
+    exit 1
+  fi
+
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done <<< "$models"
+  local total=${#lines[@]}
+
+  if command -v fzf &>/dev/null; then
+    local selected; selected=$(printf '%s\n' "${lines[@]}" | pick_fzf "Select model for this step")
+    [ -z "$selected" ] && exit 0
+    echo "$selected"
+    return
+  fi
+
+  echo -e "${BOLD_WHITE}Available models:${RESET}" >&2
+  echo >&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" >&2
+  done
+  echo >&2
+
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" >&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo >&2; exit 0; }
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      echo "${lines[$((choice - 1))]}"
+      break
+    fi
+    echo -e "${BOLD_RED}Invalid choice.${RESET}" >&2
+  done
+}
+
+resolve_chain() {
+  local chain_str="$1"
+  local IFS=','; read -ra names <<< "$chain_str"
+  local i
+  for name in "${names[@]}"; do
+    local found=""
+    for ((i=0; i<${#CHAIN_NAMES[@]}; i++)); do
+      if [ "${CHAIN_NAMES[$i]}" = "$name" ]; then
+        STEP_PROMPTS+=("${CHAIN_PROMPTS[$i]}")
+        found=1
+        break
+      fi
+    done
+    if [ -z "$found" ]; then
+      echo -e "${BOLD_RED}Error:${RESET} Unknown chain step: ${name}" >&2
+      echo "Available: ${CHAIN_NAMES[*]}" >&2
+      exit 1
+    fi
+  done
+}
+
+# ── flag parsing ────────────────────────────────────────────────────────────────
+INPUT_FILE=""
+OUTPUT_FILE=""
+DEFAULT_MODEL=""
+STEP_MODELS=()
+STEP_PROMPTS=()
+CHAIN=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-pipe [--help] [--version] [--input <file>] [--output <file>] [--model <name>] [--step \"model prompt...\"] [--chain <name,name,...>]"
+      echo
+      echo "  (no args)              Interactive: build steps, run pipeline"
+      echo "  --input <file>          Input text file (default: stdin)"
+      echo "  --output <file>         Write final output to file"
+      echo "  --model <name>          Default model for all steps"
+      echo '  --step "model prompt"   Add a pipeline step (repeatable)'
+      echo "  --chain <names>         Predefined chain (summarize,translate,json,polish,extract)"
+      echo "  OLLAMA_PIPE_TEST=1      Print commands without executing"
+      echo "  --version               Print version and exit"
+      echo "  --help                  Show this help and exit"
+      echo
+      echo "Examples:"
+      echo '  cat article.txt | ollama-pipe --step "llama3.1 Summarize this article"'
+      echo '  ollama-pipe --input doc.txt --chain summarize,json --model qwen2.5'
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-pipe $VERSION"
+      exit 0
+      ;;
+    --input|-i)
+      INPUT_FILE="$2"
+      shift 2
+      ;;
+    --output|-o)
+      OUTPUT_FILE="$2"
+      shift 2
+      ;;
+    --model|-m)
+      DEFAULT_MODEL="$2"
+      shift 2
+      ;;
+    --step|-s)
+      step_str="$2"
+      model="${step_str%% *}"
+      prompt="${step_str#* }"
+      if [ "$model" = "$prompt" ]; then
+        echo -e "${BOLD_RED}Error:${RESET} --step must include a model and a prompt separated by a space." >&2
+        exit 1
+      fi
+      STEP_MODELS+=("$model")
+      STEP_PROMPTS+=("$prompt")
+      shift 2
+      ;;
+    --chain|-c)
+      CHAIN="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-pipe --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# ── main ────────────────────────────────────────────────────────────────────────
+check_ollama
+
+# Resolve chain into prompts and models
+if [ -n "$CHAIN" ]; then
+  resolve_chain "$CHAIN"
+  if [ -n "$DEFAULT_MODEL" ]; then
+    for ((i=0; i<${#STEP_PROMPTS[@]}; i++)); do
+      STEP_MODELS+=("$DEFAULT_MODEL")
+    done
+  fi
+fi
+
+# Read input
+content=""
+if [ -n "$INPUT_FILE" ]; then
+  if [ ! -f "$INPUT_FILE" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Input file not found: $INPUT_FILE"
+    exit 1
+  fi
+  if [ -s "$INPUT_FILE" ]; then
+    IFS= read -r -d '' content < "$INPUT_FILE" || true
+  fi
+elif ! [ -t 0 ]; then
+  IFS= read -r -d '' content || true
+elif [ -t 0 ]; then
+  echo -e "${BOLD}Enter input text (Ctrl+D when done):${RESET}" >&2
+  IFS= read -r -d '' content || true
+fi
+
+if [ -z "$content" ]; then
+  echo -e "${BOLD_RED}Error:${RESET} No input provided. Use --input, pipe stdin, or type interactively." >&2
+  exit 1
+fi
+
+# Interactive step builder
+if [ "${#STEP_PROMPTS[@]}" -eq 0 ]; then
+  echo -e "${BOLD_CYAN}Build pipeline steps:${RESET}" >&2
+  step_num=1
+  while true; do
+    echo >&2
+    echo -e "${BOLD_WHITE}Step ${step_num}:${RESET}" >&2
+    model=""
+    if [ -n "$DEFAULT_MODEL" ]; then
+      model="$DEFAULT_MODEL"
+      echo -e "  ${FZF_META}Model:${RESET} ${WHITE}$model${RESET}" >&2
+    else
+      model=$(pick_pipe_model)
+      [ -z "$model" ] && exit 0
+    fi
+
+    prompt=""
+    if [ -t 0 ]; then
+      printf "${BOLD}Instruction for this step:${RESET} " >&2
+      read -r prompt </dev/tty 2>/dev/null || read -r prompt 2>/dev/null || { echo >&2; exit 0; }
+    fi
+    [ -z "$prompt" ] && exit 0
+
+    STEP_MODELS+=("$model")
+    STEP_PROMPTS+=("$prompt")
+
+    cont=""
+    if [ -t 0 ]; then
+      printf "${BOLD}Add another step? [y/N]:${RESET} " >&2
+      read -r cont </dev/tty 2>/dev/null || read -r cont 2>/dev/null || { echo >&2; exit 0; }
+    fi
+    [[ "${cont:-}" =~ ^[Yy]$ ]] || break
+    step_num=$((step_num + 1))
+  done
+fi
+
+# If chain was used without default model, pick models now
+if [ -n "$CHAIN" ] && [ "${#STEP_MODELS[@]}" -eq 0 ] && [ "${#STEP_PROMPTS[@]}" -gt 0 ]; then
+  echo -e "${BOLD_CYAN}Select model for each chain step:${RESET}" >&2
+  for ((i=0; i<${#STEP_PROMPTS[@]}; i++)); do
+    echo -e "${BOLD_WHITE}Step $((i+1)):${RESET} ${STEP_PROMPTS[$i]}" >&2
+    model=$(pick_pipe_model)
+    [ -z "$model" ] && exit 0
+    STEP_MODELS+=("$model")
+  done
+fi
+
+if [ "${#STEP_MODELS[@]}" -eq 0 ]; then
+  echo -e "${BOLD_RED}Error:${RESET} No pipeline steps defined." >&2
+  exit 1
+fi
+
+if [ "${#STEP_MODELS[@]}" -ne "${#STEP_PROMPTS[@]}" ]; then
+  echo -e "${BOLD_RED}Error:${RESET} Mismatch between models and prompts. Every step needs both." >&2
+  exit 1
+fi
+
+echo >&2
+echo -e "${BOLD_CYAN}Pipeline:${RESET} ${#STEP_PROMPTS[@]} step(s)" >&2
+
+# Run pipeline
+total=${#STEP_PROMPTS[@]}
+for ((i=0; i<total; i++)); do
+  model="${STEP_MODELS[$i]}"
+  prompt="${STEP_PROMPTS[$i]}"
+
+  echo -e "  ${BOLD_AMBER}Step $((i+1))/${total}:${RESET} ${WHITE}$model${RESET}" >&2
+
+  full_prompt="${prompt}"$'\n\n'"${content}"
+
+  if [ -n "${OLLAMA_PIPE_TEST:-}" ]; then
+    echo -e "    ${BOLD_AMBER}Would run:${RESET} ollama run $model <prompt>" >&2
+    content="[mock output for step $((i+1))]"
+  else
+    result=$(ollama run "$model" "$full_prompt")
+    content="$result"
+  fi
+done
+
+echo >&2
+if [ -n "$OUTPUT_FILE" ]; then
+  printf '%s' "$content" > "$OUTPUT_FILE"
+  echo -e "${BOLD_GREEN}Output written to:${RESET} $OUTPUT_FILE" >&2
+else
+  echo -e "${BOLD_GREEN}--- Output ---${RESET}" >&2
+  printf '%s\n' "$content"
+fi

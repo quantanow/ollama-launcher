@@ -561,10 +561,60 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── tools suite ── */
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 64px;
+    }
+
+    .tool {
+      background: var(--bg2);
+      padding: 24px;
+      transition: background 0.2s;
+    }
+
+    .tool:hover { background: var(--bg2-hi); }
+
+    .tool-name {
+      font-size: 13px;
+      color: var(--cyan);
+      font-weight: 500;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .tool-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tool-cmd {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--dim);
+      background: var(--bg3);
+      padding: 2px 6px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 900px) {
+      .tools { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── responsive ── */
     @media (max-width: 640px) {
       .steps    { grid-template-columns: 1fr; }
       .features { grid-template-columns: 1fr; }
+      .tools    { grid-template-columns: 1fr; }
       h1 { font-size: 42px; }
     }
   </style>
@@ -574,6 +624,7 @@
 <nav>
   <a class="nav-logo" href="#">ollama<span>-launch</span></a>
   <div class="nav-links">
+    <a href="#tools">Tools</a>
     <a href="#how-it-works">How it works</a>
     <a href="#features">Features</a>
     <a href="#usage">Usage</a>
@@ -588,7 +639,7 @@
   <div class="container">
     <div class="badge">npm package</div>
     <h1>ollama<span>-launch</span></h1>
-    <p class="tagline">Stop memorizing model names. Pick agent, model, and variant interactively.</p>
+    <p class="tagline">A suite of fast, polished CLIs for Ollama. Pick agent, model, and variant interactively.</p>
 
     <div class="install-block">
       <span class="prompt">$</span>
@@ -719,11 +770,68 @@
   </div>
 </div>
 
+<!-- TOOLS SUITE -->
+<section id="tools">
+  <div class="container">
+    <p class="section-label">The suite</p>
+    <h2>Nine tools for every Ollama workflow</h2>
+    <div class="tools">
+      <div class="tool">
+        <div class="tool-name">ollama-launch</div>
+        <p class="tool-desc">Interactive agent + model picker. Three-step flow with fuzzy search and recent-launch quick-pick.</p>
+        <span class="tool-cmd">ollama-launch</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-clean</div>
+        <p class="tool-desc">Interactively remove local models to free disk space. Multi-select via fzf or numbered menu.</p>
+        <span class="tool-cmd">ollama-clean</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-compare</div>
+        <p class="tool-desc">Run the same prompt across multiple models and display outputs side-by-side.</p>
+        <span class="tool-cmd">ollama-compare</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-batch</div>
+        <p class="tool-desc">Process a directory of text files through a single model. Resume-friendly output.</p>
+        <span class="tool-cmd">ollama-batch --dir ./docs</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-bench</div>
+        <p class="tool-desc">Benchmark model inference speed with warmup + timed runs. Stores JSON history.</p>
+        <span class="tool-cmd">ollama-bench --runs 5</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-chat</div>
+        <p class="tool-desc">Persistent conversation manager with forking, history, and per-chat model switching.</p>
+        <span class="tool-cmd">ollama-chat --new</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-modelfile</div>
+        <p class="tool-desc">Interactive Modelfile builder for creating custom ollama models with parameters.</p>
+        <span class="tool-cmd">ollama-modelfile --from llama3</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-vision</div>
+        <p class="tool-desc">Vision-capable model picker. Provide image(s), ask a question, get a response.</p>
+        <span class="tool-cmd">ollama-vision --image photo.jpg</span>
+      </div>
+      <div class="tool">
+        <div class="tool-name">ollama-pipe</div>
+        <p class="tool-desc">Chain model operations into multi-step pipelines. Summarize, translate, extract, polish.</p>
+        <span class="tool-cmd">ollama-pipe --chain summarize,json</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- HOW IT WORKS -->
 <section id="how-it-works">
   <div class="container">
     <p class="section-label">How it works</p>
-    <h2>Three steps to launch</h2>
+    <h2>Three steps to launch <span style="color:var(--cyan)">ollama-launch</span></h2>
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
@@ -774,8 +882,8 @@
       </div>
       <div class="feature">
         <div class="feature-icon">🖥</div>
-        <div class="feature-title">Single bash script</div>
-        <p class="feature-desc">One self-contained file. No Node runtime, no dependencies beyond ollama itself. Works on macOS and Linux with bash 3.2+.</p>
+        <div class="feature-title">Self-contained bash scripts</div>
+        <p class="feature-desc">Nine standalone tools, zero runtime dependencies. No Node, no Python, no config files. Works on macOS and Linux with bash 3.2+.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">🔍</div>

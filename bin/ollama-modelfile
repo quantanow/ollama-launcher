@@ -1,0 +1,291 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_local_models() {
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}'
+}
+
+pick_fzf() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu() {
+  local label="$1"
+  local file="$2"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available." &&2
+    exit 0
+  fi
+
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}" &&2
+  echo &&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" &&2
+  done
+  echo &&2
+
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" &&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo &&2; exit 0; }
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      echo "${lines[$((choice - 1))]}"
+      break
+    fi
+    echo -e "${BOLD_RED}Invalid choice.${RESET}" &&2
+  done
+}
+
+pick_model() {
+  local models; models=$(get_local_models)
+  if [ -z "$models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found." &&2
+    exit 1
+  fi
+
+  local selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(printf '%s\n' "$models" | pick_fzf "Pick a base model")
+  else
+    local tmpfile; tmpfile=$(mktemp)
+    printf '%s\n' "$models" > "$tmpfile"
+    selected=$(pick_menu "model" "$tmpfile")
+    rm -f "$tmpfile"
+  fi
+
+  if [ -z "$selected" ]; then exit 0; fi
+  echo "$selected"
+}
+
+preview_modelfile() {
+  local from="$1" system="$2" temp="$3" ctx="$4" top_p="$5"
+  echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+  echo -e "${BOLD_WHITE}  Preview Modelfile${RESET}"
+  echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+  echo
+  echo "FROM ${from}"
+  if [ -n "$system" ]; then
+    echo
+    echo "SYSTEM ${system}"
+  fi
+  echo
+  echo "PARAMETER temperature ${temp}"
+  echo "PARAMETER num_ctx ${ctx}"
+  if [ -n "$top_p" ]; then
+    echo "PARAMETER top_p ${top_p}"
+  fi
+  echo
+}
+
+write_modelfile() {
+  local file="$1" from="$2" system="$3" temp="$4" ctx="$5" top_p="$6"
+  {
+    echo "FROM ${from}"
+    if [ -n "$system" ]; then
+      echo
+      echo "SYSTEM ${system}"
+    fi
+    echo
+    echo "PARAMETER temperature ${temp}"
+    echo "PARAMETER num_ctx ${ctx}"
+    if [ -n "$top_p" ]; then
+      echo "PARAMETER top_p ${top_p}"
+    fi
+  } > "$file"
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+NAME=""
+FROM=""
+SYSTEM=""
+TEMP=""
+CTX=""
+TOP_P=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-modelfile [--help] [--version] [--name <name>] [--from <model>] [--system <text>] [--temperature <n>] [--num-ctx <n>] [--top-p <n>]"
+      echo
+      echo "  (no args)              Interactive: build a Modelfile step by step"
+      echo "  --name <name>          Name for the custom model"
+      echo "  --from <model>         Base model to build from"
+      echo "  --system <text>        System prompt"
+      echo "  --temperature <n>       Temperature (default: 0.7)"
+      echo "  --num-ctx <n>         Context length (default: 4096)"
+      echo "  --top-p <n>           Top-p sampling (default: none)"
+      echo "  OLLAMA_MODELFILE_TEST=1  Print command without executing"
+      echo "  --version              Print version and exit"
+      echo "  --help                 Show this help and exit"
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-modelfile $VERSION"
+      exit 0
+      ;;
+    --name)
+      NAME="$2"
+      shift 2
+      ;;
+    --from)
+      FROM="$2"
+      shift 2
+      ;;
+    --system)
+      SYSTEM="$2"
+      shift 2
+      ;;
+    --temperature)
+      TEMP="$2"
+      shift 2
+      ;;
+    --num-ctx)
+      CTX="$2"
+      shift 2
+      ;;
+    --top-p)
+      TOP_P="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-modelfile --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+
+# Resolve name
+if [ -z "$NAME" ]; then
+  if [ -t 0 ]; then
+    printf "${BOLD}Custom model name:${RESET} "
+    read -r NAME 2>/dev/null || { echo; exit 0; }
+  fi
+  [ -z "$NAME" ] && exit 0
+fi
+
+# Resolve base model
+if [ -z "$FROM" ]; then
+  if [ -t 0 ]; then
+    echo -e "${BOLD}Pick a base model:${RESET}"
+  fi
+  FROM=$(pick_model)
+  [ -z "$FROM" ] && exit 0
+fi
+
+# Resolve system prompt
+if [ -z "$SYSTEM" ] && [ -t 0 ]; then
+  printf "${BOLD}System prompt (optional, press Enter to skip):${RESET} "
+  read -r SYSTEM 2>/dev/null || { echo; }
+fi
+
+# Resolve temperature
+if [ -z "$TEMP" ] && [ -t 0 ]; then
+  printf "${BOLD}Temperature [0.7]:${RESET} "
+  read -r TEMP 2>/dev/null || { echo; }
+fi
+[ -z "$TEMP" ] && TEMP="0.7"
+
+# Resolve context length
+if [ -z "$CTX" ] && [ -t 0 ]; then
+  printf "${BOLD}Context length [4096]:${RESET} "
+  read -r CTX 2>/dev/null || { echo; }
+fi
+[ -z "$CTX" ] && CTX="4096"
+
+# Resolve top_p
+if [ -z "$TOP_P" ] && [ -t 0 ]; then
+  printf "${BOLD}Top-p (optional, press Enter to skip):${RESET} "
+  read -r TOP_P 2>/dev/null || { echo; }
+fi
+
+echo
+preview_modelfile "$FROM" "$SYSTEM" "$TEMP" "$CTX" "$TOP_P"
+
+printf "${BOLD}Proceed with 'ollama create ${NAME}'? [Y/n] ${RESET}"
+read -r confirm 2>/dev/null || { echo; exit 0; }
+if [[ "$confirm" =~ ^[Nn]$ ]]; then
+  echo -e "${BOLD}Cancelled.${RESET}"
+  exit 0
+fi
+
+# Write temp modelfile and create
+mf_file=$(mktemp)
+write_modelfile "$mf_file" "$FROM" "$SYSTEM" "$TEMP" "$CTX" "$TOP_P"
+
+if [ -n "${OLLAMA_MODELFILE_TEST:-}" ]; then
+  echo -e "${BOLD_AMBER}Would run:${RESET} ollama create ${NAME} -f ${mf_file}"
+  echo -e "${BOLD}Modelfile contents:${RESET}"
+  cat "$mf_file"
+  rm -f "$mf_file"
+else
+  echo -e "  ${BOLD_AMBER}Creating model:${RESET} ${NAME} ..."
+  ollama create "$NAME" -f "$mf_file"
+  rm -f "$mf_file"
+  echo -e "\n${BOLD_GREEN}Done:${RESET} ${NAME}"
+fi

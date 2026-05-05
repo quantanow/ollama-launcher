@@ -2,23 +2,55 @@
 set -euo pipefail
 
 INSTALL_DIR="/usr/local/bin"
-SCRIPT_NAME="ollama-launch"
 REPO_URL="https://raw.githubusercontent.com/quantanow/ollama-launcher/main"
 
-echo "Installing ${SCRIPT_NAME}..."
+TOOLS=(
+  "ollama-launch"
+  "ollama-clean"
+  "ollama-compare"
+  "ollama-batch"
+  "ollama-bench"
+  "ollama-chat"
+  "ollama-modelfile"
+  "ollama-vision"
+  "ollama-pipe"
+)
 
-if ! curl -fsSL "${REPO_URL}/${SCRIPT_NAME}" -o "/tmp/${SCRIPT_NAME}"; then
-  echo "Error: Failed to download ${SCRIPT_NAME}" >&2
-  exit 1
-fi
+echo "Installing ollama-launcher tools..."
 
-chmod +x "/tmp/${SCRIPT_NAME}"
+for tool in "${TOOLS[@]}"; do
+  src="${REPO_URL}/bin/${tool}"
+  dst="${INSTALL_DIR}/${tool}"
 
-if [ -w "$INSTALL_DIR" ]; then
-  mv "/tmp/${SCRIPT_NAME}" "${INSTALL_DIR}/${SCRIPT_NAME}"
-else
-  sudo mv "/tmp/${SCRIPT_NAME}" "${INSTALL_DIR}/${SCRIPT_NAME}"
-fi
+  echo "  Downloading ${tool}..."
+  if ! curl -fsSL "${src}" -o "/tmp/${tool}"; then
+    echo "Error: Failed to download ${tool}" >&2
+    exit 1
+  fi
 
-echo "Installed to ${INSTALL_DIR}/${SCRIPT_NAME}"
+  chmod +x "/tmp/${tool}"
+
+  if [ -w "$INSTALL_DIR" ]; then
+    mv "/tmp/${tool}" "$dst"
+  else
+    sudo mv "/tmp/${tool}" "$dst"
+  fi
+
+echo "  Installed ${tool}"
+done
+
+echo
+echo "All tools installed to ${INSTALL_DIR}:"
+for tool in "${TOOLS[@]}"; do
+  echo "  ${tool}"
+done
+echo
 echo "Run: ollama-launch"
+echo "Run: ollama-clean"
+echo "Run: ollama-compare"
+echo "Run: ollama-batch"
+echo "Run: ollama-bench"
+echo "Run: ollama-chat"
+echo "Run: ollama-modelfile"
+echo "Run: ollama-vision"
+echo "Run: ollama-pipe"

@@ -40,28 +40,28 @@ teardown_file() {
 
 @test "fzf path with 0-variant model uses base name" {
   export FZF_SELECT="deepseek-v4-flash"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
 }
 
 @test "fzf path with 1-variant model auto-selects variant" {
   export FZF_SELECT="kimi-k2.6"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
 }
 
 @test "fzf path with 3-variant model selects first by default" {
   unset FZF_SELECT
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model granite4.1:3b"* ]]
 }
 
 @test "menu path with 0-variant model" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
@@ -69,7 +69,7 @@ teardown_file() {
 
 @test "menu path with 3-variant model selects second variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n1\n2\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'echo -e "1\n1\n2\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model granite4.1:8b"* ]]
@@ -77,14 +77,14 @@ teardown_file() {
 
 @test "fzf path selects non-first agent (codex)" {
   export FZF_SELECT="codex"
-  run bash -c "FZF_SELECT=codex OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1"
+  run bash -c "FZF_SELECT=codex OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch codex --model"* ]]
 }
 
 @test "fzf path with 2-variant model auto-selects first variant" {
   export FZF_SELECT="mistral-medium-3.5"
-  run bash -c 'FZF_SELECT="mistral-medium-3.5" OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'FZF_SELECT="mistral-medium-3.5" OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model mistral-medium-3.5:latest"* ]]
 }
@@ -92,7 +92,7 @@ teardown_file() {
 @test "menu path with 1-variant model auto-selects variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
   # agent=1 (claude), model=5 (kimi-k2.6, 1 variant — no sub-menu needed)
-  run bash -c 'echo -e "1\n5\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'echo -e "1\n5\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
@@ -100,7 +100,7 @@ teardown_file() {
 
 @test "-p flag prints command without executing" {
   export FZF_SELECT="deepseek-v4-flash"
-  run bash -c './ollama-launch -p 2>&1'
+  run bash -c './bin/ollama-launch -p 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch"* ]]
   [[ "$output" == *"deepseek-v4-flash"* ]]
@@ -108,14 +108,14 @@ teardown_file() {
 
 @test "--print flag prints command without executing" {
   export FZF_SELECT="deepseek-v4-flash"
-  run bash -c './ollama-launch --print 2>&1'
+  run bash -c './bin/ollama-launch --print 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch"* ]]
   [[ "$output" == *"deepseek-v4-flash"* ]]
 }
 
 @test "exits with error when ollama not in PATH" {
-  run bash -c 'PATH=/usr/bin:/bin OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'PATH=/usr/bin:/bin OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"ollama is not installed"* ]]
 }
@@ -124,7 +124,7 @@ teardown_file() {
 
 @test "history file is written after a successful run" {
   export FZF_SELECT="deepseek-v4-flash"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [ -f "$HOME/.ollama-launch-history" ]
   grep -q "claude|deepseek-v4-flash" "$HOME/.ollama-launch-history"
@@ -133,7 +133,7 @@ teardown_file() {
 @test "recent picker selects a recent entry and skips 3-step flow" {
   printf 'claude|qwen3:14b\n' > "$HOME/.ollama-launch-history"
   export FZF_SELECT="qwen3:14b"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model qwen3:14b"* ]]
 }
@@ -143,7 +143,7 @@ teardown_file() {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
   # menu: 1=recent(claude|qwen3:14b), 2=separator, 3=claude(agent), 4=codex...
   # select 3 (claude agent), then model 7 (deepseek-v4-flash, auto-variant)
-  run bash -c 'echo -e "3\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'echo -e "3\n7\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
@@ -152,7 +152,7 @@ teardown_file() {
 @test "history deduplicates repeated entries" {
   printf 'claude|qwen3:14b\nhermes|llama3.1:8b\n' > "$HOME/.ollama-launch-history"
   export FZF_SELECT="qwen3:14b"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
   local count; count=$(grep -c "qwen3:14b" "$HOME/.ollama-launch-history")
   [ "$count" -eq 1 ]
@@ -164,7 +164,7 @@ teardown_file() {
   printf 'fake1|x1\nfake2|x2\nfake3|x3\nfake4|x4\nfake5|x5\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
   # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model: 1=granite4.1, variant: 1=first
-  run bash -c 'echo -e "7\n1\n1\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
+  run bash -c 'echo -e "7\n1\n1\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   local lines; lines=$(wc -l < "$HOME/.ollama-launch-history")

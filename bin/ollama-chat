@@ -1,0 +1,566 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+CHAT_DIR="${CHAT_DIR:-${HOME}/.ollama-chats}"
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+ensure_chat_dir() {
+  [ -d "$CHAT_DIR" ] || mkdir -p "$CHAT_DIR"
+}
+
+list_chats() {
+  ensure_chat_dir
+  local f name model turns modified
+  for f in "$CHAT_DIR"/*.txt; do
+    [ -f "$f" ] || continue
+    name=$(basename "$f" .txt)
+    model=$(grep "^MODEL: " "$f" 2>/dev/null | head -1 | sed 's/^MODEL: //')
+    turns=$(grep -c "^USER: " "$f" 2>/dev/null || echo 0)
+    modified=$(stat -c %Y "$f" 2>/dev/null || stat -f %m "$f" 2>/dev/null || echo 0)
+    printf '%s\t%s\t%s\t%s\n' "$name" "$model" "$turns" "$modified"
+  done
+}
+
+fmt_chats() {
+  local line name model turns modified mdate
+  while IFS=$'\t' read -r name model turns modified; do
+    mdate=""
+    if [ -n "$modified" ] && [ "$modified" != "0" ]; then
+      mdate=$(date -r "$modified" '+%Y-%m-%d %H:%M' 2>/dev/null || date -d "@$modified" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "")
+    fi
+    local meta="${model:-unknown} | ${turns} turns"
+    [ -n "$mdate" ] && meta="$meta | $mdate"
+    printf '%s\n' "${FZF_NAME}${name}${FZF_RST}  ${FZF_META}${meta}${FZF_RST}"
+  done
+}
+
+pick_fzf() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu() {
+  local label="$1"
+  local file="$2"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available." &&2
+    exit 0
+  fi
+
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}" &&2
+  echo &&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  %s\n" "$((i + 1))" "${lines[$i]}" &&2
+  done
+  echo &&2
+
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" &&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo &&2; exit 0; }
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      echo "${lines[$((choice - 1))]}"
+      break
+    fi
+    echo -e "${BOLD_RED}Invalid choice.${RESET}" &&2
+  done
+}
+
+pick_model() {
+  local models; models=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}')
+  if [ -z "$models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found." &&2
+    exit 1
+  fi
+
+  local selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(printf '%s\n' "$models" | pick_fzf "Pick a model")
+  else
+    local tmpfile; tmpfile=$(mktemp)
+    printf '%s\n' "$models" > "$tmpfile"
+    selected=$(pick_menu "model" "$tmpfile")
+    rm -f "$tmpfile"
+  fi
+
+  if [ -z "$selected" ]; then exit 0; fi
+  echo "$selected"
+}
+
+get_chat_model() {
+  local file="$1"
+  grep "^MODEL: " "$file" 2>/dev/null | head -1 | sed 's/^MODEL: //'
+}
+
+get_chat_system() {
+  local file="$1"
+  grep "^SYSTEM: " "$file" 2>/dev/null | head -1 | sed 's/^SYSTEM: //'
+}
+
+get_chat_name_from_line() {
+  local line="$1"
+  printf '%s' "$line" | sed "s/$(printf '\033')\[[0-9;]*m//g" | awk '{print $1}'
+}
+
+run_ollama() {
+  local model="$1" prompt="$2"
+  if [ -n "${OLLAMA_CHAT_TEST:-}" ]; then
+    echo "MOCK RESPONSE for model $model"
+  else
+    ollama run "$model" "$prompt"
+  fi
+}
+
+build_context() {
+  local file="$1"
+  local system_line
+  system_line=$(get_chat_system "$file")
+  local ctx=""
+  if [ -n "$system_line" ]; then
+    ctx="SYSTEM: $system_line
+
+"
+  fi
+  # Append all USER/ASSISTANT lines
+  while IFS= read -r line; do
+    case "$line" in
+      USER:*|ASSISTANT:*) ctx="${ctx}${line}
+" ;;
+    esac
+  done < "$file"
+  printf '%s' "$ctx"
+}
+
+show_chat_info() {
+  local file="$1"
+  local name model system_line turns
+  name=$(basename "$file" .txt)
+  model=$(get_chat_model "$file")
+  system_line=$(get_chat_system "$file")
+  turns=$(grep -c "^USER: " "$file" 2>/dev/null || echo 0)
+
+  echo -e "${BOLD_CYAN}Chat: ${name}${RESET}"
+  echo -e "  ${FZF_META}Model:${RESET}  ${WHITE}${model:-unknown}${RESET}"
+  echo -e "  ${FZF_META}Turns:${RESET}  ${WHITE}${turns}${RESET}"
+  if [ -n "$system_line" ]; then
+    echo -e "  ${FZF_META}System:${RESET} ${WHITE}${system_line}${RESET}"
+  fi
+}
+
+show_chat_history() {
+  local file="$1"
+  local line role content
+  while IFS= read -r line; do
+    case "$line" in
+      USER:*)
+        content=$(printf '%s' "$line" | sed 's/^USER: //')
+        echo -e "${BOLD_CYAN}You:${RESET} ${WHITE}${content}${RESET}"
+        ;;
+      ASSISTANT:*)
+        content=$(printf '%s' "$line" | sed 's/^ASSISTANT: //')
+        echo -e "${FZF_META}Bot:${RESET} ${content}"
+        echo
+        ;;
+    esac
+  done < "$file"
+}
+
+enter_repl() {
+  local file="$1"
+  local model
+  model=$(get_chat_model "$file")
+
+  if [ -z "$model" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Could not determine model for chat."
+    exit 1
+  fi
+
+  echo
+  show_chat_info "$file"
+  echo
+
+  # Show last 10 turns
+  local hist_lines
+  hist_lines=$(grep -n "^USER: " "$file" 2>/dev/null | tail -10 | head -1 | cut -d: -f1)
+  if [ -n "$hist_lines" ] && [ "$hist_lines" -gt 1 ]; then
+    echo -e "${BOLD}Recent history:${RESET}"
+    tail -n +"$hist_lines" "$file" | while IFS= read -r line; do
+      case "$line" in
+        USER:*) echo -e "${BOLD_CYAN}You:${RESET} $(printf '%s' "$line" | sed 's/^USER: //')" ;;
+        ASSISTANT:*) echo -e "${FZF_META}Bot:${RESET} $(printf '%s' "$line" | sed 's/^ASSISTANT: //')" ;;
+      esac
+    done
+    echo
+  fi
+
+  if [ -z "${OLLAMA_CHAT_TEST:-}" ]; then
+    echo -e "${FZF_META}Commands: /quit, /system <text>, /model <name>, /clear, /info${RESET}"
+    echo
+  fi
+
+  while true; do
+    local input
+    if [ -n "${OLLAMA_CHAT_TEST:-}" ]; then
+      if ! IFS= read -r input; then break; fi
+    else
+      printf "${BOLD_GREEN}>${RESET} "
+      read -r input </dev/tty 2>/dev/null || read -r input || { echo; break; }
+    fi
+
+    case "$input" in
+      /quit|/q)
+        break
+        ;;
+      /system*)
+        local new_system
+        new_system=$(printf '%s' "$input" | sed 's/^\/system *//')
+        if [ -n "$new_system" ]; then
+          # Replace SYSTEM line
+          local tmp; tmp=$(mktemp)
+          grep -v "^SYSTEM: " "$file" > "$tmp"
+          {
+            head -2 "$tmp"
+            printf 'SYSTEM: %s\n' "$new_system"
+            tail -n +3 "$tmp"
+          } > "${tmp}.new"
+          mv "${tmp}.new" "$file"
+          rm -f "$tmp"
+          echo -e "  ${BOLD_GREEN}System prompt updated.${RESET}"
+        fi
+        ;;
+      /model*)
+        local new_model
+        new_model=$(printf '%s' "$input" | sed 's/^\/model *//')
+        if [ -n "$new_model" ]; then
+          sed -i.bak "s/^MODEL: .*/MODEL: $new_model/" "$file"
+          rm -f "${file}.bak"
+          model="$new_model"
+          echo -e "  ${BOLD_GREEN}Model switched to $model.${RESET}"
+        fi
+        ;;
+      /clear)
+        local sys_line
+        sys_line=$(get_chat_system "$file")
+        {
+          printf '# ollama-chat: %s\n' "$(basename "$file" .txt)"
+          printf 'MODEL: %s\n' "$model"
+          [ -n "$sys_line" ] && printf 'SYSTEM: %s\n' "$sys_line"
+        } > "$file"
+        echo -e "  ${BOLD_GREEN}History cleared.${RESET}"
+        ;;
+      /info)
+        show_chat_info "$file"
+        ;;
+      "")
+        continue
+        ;;
+      *)
+        local context response
+        context=$(build_context "$file")
+        local full="${context}
+USER: ${input}
+
+ASSISTANT:"
+
+        response=$(run_ollama "$model" "$full")
+        echo
+        echo -e "${FZF_META}Bot:${RESET} ${response}"
+        echo
+
+        # Save turn
+        printf '\nUSER: %s\nASSISTANT: %s\n' "$input" "$response" >> "$file"
+        ;;
+    esac
+  done
+
+  echo -e "\n${BOLD}Goodbye.${RESET}"
+}
+
+new_chat() {
+  ensure_chat_dir
+  local name=""
+  local model=""
+  local system=""
+
+  if [ -t 0 ]; then
+    printf "${BOLD}Chat name:${RESET} "
+    read -r name 2>/dev/null || { echo; exit 0; }
+  fi
+  [ -z "$name" ] && name="chat-$(date +%Y%m%d-%H%M%S)"
+
+  local file="${CHAT_DIR}/${name}.txt"
+  if [ -f "$file" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Chat '$name' already exists."
+    exit 1
+  fi
+
+  model=$(pick_model)
+  [ -z "$model" ] && exit 0
+
+  if [ -t 0 ]; then
+    printf "${BOLD}System prompt (optional):${RESET} "
+    read -r system 2>/dev/null || { echo; }
+  fi
+
+  {
+    printf '# ollama-chat: %s\n' "$name"
+    printf 'MODEL: %s\n' "$model"
+    [ -n "$system" ] && printf 'SYSTEM: %s\n' "$system"
+  } > "$file"
+
+  echo -e "${BOLD_GREEN}Created chat:${RESET} $name"
+
+  if [ -z "${OLLAMA_CHAT_TEST:-}" ] && [ -t 0 ]; then
+    printf "${BOLD}Start chatting now? [Y/n] ${RESET}"
+    local start
+    read -r start 2>/dev/null || { echo; exit 0; }
+    if [[ ! "$start" =~ ^[Nn]$ ]]; then
+      enter_repl "$file"
+    fi
+  fi
+}
+
+resume_chat() {
+  local target="$1"
+  local file="${CHAT_DIR}/${target}.txt"
+  if [ ! -f "$file" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Chat '$target' not found."
+    exit 1
+  fi
+  enter_repl "$file"
+}
+
+delete_chat() {
+  local target="$1"
+  local file="${CHAT_DIR}/${target}.txt"
+  if [ ! -f "$file" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Chat '$target' not found."
+    exit 1
+  fi
+  printf "${BOLD}Delete chat '${target}'? [y/N] ${RESET}"
+  local confirm
+  read -r confirm 2>/dev/null || { echo; exit 0; }
+  if [[ "$confirm" =~ ^[Yy]$ ]]; then
+    rm -f "$file"
+    echo -e "${BOLD_GREEN}Deleted.${RESET}"
+  else
+    echo -e "${BOLD}Cancelled.${RESET}"
+  fi
+}
+
+fork_chat() {
+  local old="$1"
+  local new="$2"
+  local old_file="${CHAT_DIR}/${old}.txt"
+  local new_file="${CHAT_DIR}/${new}.txt"
+
+  if [ ! -f "$old_file" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Chat '$old' not found."
+    exit 1
+  fi
+  if [ -f "$new_file" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Chat '$new' already exists."
+    exit 1
+  fi
+
+  cp "$old_file" "$new_file"
+  # Update name header
+  sed -i.bak "1s/.*/# ollama-chat: ${new}/" "$new_file"
+  rm -f "${new_file}.bak"
+  echo -e "${BOLD_GREEN}Forked:${RESET} $old → $new"
+}
+
+interactive_select() {
+  ensure_chat_dir
+  local chats
+  chats=$(list_chats)
+  if [ -z "$chats" ]; then
+    echo -e "${BOLD}No chats found.${RESET}"
+    if [ -t 0 ]; then
+      printf "${BOLD}Create a new chat? [Y/n] ${RESET}"
+      local ans
+      read -r ans 2>/dev/null || { echo; exit 0; }
+      if [[ ! "$ans" =~ ^[Nn]$ ]]; then
+        new_chat
+      fi
+    fi
+    exit 0
+  fi
+
+  local tmpfile; tmpfile=$(mktemp)
+  printf '%s\n' "$chats" | fmt_chats > "$tmpfile"
+
+  local selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(cat "$tmpfile" | pick_fzf "Enter to resume / Esc to cancel")
+  else
+    selected=$(pick_menu "chat" "$tmpfile")
+  fi
+
+  rm -f "$tmpfile"
+
+  if [ -z "$selected" ]; then exit 0; fi
+  local name; name=$(get_chat_name_from_line "$selected")
+  [ -n "$name" ] && resume_chat "$name"
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+ACTION=""
+TARGET=""
+TARGET2=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-chat [--help] [--version] [--new] [--list] [--resume <name>] [--delete <name>] [--fork <old> <new>] [--info <name>]"
+      echo
+      echo "  (no args)              Interactive: list chats and pick one to resume"
+      echo "  --new                  Create a new chat"
+      echo "  --list                 List all chats and exit"
+      echo "  --resume <name>       Resume a specific chat"
+      echo "  --delete <name>       Delete a chat"
+      echo "  --fork <old> <new>   Fork a chat"
+      echo "  --info <name>        Show chat metadata"
+      echo "  OLLAMA_CHAT_TEST=1   Mock ollama run for testing"
+      echo "  --version              Print version and exit"
+      echo "  --help                 Show this help and exit"
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-chat $VERSION"
+      exit 0
+      ;;
+    --new)
+      ACTION="new"
+      shift
+      ;;
+    --list)
+      ACTION="list"
+      shift
+      ;;
+    --resume)
+      ACTION="resume"
+      TARGET="$2"
+      shift 2
+      ;;
+    --delete)
+      ACTION="delete"
+      TARGET="$2"
+      shift 2
+      ;;
+    --fork)
+      ACTION="fork"
+      TARGET="$2"
+      TARGET2="$3"
+      shift 3
+      ;;
+    --info)
+      ACTION="info"
+      TARGET="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-chat --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+ensure_chat_dir
+
+case "$ACTION" in
+  "")
+    interactive_select
+    ;;
+  new)
+    new_chat
+    ;;
+  list)
+    _chats=$(list_chats)
+    if [ -z "$_chats" ]; then
+      echo -e "${BOLD}No chats found.${RESET}"
+      exit 0
+    fi
+    printf '%s\n' "$_chats" | fmt_chats
+    ;;
+  resume)
+    resume_chat "$TARGET"
+    ;;
+  delete)
+    delete_chat "$TARGET"
+    ;;
+  fork)
+    fork_chat "$TARGET" "$TARGET2"
+    ;;
+  info)
+    _f="${CHAT_DIR}/${TARGET}.txt"
+    if [ ! -f "$_f" ]; then
+      echo -e "${BOLD_RED}Error:${RESET} Chat '$TARGET' not found."
+      exit 1
+    fi
+    show_chat_info "$_f"
+    ;;
+esac

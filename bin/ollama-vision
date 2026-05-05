@@ -1,0 +1,299 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+# Embedded model arrays (subset with vision tag from models.json)
+MODEL_NAMES=(
+  "mistral-medium-3.5" "qwen3.6" "nemotron3" "kimi-k2.6"
+  "medgemma" "medgemma1.5" "gemma4" "qwen3.5"
+  "translategemma" "ministral-3" "devstral-small-2"
+  "nemotron-3-super" "glm-ocr" "qwen3-next"
+  "rnj-1" "kimi-k2.5" "olmo-3" "deepseek-ocr"
+  "olmo-3.1" "glm-4.7" "deepseek-v3.2" "kimi-k2-thinking"
+  "mistral-large-3" "gpt-oss" "qwen3-vl" "qwen2.5vl"
+  "gemma3n" "deepseek-v3.1" "devstral" "gpt-oss-safeguard"
+  "qwen3" "gemma3" "llama3.2-vision" "minicpm-v"
+  "llava" "qwen2" "gemma" "llama3.3"
+  "llama4" "phi4" "phi3"
+)
+
+MODEL_TAGS=(
+  "vision tools thinking" "vision tools thinking" "vision tools thinking audio" "vision tools thinking"
+  "vision" "vision" "vision tools thinking audio" "vision tools thinking"
+  "vision" "vision tools" "vision tools"
+  "tools thinking" "vision tools" "tools thinking"
+  "tools" "vision tools thinking" "vision" "vision"
+  "vision" "vision" "vision" "vision"
+  "vision" "vision tools thinking" "vision tools" "vision"
+  "vision" "vision tools thinking" "vision" "vision tools thinking"
+  "vision" "vision" "vision tools thinking" "vision"
+  "vision" "vision" "vision" "vision"
+  "vision tools thinking" "vision tools" "vision"
+)
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_local_models() {
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}'
+}
+
+pick_fzf() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu() {
+  local label="$1"
+  local file="$2"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available." >&2
+    exit 0
+  fi
+
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}" >&2
+  echo >&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" >&2
+  done
+  echo >&2
+
+  while true; do
+    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total" >&2
+    read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo >&2; exit 0; }
+    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
+      echo "${lines[$((choice - 1))]}"
+      break
+    fi
+    echo -e "${BOLD_RED}Invalid choice.${RESET}" >&2
+  done
+}
+
+build_vision_lines() {
+  local local_models="$1"
+  local lines=()
+  local i
+  for ((i=0; i<${#MODEL_NAMES[@]}; i++)); do
+    if [[ "${MODEL_TAGS[$i]}" == *"vision"* ]]; then
+      local name="${MODEL_NAMES[$i]}"
+      # Check if this model (or any variant) is locally available
+      local installed=""
+      while IFS= read -r lm; do
+        [ -z "$lm" ] && continue
+        if [[ "$lm" == "${name}"* ]]; then
+          installed="installed"
+          break
+        fi
+      done <<< "$local_models"
+      lines+=("${FZF_NAME}${name}${FZF_RST}  ${FZF_META}${MODEL_TAGS[$i]}${FZF_RST}  ${BOLD_GREEN}${installed}${FZF_RST}")
+    fi
+  done
+  printf '%s\n' "${lines[@]}"
+}
+
+pick_vision_model() {
+  local local_models; local_models=$(get_local_models)
+  if [ -z "$local_models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found. Run 'ollama pull <model>' first." >&2
+    exit 1
+  fi
+
+  local tmpfile; tmpfile=$(mktemp)
+  build_vision_lines "$local_models" > "$tmpfile"
+
+  # Also include any local vision models not in our embedded list
+  while IFS= read -r lm; do
+    [ -z "$lm" ] && continue
+    local base; base=$(printf '%s' "$lm" | cut -d: -f1)
+    local found=""
+    for name in "${MODEL_NAMES[@]}"; do
+      if [ "$base" = "$name" ]; then
+        found=1
+        break
+      fi
+    done
+    if [ -z "$found" ]; then
+      printf '%s\n' "${FZF_NAME}${lm}${FZF_RST}  ${FZF_META}unknown${FZF_RST}  ${BOLD_GREEN}installed${FZF_RST}" >> "$tmpfile"
+    fi
+  done <<< "$local_models"
+
+  local selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(cat "$tmpfile" | pick_fzf "Vision models (green = installed)")
+  else
+    selected=$(pick_menu "vision model" "$tmpfile")
+  fi
+
+  rm -f "$tmpfile"
+
+  if [ -z "$selected" ]; then exit 0; fi
+  # Strip ANSI and get first word
+  local clean; clean=$(printf '%s' "$selected" | sed "s/$(printf '\033')\[[0-9;]*m//g")
+  local model_name; model_name=$(printf '%s' "$clean" | awk '{print $1}')
+  echo "$model_name"
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+MODEL=""
+IMAGES=""
+PROMPT=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-vision [--help] [--version] [--model <name>] [--image <path>] [--prompt <text>]"
+      echo
+      echo "  (no args)              Interactive: pick vision model, image, ask question"
+      echo "  --model <name>         Vision-capable model to use"
+      echo "  --image <path>         Image file(s), comma-separated for multiple"
+      echo "  --prompt <text>        Question about the image(s)"
+      echo "  OLLAMA_VISION_TEST=1  Print command without executing"
+      echo "  --version              Print version and exit"
+      echo "  --help                 Show this help and exit"
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-vision $VERSION"
+      exit 0
+      ;;
+    --model)
+      MODEL="$2"
+      shift 2
+      ;;
+    --image)
+      IMAGES="$2"
+      shift 2
+      ;;
+    --prompt)
+      PROMPT="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-vision --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+
+# Resolve model
+if [ -z "$MODEL" ]; then
+  MODEL=$(pick_vision_model)
+  [ -z "$MODEL" ] && exit 0
+fi
+
+# Resolve images
+if [ -z "$IMAGES" ]; then
+  if [ -t 0 ]; then
+    printf "${BOLD}Image path(s) (comma-separated):${RESET} "
+    read -r IMAGES 2>/dev/null || { echo; exit 0; }
+  fi
+  [ -z "$IMAGES" ] && exit 0
+fi
+
+# Validate images exist and build --image args
+image_args=()
+IFS=',' read -ra img_arr <<< "$IMAGES"
+for img in "${img_arr[@]}"; do
+  img=$(printf '%s' "$img" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  [ -z "$img" ] && continue
+  if [ ! -f "$img" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} Image not found: $img"
+    exit 1
+  fi
+  image_args+=("--image" "$img")
+done
+
+if [ "${#image_args[@]}" -eq 0 ]; then
+  echo -e "${BOLD_RED}Error:${RESET} No valid image paths provided."
+  exit 1
+fi
+
+# Resolve prompt
+if [ -z "$PROMPT" ]; then
+  if [ -t 0 ]; then
+    printf "${BOLD}Question about the image(s):${RESET} "
+    read -r PROMPT 2>/dev/null || { echo; exit 0; }
+  fi
+  [ -z "$PROMPT" ] && exit 0
+fi
+
+echo
+echo -e "${BOLD_CYAN}Vision Query:${RESET}"
+echo -e "  ${FZF_META}Model:${RESET}  ${WHITE}$MODEL${RESET}"
+for img in "${img_arr[@]}"; do
+  img=$(printf '%s' "$img" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+  [ -n "$img" ] && echo -e "  ${FZF_META}Image:${RESET} ${WHITE}$img${RESET}"
+done
+echo -e "  ${FZF_META}Prompt:${RESET} ${WHITE}$PROMPT${RESET}"
+echo
+
+if [ -n "${OLLAMA_VISION_TEST:-}" ]; then
+  echo -e "${BOLD_AMBER}Would run:${RESET} ollama run $MODEL \"$PROMPT\" ${image_args[*]}"
+  echo -e "\n${BOLD_GREEN}Done.${RESET}"
+  exit 0
+fi
+
+echo -e "${BOLD_AMBER}Running...${RESET}"
+ollama run "$MODEL" "$PROMPT" "${image_args[@]}"

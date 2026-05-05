@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_models() {
+  ollama list 2>/dev/null | tail -n +2
+}
+
+parse_model_name() {
+  printf '%s' "$1" | awk '{print $1}'
+}
+
+parse_model_size() {
+  printf '%s' "$1" | awk '{print $3 " " $4}'
+}
+
+pick_fzf_multi() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --multi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select models to remove: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu_multi() {
+  local label="$1"
+  local file="$2"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available." &&2
+    exit 0
+  fi
+
+  echo -e "${BOLD}Available ${label}s:${RESET}" &&2
+  echo &&2
+  for ((i=0; i<total; i++)); do
+    local name size
+    name=$(parse_model_name "${lines[$i]}")
+    size=$(parse_model_size "${lines[$i]}")
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%-40s${RESET}  ${FZF_META}%s${RESET}\n" "$((i + 1))" "$name" "$size" &&2
+  done
+  echo &&2
+
+  echo -e "${BOLD}Enter numbers to remove (comma-separated), or 0 to cancel:${RESET}" &&2
+  printf "> " &&2
+  read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo &&2; exit 0; }
+
+  if [ "$choice" = "0" ] || [ -z "$choice" ]; then
+    exit 0
+  fi
+
+  local IFS=','
+  for num in $choice; do
+    num=$(printf '%s' "$num" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "$total" ]; then
+      echo "${lines[$((num - 1))]}"
+    else
+      echo -e "${BOLD_RED}Invalid: ${num}${RESET}" &&2
+    fi
+  done
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+case "${1:-}" in
+  --help|-h)
+    echo "Usage: ollama-clean [--help] [--version]"
+    echo
+    echo "  (no args)              Interactively select local models to remove"
+    echo "  OLLAMA_CLEAN_TEST=1   Print the ollama rm commands instead of executing"
+    echo "  --version              Print version and exit"
+    echo "  --help                 Show this help and exit"
+    exit 0
+    ;;
+  --version|-v)
+    echo "ollama-clean $VERSION"
+    exit 0
+    ;;
+esac
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+
+models=$(get_models)
+if [ -z "$models" ]; then
+  echo -e "${BOLD_CYAN}No local models found.${RESET}"
+  exit 0
+fi
+
+# Build display lines
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
+while IFS= read -r line; do
+  [ -n "$line" ] || continue
+  name=$(parse_model_name "$line")
+  size=$(parse_model_size "$line")
+  printf '%s\n' "${FZF_NAME}${name}${FZF_RST}  ${FZF_META}${size}${FZF_RST}" >> "$tmpfile"
+done <<< "$models"
+
+selected=""
+if command -v fzf &>/dev/null; then
+  selected=$(cat "$tmpfile" | pick_fzf_multi "Tab to multi-select  /  Enter to confirm  /  Esc to cancel")
+else
+  # Rebuild tmpfile with raw lines for menu
+  printf '%s\n' "$models" > "$tmpfile"
+  selected=$(pick_menu_multi "model" "$tmpfile")
+fi
+
+if [ -z "$selected" ]; then
+  echo -e "${BOLD}Cancelled.${RESET}"
+  exit 0
+fi
+
+# Collect model names to remove
+to_remove=()
+while IFS= read -r line; do
+  [ -n "$line" ] || continue
+  clean=$(printf '%s' "$line" | sed "s/$(printf '\033')\[[0-9;]*m//g")
+  name=$(printf '%s' "$clean" | awk '{print $1}')
+  [ -n "$name" ] && to_remove+=("$name")
+done <<< "$selected"
+
+if [ "${#to_remove[@]}" -eq 0 ]; then
+  echo -e "${BOLD}No models selected.${RESET}"
+  exit 0
+fi
+
+echo
+echo -e "${BOLD_RED}Models to remove:${RESET}"
+for m in "${to_remove[@]}"; do
+  echo -e "  ${RED}×${RESET} $m"
+done
+echo
+
+printf "${BOLD}Confirm removal? [y/N] ${RESET}"
+read -r confirm 2>/dev/null || { echo; exit 0; }
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+  echo -e "${BOLD}Cancelled.${RESET}"
+  exit 0
+fi
+
+echo
+for m in "${to_remove[@]}"; do
+  if [ -n "${OLLAMA_CLEAN_TEST:-}" ]; then
+    echo -e "${BOLD_AMBER}Would remove:${RESET} ollama rm $m"
+  else
+    echo -e "${BOLD_AMBER}Removing:${RESET} $m"
+    ollama rm "$m" || echo -e "${BOLD_RED}Failed:${RESET} $m"
+  fi
+done
+
+echo -e "\n${BOLD_GREEN}Done.${RESET}"

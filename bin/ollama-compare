@@ -1,0 +1,248 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+[ -L "$SCRIPT_SOURCE" ] && SCRIPT_SOURCE=$(readlink -f "$SCRIPT_SOURCE" 2>/dev/null || readlink "$SCRIPT_SOURCE")
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
+
+pkg_ver=""
+for dir in "$SCRIPT_DIR" "$SCRIPT_DIR/.."; do
+  if [ -f "$dir/package.json" ]; then
+    ver=$(grep '"version"' "$dir/package.json" | sed 's/.*"version": "\([^"]*\)".*/\1/')
+    if [ -n "$ver" ]; then
+      pkg_ver="$ver"
+      break
+    fi
+  fi
+done
+VERSION="${pkg_ver:-1.1.13}"
+
+if [ -t 1 ]; then
+  BOLD='\033[1m'
+  CYAN='\033[36m'
+  WHITE='\033[37m'
+  GREEN='\033[32m'
+  RED='\033[31m'
+  AMBER='\033[38;5;214m'
+  RESET='\033[0m'
+else
+  BOLD='' CYAN='' WHITE='' GREEN='' RED='' AMBER='' RESET=''
+fi
+
+BOLD_CYAN="${BOLD}${CYAN}"
+BOLD_GREEN="${BOLD}${GREEN}"
+BOLD_RED="${BOLD}${RED}"
+BOLD_AMBER="${BOLD}${AMBER}"
+BOLD_WHITE="${BOLD}${WHITE}"
+
+FZF_NAME=$'\033[1;96m'
+FZF_META=$'\033[2m'
+FZF_RST=$'\033[0m'
+
+# ── helpers ───────────────────────────────────────────────────────────────────
+check_ollama() {
+  if ! command -v ollama &>/dev/null; then
+    echo -e "${BOLD_RED}Error:${RESET} ollama is not installed or not in PATH."
+    exit 1
+  fi
+}
+
+get_local_models() {
+  ollama list 2>/dev/null | tail -n +2 | awk '{print $1}'
+}
+
+pick_fzf_multi() {
+  local header="$1"
+  shift
+  fzf \
+    --ansi \
+    --multi \
+    --height=50% \
+    --layout=reverse \
+    --border \
+    --prompt="  Select models: " \
+    --header="  ${header}" \
+    --color="header:italic,border:cyan" \
+    "$@" \
+    2>/dev/null || true
+}
+
+pick_menu_multi() {
+  local label="$1"
+  local file="$2"
+  local lines=()
+  while IFS= read -r line; do
+    lines+=("$line")
+  done < "$file"
+  local total=${#lines[@]}
+
+  if [ "$total" -eq 0 ]; then
+    echo "No ${label}s available." &&2
+    exit 0
+  fi
+
+  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}" &&2
+  echo &&2
+  for ((i=0; i<total; i++)); do
+    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}" &&2
+  done
+  echo &&2
+
+  echo -e "${BOLD}Enter numbers (comma-separated), or 0 to cancel:${RESET}" &&2
+  printf "> " &&2
+  read -r choice </dev/tty 2>/dev/null || read -r choice 2>/dev/null || { echo &&2; exit 0; }
+
+  if [ "$choice" = "0" ] || [ -z "$choice" ]; then
+    exit 0
+  fi
+
+  local IFS=','
+  for num in $choice; do
+    num=$(printf '%s' "$num" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    if [[ "$num" =~ ^[0-9]+$ ]] && [ "$num" -ge 1 ] && [ "$num" -le "$total" ]; then
+      echo "${lines[$((num - 1))]}"
+    fi
+  done
+}
+
+safe_filename() {
+  printf '%s' "$1" | tr '/:' '_'
+}
+
+# ── flag parsing ──────────────────────────────────────────────────────────────
+PROMPT=""
+MODELS_ARG=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --help|-h)
+      echo "Usage: ollama-compare [--help] [--version] [--prompt <text>] [--models <m1,m2,...>]"
+      echo
+      echo "  (no args)              Interactive: pick models, enter prompt, compare outputs"
+      echo "  --prompt <text>        Prompt to send to all models"
+      echo "  --models <list>        Comma-separated list of local model names"
+      echo "  OLLAMA_COMPARE_TEST=1  Print commands without executing"
+      echo "  --version              Print version and exit"
+      echo "  --help                 Show this help and exit"
+      echo
+      echo "Examples:"
+      echo "  ollama-compare --prompt 'Explain quantum computing' --models llama3.1,mistral"
+      echo "  echo 'Summarize this' | ollama-compare --models llama3.1,qwen2.5"
+      exit 0
+      ;;
+    --version|-v)
+      echo "ollama-compare $VERSION"
+      exit 0
+      ;;
+    --prompt)
+      PROMPT="$2"
+      shift 2
+      ;;
+    --models)
+      MODELS_ARG="$2"
+      shift 2
+      ;;
+    *)
+      echo -e "${BOLD_RED}Error:${RESET} Unknown option: ${1}"
+      echo "Run 'ollama-compare --help' for usage."
+      exit 1
+      ;;
+  esac
+done
+
+# If stdin is piped and no --prompt, read from stdin
+if [ -z "$PROMPT" ] && [ ! -t 0 ]; then
+  PROMPT=$(cat)
+fi
+
+# ── main ──────────────────────────────────────────────────────────────────────
+check_ollama
+
+# Resolve models
+SELECTED_MODELS=()
+if [ -n "$MODELS_ARG" ]; then
+  IFS=',' read -ra SELECTED_MODELS <<< "$MODELS_ARG"
+else
+  models=$(get_local_models)
+  if [ -z "$models" ]; then
+    echo -e "${BOLD_RED}Error:${RESET} No local models found. Run 'ollama pull <model>' first."
+    exit 1
+  fi
+
+  tmpfile=$(mktemp)
+  printf '%s\n' "$models" > "$tmpfile"
+
+  selected=""
+  if command -v fzf &>/dev/null; then
+    selected=$(cat "$tmpfile" | pick_fzf_multi "Tab to multi-select / Enter to confirm / Esc to cancel")
+  else
+    selected=$(pick_menu_multi "model" "$tmpfile")
+  fi
+
+  rm -f "$tmpfile"
+
+  if [ -z "$selected" ]; then
+    echo -e "${BOLD}Cancelled.${RESET}"
+    exit 0
+  fi
+
+  while IFS= read -r line; do
+    [ -n "$line" ] && SELECTED_MODELS+=("$line")
+  done <<< "$selected"
+fi
+
+if [ "${#SELECTED_MODELS[@]}" -lt 2 ]; then
+  echo -e "${BOLD_RED}Error:${RESET} Select at least 2 models to compare."
+  exit 1
+fi
+
+# Resolve prompt
+if [ -z "$PROMPT" ]; then
+  printf "${BOLD}Enter prompt:${RESET} "
+  read -r PROMPT 2>/dev/null || { echo; exit 0; }
+  [ -z "$PROMPT" ] && exit 0
+fi
+
+echo
+echo -e "${BOLD_CYAN}Comparing ${#SELECTED_MODELS[@]} models:${RESET}"
+for m in "${SELECTED_MODELS[@]}"; do
+  echo -e "  ${FZF_META}•${RESET} ${WHITE}$m${RESET}"
+done
+echo -e "${BOLD}Prompt:${RESET} ${FZF_META}${PROMPT}${RESET}"
+echo
+
+# Run sequentially with temp files
+results_dir=$(mktemp -d)
+trap 'rm -rf "$results_dir"' EXIT
+
+for model in "${SELECTED_MODELS[@]}"; do
+  safe=$(safe_filename "$model")
+  if [ -n "${OLLAMA_COMPARE_TEST:-}" ]; then
+    echo -e "  ${BOLD_AMBER}Would run:${RESET} ollama run $model \"$PROMPT\""
+    printf '%s\n' "TEST OUTPUT for $model" > "$results_dir/$safe.txt"
+  else
+    echo -e "  ${BOLD_AMBER}Running:${RESET} $model ..."
+    ollama run "$model" "$PROMPT" > "$results_dir/$safe.txt" 2>&1 || true
+    echo -e "  ${BOLD_GREEN}Done:${RESET}   $model"
+  fi
+done
+
+# Display results
+echo
+echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+echo -e "${BOLD_WHITE}  RESULTS${RESET}"
+echo -e "${BOLD_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
+
+for model in "${SELECTED_MODELS[@]}"; do
+  safe=$(safe_filename "$model")
+  echo
+  echo -e "${BOLD_CYAN}┌────────────────────────────────────────────────────────────────────┐${RESET}"
+  echo -e "${BOLD_CYAN}│${RESET}  ${BOLD_WHITE}$model${RESET}"
+  echo -e "${BOLD_CYAN}└────────────────────────────────────────────────────────────────────┘${RESET}"
+  if [ -s "$results_dir/$safe.txt" ]; then
+    sed 's/^/  /' "$results_dir/$safe.txt"
+  else
+    echo -e "  ${RED}(no output or error)${RESET}"
+  fi
+  echo
+done

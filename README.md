@@ -1,6 +1,18 @@
-# ollama-launch
+# ollama-launcher
 
-A fast, polished CLI for picking and launching [Ollama](https://ollama.com) agents interactively. Pick an agent, pick a model, pick a variant — start chatting. No config, no fuss.
+A suite of fast, polished CLIs for working with [Ollama](https://ollama.com).
+
+- **ollama-launch** — pick an agent, pick a model, pick a variant — start chatting
+- **ollama-clean** — interactively remove local models to free disk space
+- **ollama-compare** — run the same prompt across multiple models and compare outputs
+- **ollama-batch** — process a directory of text files through a single model
+- **ollama-bench** — benchmark model inference speed with warmup + timed runs
+- **ollama-chat** — persistent conversation manager with forking and history
+- **ollama-modelfile** — interactive Modelfile builder for custom models
+- **ollama-vision** — vision-capable model picker, select image(s), ask question, get response
+- **ollama-pipe** — chain model operations: pipe text through summarize → translate → json-format
+
+No config, no fuss.
 
 ```
 ┌─────────────────────────────┐
@@ -53,15 +65,14 @@ npm install -g ollama-launch
 curl -fsSL https://raw.githubusercontent.com/quantanow/ollama-launcher/main/install.sh | bash
 ```
 
-This downloads `ollama-launch` to `/usr/local/bin` and makes it executable. Uses `sudo` automatically if `/usr/local/bin` is not writable.
+This downloads all tools to `/usr/local/bin` and makes them executable. Uses `sudo` automatically if `/usr/local/bin` is not writable.
 
 ### Manual
 
 ```bash
 git clone https://github.com/quantanow/ollama-launcher
 cd ollama-launcher
-cp ollama-launch /usr/local/bin/ollama-launch
-chmod +x /usr/local/bin/ollama-launch
+cp bin/* /usr/local/bin/
 ```
 
 ### Local dev (no install)
@@ -69,7 +80,7 @@ chmod +x /usr/local/bin/ollama-launch
 ```bash
 git clone https://github.com/quantanow/ollama-launcher
 cd ollama-launcher
-./ollama-launch
+./bin/ollama-launch
 ```
 
 ### Install fzf (optional but recommended)
@@ -277,15 +288,154 @@ See the full list with `ollama-launch --list-models`.
 
 ---
 
+## ollama-clean
+
+Interactively remove local models to free disk space.
+
+```bash
+ollama-clean
+```
+
+Shows all locally installed models with their sizes. Use **Tab** to multi-select in fzf, or enter comma-separated numbers in the menu fallback. Confirms before deleting.
+
+Set `OLLAMA_CLEAN_TEST=1` to print the `ollama rm` commands without executing them.
+
+## ollama-compare
+
+Run the same prompt across multiple local models and compare outputs side-by-side.
+
+```bash
+# Interactive — pick models, enter prompt, see results
+ollama-compare
+
+# Pre-select models and prompt
+ollama-compare --prompt "Explain recursion" --models llama3.1,mistral
+
+# Pipe prompt from stdin
+echo "Summarize this article" | ollama-compare --models llama3.1,qwen2.5
+```
+
+Select at least 2 models. Outputs are shown sequentially in framed blocks after all models finish running. Set `OLLAMA_COMPARE_TEST=1` to print commands without executing.
+
+## ollama-batch
+
+Process a directory of text files through a single model, saving outputs to matching filenames.
+
+```bash
+# Interactive — pick model, pick directory
+ollama-batch
+
+# Pre-select everything
+ollama-batch --dir prompts/ --model llama3.1 --out results/
+
+# Custom file pattern
+ollama-batch --dir articles/ --pattern '*.md' --model qwen2.5 --out summaries/
+```
+
+Automatically resumes by skipping files that already have non-empty output in the output directory. Set `OLLAMA_BATCH_TEST=1` to print commands without executing.
+
+## ollama-bench
+
+Benchmark model inference speed with warmup + timed runs.
+
+```bash
+# Interactive — pick model, run benchmark
+ollama-bench
+
+# Pre-select model with multiple runs
+ollama-bench --model llama3.1 --runs 3
+
+# Custom prompt
+ollama-bench --model qwen2.5 --prompt "Explain quantum computing in simple terms"
+
+# View past results
+ollama-bench --history
+```
+
+Performs a warmup inference first (to load the model into memory), then runs the benchmark prompt and measures wall-clock time. Results are stored in `~/.ollama-bench-history`. Set `OLLAMA_BENCH_TEST=1` to print commands without executing.
+
+## ollama-chat
+
+Persistent conversation manager. Each chat is stored as a plain text file in `~/.ollama-chats/` with model, system prompt, and full turn history.
+
+```bash
+# Interactive — list chats and resume one
+ollama-chat
+
+# Create a new chat
+ollama-chat --new
+
+# Resume a specific chat
+ollama-chat --resume my-project
+
+# Fork an existing chat
+ollama-chat --fork my-project my-project-v2
+
+# Show chat info
+ollama-chat --info my-project
+
+# List all chats
+ollama-chat --list
+```
+
+Inside the REPL, type `/quit` to exit, `/system <text>` to change the system prompt, `/model <name>` to switch models, `/clear` to wipe history (keeping system prompt), and `/info` to show metadata. Set `OLLAMA_CHAT_TEST=1` to mock responses and read REPL input from stdin.
+
+## ollama-modelfile
+
+Interactive Modelfile builder for creating custom ollama models.
+
+```bash
+# Interactive — build a Modelfile step by step
+ollama-modelfile
+
+# Pre-select all parameters
+ollama-modelfile --name mybot --from llama3.1 --system "You are helpful" --temperature 0.5 --num-ctx 8192
+```
+
+Preview the Modelfile before confirming. Then runs `ollama create <name> -f <modelfile>`. Set `OLLAMA_MODELFILE_TEST=1` to print the command and Modelfile contents without executing.
+
+## ollama-vision
+
+Vision-capable model picker. Select a vision model, provide image file(s), ask a question, and get a response.
+
+```bash
+# Interactive — pick model, enter image path(s), ask question
+ollama-vision
+
+# Pre-select everything
+ollama-vision --model llava --image photo.jpg --prompt "Describe this image"
+
+# Multiple images (comma-separated)
+ollama-vision --model llava --image img1.jpg,img2.jpg --prompt "Compare these"
+```
+
+Only vision-tagged models are shown in the picker. Installed local models are highlighted. Set `OLLAMA_VISION_TEST=1` to print the command without executing.
+
+## ollama-pipe
+
+Chain model operations into multi-step pipelines. Pipe text through a series of model instructions — output of each step feeds into the next.
+
+```bash
+# One-step pipeline
+ollama-pipe --input article.txt --step "llama3.1 Summarize this article"
+
+# Multi-step chain with predefined prompts
+ollama-pipe --input doc.txt --chain summarize,json --model qwen2.5
+
+# Available chains: summarize, translate, json, polish, extract
+```
+
+Predefined chains expand into prompts (e.g. `--chain summarize,translate` runs "Summarize" then "Translate to French"). You can also define custom steps with `--step "model prompt"`. Set `OLLAMA_PIPE_TEST=1` to print commands without executing.
+
 ## Adding or Removing Models
 
-Model data is stored in `models.json`. To update the embedded model arrays in `ollama-launch`, edit `models.json` and then run the build script:
+Model data is stored in `models.json`. To update the embedded model arrays in `bin/ollama-launch`, edit `models.json` and then run the build script:
 
 ```bash
 node scripts/generate-model-data.js
 ```
 
-Then commit the updated `ollama-launch`.
+Then commit the updated `bin/ollama-launch`.
 
 To add or remove agents, edit the `AGENTS` array near the top of `ollama-launch`. Keep the list sorted alphabetically:
 
@@ -324,7 +474,7 @@ bats tests/
 Set `OLLAMA_LAUNCH_TEST=1` to print the command instead of executing it:
 
 ```bash
-OLLAMA_LAUNCH_TEST=1 ./ollama-launch
+OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch
 ```
 
 ---
