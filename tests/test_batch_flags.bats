@@ -53,14 +53,14 @@ teardown() {
 }
 
 @test "errors when dir does not exist" {
-  run ./bin/ollama-batch --dir /nonexistent/path --model llama3.1 2>&1
+  run bash -c 'OLLAMA_BATCH_TEST=1 ./bin/ollama-batch --dir /nonexistent/path --model llama3.1 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"Directory not found"* ]]
 }
 
 @test "errors when no matching files" {
   empty_dir="$(mktemp -d /tmp/ollama-batch-empty-XXXXXX)"
-  run ./bin/ollama-batch --dir "$empty_dir" --model llama3.1 2>&1
+  run bash -c "OLLAMA_BATCH_TEST=1 ./bin/ollama-batch --dir '$empty_dir' --model llama3.1 2>&1"
   rm -rf "$empty_dir"
   [ "$status" -eq 1 ]
   [[ "$output" == *"No files matching"* ]]

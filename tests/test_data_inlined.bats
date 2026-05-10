@@ -12,14 +12,14 @@
   [ "$output" = "1 1 1 1 1 1" ]
 }
 
-@test "model 7 (deepseek-v4-flash) has variants" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_HAS_VARIANTS[6]}"'
+@test "model 5 (deepseek-v4-flash) has variants" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_HAS_VARIANTS[4]}"'
   [ "$status" -eq 0 ]
   [ "$output" = "1" ]
 }
 
-@test "granite4.1 has 3 variants with correct metadata" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_VARIANTS_0[0]} ${MODEL_SIZES_0[0]} ${MODEL_CONTEXTS_0[0]} ${MODEL_INPUTS_0[0]}"'
+@test "granite4.1 (index 3) has 3 variants with correct metadata" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_VARIANTS_3[0]} ${MODEL_SIZES_3[0]} ${MODEL_CONTEXTS_3[0]} ${MODEL_INPUTS_3[0]}"'
   [ "$status" -eq 0 ]
   [ "$output" = "granite4.1:3b 2.1GB 128K Text" ]
 }
@@ -70,20 +70,20 @@
   [ "$output" = "ok" ]
 }
 
-@test "mistral-medium-3.5 (index 1) has 2 variants" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${#MODEL_VARIANTS_1[@]}"'
+@test "mistral-medium-3.5 (index 6) has 2 variants" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${#MODEL_VARIANTS_6[@]}"'
   [ "$status" -eq 0 ]
   [ "$output" = "2" ]
 }
 
-@test "kimi-k2.6 (index 4) has exactly 1 variant" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${#MODEL_VARIANTS_4[@]}"'
+@test "kimi-k2.6 (index 2) has exactly 1 variant" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${#MODEL_VARIANTS_2[@]}"'
   [ "$status" -eq 0 ]
   [ "$output" = "1" ]
 }
 
-@test "glm-5.1 (index 5) variant is cloud" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_VARIANTS_5[0]}"'
+@test "glm-5.1 (index 12) variant is cloud" {
+  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch; echo "${MODEL_VARIANTS_12[0]}"'
   [ "$status" -eq 0 ]
   [ "$output" = "glm-5.1:cloud" ]
 }

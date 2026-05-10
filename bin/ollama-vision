@@ -235,7 +235,9 @@ while [ $# -gt 0 ]; do
 done
 
 # ── main ──────────────────────────────────────────────────────────────────────
-check_ollama
+if [ -z "${OLLAMA_VISION_TEST:-}" ]; then
+  check_ollama
+fi
 
 # Resolve model
 if [ -z "$MODEL" ]; then

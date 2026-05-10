@@ -43,21 +43,21 @@ teardown() {
 }
 
 @test "--list shows existing chats" {
-  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --list 2>&1'
+  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --list 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"demo"* ]]
 }
 
 @test "--list empty shows no chats" {
   empty_dir="$(mktemp -d /tmp/ollama-chat-empty-XXXXXX)"
-  run env CHAT_DIR="$empty_dir" bash -c 'CHAT_DIR="'"$empty_dir"'" ./bin/ollama-chat --list 2>&1'
+  run env CHAT_DIR="$empty_dir" bash -c 'CHAT_DIR="'"$empty_dir"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --list 2>&1'
   rm -rf "$empty_dir"
   [ "$status" -eq 0 ]
   [[ "$output" == *"No chats"* ]]
 }
 
 @test "--info shows chat metadata" {
-  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --info demo 2>&1'
+  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --info demo 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"demo"* ]]
   [[ "$output" == *"llama3.1"* ]]
@@ -65,7 +65,7 @@ teardown() {
 }
 
 @test "--info nonexistent exits 1" {
-  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --info nonexistent 2>&1'
+  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --info nonexistent 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"not found"* ]]
 }
@@ -80,7 +80,7 @@ teardown() {
 }
 
 @test "--fork copies chat" {
-  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --fork demo demo2 2>&1'
+  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --fork demo demo2 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"Forked:"* ]]
   [ -f "$CHAT_DIR/demo2.txt" ]
@@ -88,14 +88,14 @@ teardown() {
 }
 
 @test "--delete removes chat" {
-  run bash -c 'printf "y\n" | CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --delete demo 2>&1'
+  run bash -c 'printf "y\n" | CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --delete demo 2>&1'
   [ "$status" -eq 0 ]
   [[ "$output" == *"Deleted"* ]]
   [ ! -f "$CHAT_DIR/demo.txt" ]
 }
 
 @test "--delete nonexistent exits 1" {
-  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" ./bin/ollama-chat --delete nonexistent 2>&1'
+  run env CHAT_DIR="$CHAT_DIR" bash -c 'CHAT_DIR="'"$CHAT_DIR"'" OLLAMA_CHAT_TEST=1 ./bin/ollama-chat --delete nonexistent 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"not found"* ]]
 }

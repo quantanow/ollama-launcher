@@ -156,7 +156,9 @@ if [ -z "$PROMPT" ] && [ ! -t 0 ]; then
 fi
 
 # ── main ──────────────────────────────────────────────────────────────────────
-check_ollama
+if [ -z "${OLLAMA_COMPARE_TEST:-}" ]; then
+  check_ollama
+fi
 
 # Resolve models
 SELECTED_MODELS=()

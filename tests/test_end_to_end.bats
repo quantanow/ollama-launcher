@@ -52,24 +52,26 @@ teardown_file() {
   [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
 }
 
-@test "fzf path with 3-variant model selects first by default" {
+@test "fzf path with multi-variant model selects first by default" {
   unset FZF_SELECT
   run bash -c 'OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model granite4.1:3b"* ]]
+  [[ "$output" == *"ollama launch claude --model qwen3.6:latest"* ]]
 }
 
-@test "menu path with 0-variant model" {
+@test "menu path with 1-variant model auto-selects variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=5 (deepseek-v4-flash, 1 variant — no sub-menu)
+  run bash -c 'echo -e "1\n5\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
+  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash:cloud"* ]]
 }
 
 @test "menu path with 3-variant model selects second variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n1\n2\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=4 (granite4.1), variant=2 (granite4.1:8b)
+  run bash -c 'echo -e "1\n4\n2\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model granite4.1:8b"* ]]
@@ -89,10 +91,10 @@ teardown_file() {
   [[ "$output" == *"ollama launch claude --model mistral-medium-3.5:latest"* ]]
 }
 
-@test "menu path with 1-variant model auto-selects variant" {
+@test "menu path with 1-variant model (kimi-k2.6) auto-selects variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # agent=1 (claude), model=5 (kimi-k2.6, 1 variant — no sub-menu needed)
-  run bash -c 'echo -e "1\n5\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=3 (kimi-k2.6, 1 variant — no sub-menu needed)
+  run bash -c 'echo -e "1\n3\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
@@ -142,11 +144,11 @@ teardown_file() {
   printf 'claude|qwen3:14b\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
   # menu: 1=recent(claude|qwen3:14b), 2=separator, 3=claude(agent), 4=codex...
-  # select 3 (claude agent), then model 7 (deepseek-v4-flash, auto-variant)
-  run bash -c 'echo -e "3\n7\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # select 3 (claude agent), then model 5 (deepseek-v4-flash, 1 variant auto-select)
+  run bash -c 'echo -e "3\n5\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
+  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash:cloud"* ]]
 }
 
 @test "history deduplicates repeated entries" {
@@ -163,12 +165,12 @@ teardown_file() {
 @test "history keeps at most 5 entries" {
   printf 'fake1|x1\nfake2|x2\nfake3|x3\nfake4|x4\nfake5|x5\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model: 1=granite4.1, variant: 1=first
+  # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model: 1=qwen3.6, variant: 1=first
   run bash -c 'echo -e "7\n1\n1\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   local lines; lines=$(wc -l < "$HOME/.ollama-launch-history")
   [ "$lines" -eq 5 ]
   local top; top=$(head -n 1 "$HOME/.ollama-launch-history")
-  [ "$top" = "claude|granite4.1:3b" ]
+  [ "$top" = "claude|qwen3.6:latest" ]
 }

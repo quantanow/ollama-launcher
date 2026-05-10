@@ -528,7 +528,9 @@ while [ $# -gt 0 ]; do
 done
 
 # ── main ──────────────────────────────────────────────────────────────────────
-check_ollama
+if [ -z "${OLLAMA_CHAT_TEST:-}" ]; then
+  check_ollama
+fi
 ensure_chat_dir
 
 case "$ACTION" in

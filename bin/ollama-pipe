@@ -208,7 +208,9 @@ while [ $# -gt 0 ]; do
 done
 
 # ── main ────────────────────────────────────────────────────────────────────────
-check_ollama
+if [ -z "${OLLAMA_PIPE_TEST:-}" ]; then
+  check_ollama
+fi
 
 # Resolve chain into prompts and models
 if [ -n "$CHAIN" ]; then
