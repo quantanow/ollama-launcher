@@ -45,7 +45,7 @@
 }
 
 @test "missing image file exits 1 with error" {
-  run ./bin/ollama-vision --model llava --image /nonexistent.png --prompt "test"
+  run bash -c 'OLLAMA_VISION_TEST=1 ./bin/ollama-vision --model llava --image /nonexistent.png --prompt "test" 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"Image not found"* ]]
 }

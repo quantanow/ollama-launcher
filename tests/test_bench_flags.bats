@@ -46,7 +46,7 @@
 }
 
 @test "invalid --runs exits with error" {
-  run ./bin/ollama-bench --model llama3.1 --runs 0 2>&1
+  run bash -c 'OLLAMA_BENCH_TEST=1 ./bin/ollama-bench --model llama3.1 --runs 0 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"positive integer"* ]]
 }

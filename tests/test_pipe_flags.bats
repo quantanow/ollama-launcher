@@ -45,7 +45,7 @@
 }
 
 @test "missing input file exits 1 with error" {
-  run ./bin/ollama-pipe --input /nonexistent.txt --step "llama3.1 Summarize"
+  run bash -c 'OLLAMA_PIPE_TEST=1 ./bin/ollama-pipe --input /nonexistent.txt --step "llama3.1 Summarize" 2>&1'
   [ "$status" -eq 1 ]
   [[ "$output" == *"Input file not found"* ]]
 }
