@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the hardcoded `MODELS` array in `ollama-launch` with a JSON-derived model picker that shows metadata (pulls, tags, input type) and prompts for variant selection when applicable.
+**Goal:** Replace the hardcoded `MODELS` array in `bin/ollama-launch` with a JSON-derived model picker that shows metadata (pulls, tags, input type) and prompts for variant selection when applicable. Update all docs and tests to reflect 100 models and current architecture.
 
-**Architecture:** A build-time Node script reads `models.json` and inlines bash indexed arrays into `ollama-launch` between `# MODEL DATA BEGIN/END` markers. New `pick_model()` and `pick_variant()` functions use existing `fzf`/menu machinery with formatted display lines. Integration tests use mocked `fzf` and stdin input to verify the full three-step flow.
+**Architecture:** A build-time Node script reads `models.json` and inlines bash indexed arrays into `bin/ollama-launch` between `# MODEL DATA BEGIN/END` markers. New `pick_model()` and `pick_variant()` functions use existing `fzf`/menu machinery with formatted display lines. Integration tests use mocked `fzf` and stdin input to verify the full flow.
 
 **Tech Stack:** Bash 3.2+, Node.js (build time only), bats (testing), GitHub Actions (CI)
 
@@ -14,25 +14,25 @@
 
 | File | Role |
 |------|------|
-| `ollama-launch` | Main executable — data markers, `pick_model()`, `pick_variant()`, wired main flow |
-| `models.json` | Source of truth for model metadata (already exists in repo) |
-| `scripts/generate-model-data.js` | Build script that reads `models.json` and inlines bash arrays into `ollama-launch` |
-| `tests/test_data_inlined.bats` | Verify generated model arrays are correct (80 models, variants present) |
+| `bin/ollama-launch` | Main executable — data markers, `pick_model()`, `pick_variant()`, wired main flow |
+| `models.json` | Source of truth for model metadata (100 models, 332 total variants) |
+| `scripts/generate-model-data.js` | Build script that reads `models.json` and inlines bash arrays into `bin/ollama-launch` |
+| `scripts/fetch-models.js` | Scrapes ollama.com for top models + variant data, writes `models.json` |
+| `tests/test_data_inlined.bats` | Verify generated model arrays are correct (lengths, variant consistency, metadata values) |
 | `tests/test_end_to_end.bats` | Integration tests — mocked fzf and menu paths with 0/1/3-variant models |
 | `.github/workflows/test.yml` | GitHub Actions workflow — installs bats, runs test suite |
+| `.github/workflows/publish.yml` | GitHub Actions workflow — publishes to npm on `v*` tag push |
 
 ---
 
 ### Task 1: Add model data markers and raw picker helpers
 
 **Files:**
-- Modify: `ollama-launch:32-79` (replace `MODELS` array and `print_models`)
-- Modify: `ollama-launch:60-151` (add helpers after existing helpers)
-- Modify: `ollama-launch:189-235` (add skip guard to main block)
+- Modify: `bin/ollama-launch` (replace `MODELS` array and `print_models`, add helpers)
 
 - [ ] **Step 1: Replace MODELS array with data markers**
 
-Replace lines 32–58 in `ollama-launch`:
+Replace model list area with:
 
 ```bash
 # ── model list ────────────────────────────────────────────────────────────────
@@ -57,8 +57,6 @@ MODEL_HAS_VARIANTS=(
 
 - [ ] **Step 2: Update print_models to use MODEL_NAMES**
 
-Replace lines 75–79:
-
 ```bash
 print_models() {
   local i
@@ -70,88 +68,32 @@ print_models() {
 
 - [ ] **Step 3: Add pick_fzf_raw and pick_menu_raw helpers**
 
-Insert after line 151 (after `pick_menu` function, before flag parsing):
+`pick_fzf_raw` reads items from stdin, accepts extra fzf flags via `"$@"` (shift 2 after label/header). Prints selected line, or empty string if cancelled.
 
-```bash
-# pick_fzf_raw <label> <header>
-# Reads items from stdin. Prints selected line, or empty string if cancelled.
-pick_fzf_raw() {
-  local label="$1" header="$2"
-  fzf \
-    --height=40% \
-    --layout=reverse \
-    --border \
-    --prompt="  ${label}: " \
-    --header="  ${header}" \
-    --color="header:italic,border:cyan" \
-    2>/dev/null || true
-}
-
-# pick_menu_raw <label>
-# Reads items from stdin into numbered menu. Sets PICK_RESULT to chosen line.
-pick_menu_raw() {
-  local label="$1"
-  local lines=()
-  while IFS= read -r line; do
-    lines+=("$line")
-  done
-  local total=${#lines[@]}
-
-  echo -e "${BOLD_WHITE}Available ${label}s:${RESET}"
-  echo
-  for ((i=0; i<total; i++)); do
-    printf "  ${BOLD_GREEN}%2d${RESET}  ${WHITE}%s${RESET}\n" "$((i + 1))" "${lines[$i]}"
-  done
-  echo
-
-  PICK_RESULT=""
-  while true; do
-    printf "${BOLD_GREEN}Enter number [1-%d]:${RESET} " "$total"
-    read -r choice 2>/dev/null || { echo; exit 0; }
-
-    if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$total" ]; then
-      PICK_RESULT="${lines[$((choice - 1))]}"
-      break
-    fi
-
-    echo -e "${BOLD_RED}Invalid choice.${RESET} Enter a number between 1 and ${total}."
-  done
-}
-```
+`pick_menu_raw` reads items from a file. UI output goes to stderr so callers capture only the selection. Validates numeric input, re-prompts on invalid entry.
 
 - [ ] **Step 4: Add OLLAMA_LAUNCH_SKIP_MAIN guard**
 
-Insert at line 189, before `check_ollama`:
+Insert before main block:
 
 ```bash
-# ── main ──────────────────────────────────────────────────────────────────────
 if [ -n "${OLLAMA_LAUNCH_SKIP_MAIN:-}" ]; then
   return 0 2>/dev/null || exit 0
 fi
-
-check_ollama
 ```
 
 - [ ] **Step 5: Verify syntax**
 
 ```bash
-bash -n ollama-launch
+bash -n bin/ollama-launch
 ```
 
 Expected: no output
 
-- [ ] **Step 6: Test --list-models still works**
+- [ ] **Step 6: Commit**
 
 ```bash
-./ollama-launch --list-models
-```
-
-Expected: prints `placeholder` (single placeholder model)
-
-- [ ] **Step 7: Commit**
-
-```bash
-git add ollama-launch
+git add bin/ollama-launch
 git commit -m "feat: add model data markers and raw picker helpers"
 ```
 
@@ -164,65 +106,11 @@ git commit -m "feat: add model data markers and raw picker helpers"
 
 - [ ] **Step 1: Create the build script**
 
-```javascript
-const fs = require('fs');
+Reads `models.json`, generates parallel bash arrays, and replaces content between `# MODEL DATA BEGIN` and `# MODEL DATA END` markers in `bin/ollama-launch`.
 
-const modelsJson = JSON.parse(fs.readFileSync('models.json', 'utf8'));
-const scriptPath = 'ollama-launch';
-
-let bash = '# MODEL DATA BEGIN — generated by scripts/generate-model-data.js\n';
-
-bash += 'MODEL_NAMES=(\n';
-modelsJson.models.forEach(m => { bash += `  "${m.name}"\n`; });
-bash += ')\n\n';
-
-bash += 'MODEL_PULLS=(\n';
-modelsJson.models.forEach(m => { bash += `  "${m.pulls}"\n`; });
-bash += ')\n\n';
-
-bash += 'MODEL_TAGS=(\n';
-modelsJson.models.forEach(m => { bash += `  "${m.tags.join(' ')}"\n`; });
-bash += ')\n\n';
-
-bash += 'MODEL_HAS_VARIANTS=(\n';
-modelsJson.models.forEach(m => { bash += `  ${m.variants.length > 0 ? 1 : 0}\n`; });
-bash += ')\n\n';
-
-modelsJson.models.forEach((m, i) => {
-  if (m.variants.length === 0) return;
-  bash += `MODEL_VARIANTS_${i}=(\n`;
-  m.variants.forEach(v => { bash += `  "${v.name}"\n`; });
-  bash += ')\n\n';
-  bash += `MODEL_SIZES_${i}=(\n`;
-  m.variants.forEach(v => { bash += `  "${v.size}"\n`; });
-  bash += ')\n\n';
-  bash += `MODEL_CONTEXTS_${i}=(\n`;
-  m.variants.forEach(v => { bash += `  "${v.context_window}"\n`; });
-  bash += ')\n\n';
-  bash += `MODEL_INPUTS_${i}=(\n`;
-  m.variants.forEach(v => { bash += `  "${v.input_type}"\n`; });
-  bash += ')\n\n';
-});
-
-bash += '# MODEL DATA END';
-
-let script = fs.readFileSync(scriptPath, 'utf8');
-const beginMarker = '# MODEL DATA BEGIN';
-const endMarker = '# MODEL DATA END';
-const beginIdx = script.indexOf(beginMarker);
-const endIdx = script.indexOf(endMarker);
-
-if (beginIdx === -1 || endIdx === -1) {
-  console.error('Error: markers not found in ollama-launch');
-  process.exit(1);
-}
-
-const newScript = script.slice(0, beginIdx) + bash + '\n' + script.slice(endIdx + endMarker.length);
-fs.writeFileSync(scriptPath, newScript);
-console.log(`Updated ${scriptPath} with ${modelsJson.models.length} models`);
-```
-
-Save to `scripts/generate-model-data.js`.
+Arrays emitted:
+- `MODEL_NAMES`, `MODEL_PULLS`, `MODEL_TAGS`, `MODEL_HAS_VARIANTS`
+- Per-model: `MODEL_VARIANTS_N`, `MODEL_SIZES_N`, `MODEL_CONTEXTS_N`, `MODEL_INPUTS_N` (only when variants exist)
 
 - [ ] **Step 2: Verify script syntax**
 
@@ -230,7 +118,7 @@ Save to `scripts/generate-model-data.js`.
 node --check scripts/generate-model-data.js
 ```
 
-Expected: no output (syntax OK)
+Expected: no output
 
 - [ ] **Step 3: Commit**
 
@@ -245,7 +133,7 @@ git commit -m "feat: add generate-model-data.js build script"
 ### Task 3: Generate and verify model data
 
 **Files:**
-- Modify: `ollama-launch` (data block between markers)
+- Modify: `bin/ollama-launch` (data block between markers)
 
 - [ ] **Step 1: Run the build script**
 
@@ -253,20 +141,20 @@ git commit -m "feat: add generate-model-data.js build script"
 node scripts/generate-model-data.js
 ```
 
-Expected: `Updated ollama-launch with 80 models`
+Expected: `Updated bin/ollama-launch with 100 models`
 
-- [ ] **Step 2: Verify --list-models shows all 80 models**
+- [ ] **Step 2: Verify --list-models shows all 100 models**
 
 ```bash
-./ollama-launch --list-models | wc -l
+./bin/ollama-launch --list-models | wc -l
 ```
 
-Expected: `80`
+Expected: `100`
 
 - [ ] **Step 3: Verify syntax still passes**
 
 ```bash
-bash -n ollama-launch
+bash -n bin/ollama-launch
 ```
 
 Expected: no output
@@ -274,8 +162,8 @@ Expected: no output
 - [ ] **Step 4: Commit**
 
 ```bash
-git add ollama-launch
-git commit -m "feat: inline 80 models from models.json"
+git add bin/ollama-launch
+git commit -m "feat: inline 100 models from models.json"
 ```
 
 ---
@@ -283,75 +171,26 @@ git commit -m "feat: inline 80 models from models.json"
 ### Task 4: Implement pick_model()
 
 **Files:**
-- Modify: `ollama-launch:152-180` (after pick_menu_raw, before flag parsing)
+- Modify: `bin/ollama-launch`
 
 - [ ] **Step 1: Add pick_model function**
 
-Insert after `pick_menu_raw`:
+Builds formatted display lines from `MODEL_NAMES`, `MODEL_PULLS`, `MODEL_TAGS`, and `MODEL_INPUTS_N[0]`. Appends `cloud` to tags at display time if the model has a `:cloud` variant (so searching "cloud" in fzf finds them). Uses `pick_fzf_raw` or `pick_menu_raw`. Sets global `PICK_MODEL_INDEX` and `PICK_RESULT`. Strips ANSI codes from selected name before index lookup.
 
-```bash
-# pick_model
-# Presents metadata-rich list of all models. Sets PICK_MODEL_INDEX to selected index.
-# Prints selected model name (base name, not variant).
-pick_model() {
-  local total=${#MODEL_NAMES[@]}
-  local lines=()
-  local i
-
-  for ((i=0; i<total; i++)); do
-    local input_type
-    if [ "${MODEL_HAS_VARIANTS[$i]}" -eq 1 ]; then
-      eval "input_type=\${MODEL_INPUTS_${i}[0]}"
-    else
-      input_type="N/A"
-    fi
-    lines+=("${MODEL_NAMES[$i]} | ${MODEL_PULLS[$i]} pulls | ${MODEL_TAGS[$i]} | $input_type")
-  done
-
-  local selected
-  if command -v fzf &>/dev/null; then
-    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Model" "↑↓ navigate  /  type to filter  /  Enter to run  /  Esc to quit")
-  else
-    printf '%s\n' "${lines[@]}" | pick_menu_raw "model"
-    selected="$PICK_RESULT"
-  fi
-
-  if [ -z "$selected" ]; then exit 0; fi
-
-  local model_name="${selected%% | *}"
-
-  PICK_MODEL_INDEX=-1
-  for ((i=0; i<total; i++)); do
-    if [ "${MODEL_NAMES[$i]}" = "$model_name" ]; then
-      PICK_MODEL_INDEX=$i
-      break
-    fi
-  done
-
-  echo "$model_name"
-}
-```
+Important: Do not use `--with-nth` in the model picker — fzf >=0.62 restricts search to displayed fields when `--with-nth` is set, breaking hidden-field search.
 
 - [ ] **Step 2: Verify syntax**
 
 ```bash
-bash -n ollama-launch
+bash -n bin/ollama-launch
 ```
 
 Expected: no output
 
-- [ ] **Step 3: Test pick_model with skip-main guard**
+- [ ] **Step 3: Commit**
 
 ```bash
-bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "models=${#MODEL_NAMES[@]} index_fn_defined=$(type pick_model &>/dev/null && echo yes || echo no)"'
-```
-
-Expected: `models=80 index_fn_defined=yes`
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add ollama-launch
+git add bin/ollama-launch
 git commit -m "feat: add metadata-rich pick_model() function"
 ```
 
@@ -360,85 +199,31 @@ git commit -m "feat: add metadata-rich pick_model() function"
 ### Task 5: Implement pick_variant()
 
 **Files:**
-- Modify: `ollama-launch:181-210` (after pick_model, before flag parsing)
+- Modify: `bin/ollama-launch`
 
 - [ ] **Step 1: Add pick_variant function**
 
-Insert after `pick_model`:
-
 ```bash
 # pick_variant <model_index>
-# If model has 0 variants, returns empty string.
-# If model has 1 variant, returns it directly.
-# If model has 2+ variants, presents a sub-picker and returns selected variant name.
-pick_variant() {
-  local idx="$1"
-  local variants_name="MODEL_VARIANTS_${idx}[@]"
-
-  local variants=()
-  eval "variants=(\"\${${variants_name}}\")"
-
-  local count=${#variants[@]}
-  if [ "$count" -eq 0 ]; then
-    echo ""
-    return
-  fi
-  if [ "$count" -eq 1 ]; then
-    echo "${variants[0]}"
-    return
-  fi
-
-  local lines=()
-  local i
-  for ((i=0; i<count; i++)); do
-    local size context input_type
-    eval "size=\${MODEL_SIZES_${idx}[\$i]}"
-    eval "context=\${MODEL_CONTEXTS_${idx}[\$i]}"
-    eval "input_type=\${MODEL_INPUTS_${idx}[\$i]}"
-    lines+=("${variants[$i]} | $size | $context context | $input_type")
-  done
-
-  local selected
-  if command -v fzf &>/dev/null; then
-    selected=$(printf '%s\n' "${lines[@]}" | pick_fzf_raw "Variant" "↑↓ navigate  /  type to filter  /  Enter to select  /  Esc to quit")
-  else
-    printf '%s\n' "${lines[@]}" | pick_menu_raw "variant"
-    selected="$PICK_RESULT"
-  fi
-
-  if [ -z "$selected" ]; then exit 0; fi
-  echo "${selected%% | *}"
-}
+# 0 variants → empty string
+# 1 variant  → auto-selects, skip picker
+# 2+ variants → sub-picker with size, context, input type
 ```
+
+Uses same fzf/menu machinery as `pick_model`. Strips ANSI codes from result.
 
 - [ ] **Step 2: Verify syntax**
 
 ```bash
-bash -n ollama-launch
+bash -n bin/ollama-launch
 ```
 
 Expected: no output
 
-- [ ] **Step 3: Test variant function with skip-main guard**
+- [ ] **Step 3: Commit**
 
 ```bash
-bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; pick_variant 0'
-```
-
-Expected: `granite4.1:3b` (first variant, since fzf mock isn't set and real fzf would show UI — this test is best run manually or skipped in CI; just verify no syntax error)
-
-Actually, for a quick automated check:
-
-```bash
-bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; type pick_variant &>/dev/null && echo "function exists"'
-```
-
-Expected: `function exists`
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add ollama-launch
+git add bin/ollama-launch
 git commit -m "feat: add pick_variant() for multi-variant models"
 ```
 
@@ -447,81 +232,36 @@ git commit -m "feat: add pick_variant() for multi-variant models"
 ### Task 6: Wire up three-step flow and test guards
 
 **Files:**
-- Modify: `ollama-launch:219-235` (step 2 pick model and launch)
+- Modify: `bin/ollama-launch`
 
-- [ ] **Step 1: Replace step 2 model selection with pick_model + variant**
+- [ ] **Step 1: Replace main block with three-step flow**
 
-Replace lines 219–235:
-
-```bash
-# ── step 2: pick model ────────────────────────────────────────────────────────
-model_name=$(pick_model)
-if [ -z "$model_name" ]; then exit 0; fi
-
-echo -e "  Model:  ${BOLD_GREEN}${model_name}${RESET}"
-echo
-
-# ── step 2b: pick variant (if applicable) ───────────────────────────────────
-final_model="$model_name"
-if [ "$PICK_MODEL_INDEX" -ge 0 ] && [ "${MODEL_HAS_VARIANTS[$PICK_MODEL_INDEX]}" -eq 1 ]; then
-  variant=$(pick_variant "$PICK_MODEL_INDEX")
-  if [ -n "$variant" ]; then
-    final_model="$variant"
-  fi
-fi
-
-if [ "$final_model" != "$model_name" ]; then
-  echo -e "  Variant: ${BOLD_GREEN}${final_model}${RESET}"
-  echo
-fi
-
-# ── launch ────────────────────────────────────────────────────────────────────
-if [ -n "${OLLAMA_LAUNCH_TEST:-}" ]; then
-  echo "ollama launch ${agent} --model ${final_model}"
-  exit 0
-fi
-
-echo -e "${BOLD_CYAN}Running:${RESET} ollama launch ${agent} --model ${final_model}"
-echo
-exec ollama launch "$agent" --model "$final_model"
 ```
+load_history
+pick_recent
+if recent selected → launch immediately (save_history + exec)
+else:
+  step 1: pick agent (skip if chosen from popup)
+  step 2: pick model (pick_model)
+  step 2b: pick variant (pick_variant, if applicable)
+  save_history
+  exec ollama launch <agent> --model <final_model>
+```
+
+Supports `OLLAMA_LAUNCH_TEST=1` (print command) and `OLLAMA_LAUNCH_PRINT=1` (pretty-print command).
 
 - [ ] **Step 2: Verify syntax**
 
 ```bash
-bash -n ollama-launch
+bash -n bin/ollama-launch
 ```
 
 Expected: no output
 
-- [ ] **Step 3: Test end-to-end with menu path and OLLAMA_LAUNCH_TEST**
-
-Temporarily remove fzf from PATH to force menu path:
+- [ ] **Step 3: Commit**
 
 ```bash
-PATH_WITHOUT_FZF=$(echo "$PATH" | tr ':' '\n' | grep -v fzf | tr '\n' ':')
-run bash -c 'echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch'
-```
-
-Wait, this needs to be run manually. In the terminal:
-
-```bash
-# Save current PATH
-OLDPATH="$PATH"
-# Remove fzf
-export PATH="$(echo "$PATH" | tr ':' '\n' | grep -v fzf | tr '\n' ':' | sed 's/:$//')"
-# Run with test mode
-echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch
-# Restore PATH
-export PATH="$OLDPATH"
-```
-
-Expected output contains: `ollama launch claude --model deepseek-v4-flash`
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add ollama-launch
+git add bin/ollama-launch
 git commit -m "feat: wire up three-step flow with variant picker and test guard"
 ```
 
@@ -535,121 +275,36 @@ git commit -m "feat: wire up three-step flow with variant picker and test guard"
 
 - [ ] **Step 1: Create test_data_inlined.bats**
 
-```bash
-#!/usr/bin/env bats
-
-@test "MODEL_NAMES contains 80 models" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${#MODEL_NAMES[@]}"'
-  [ "$status" -eq 0 ]
-  [ "$output" = "80" ]
-}
-
-@test "first 6 models have variants" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${MODEL_HAS_VARIANTS[0]} ${MODEL_HAS_VARIANTS[1]} ${MODEL_HAS_VARIANTS[2]} ${MODEL_HAS_VARIANTS[3]} ${MODEL_HAS_VARIANTS[4]} ${MODEL_HAS_VARIANTS[5]}"'
-  [ "$status" -eq 0 ]
-  [ "$output" = "1 1 1 1 1 1" ]
-}
-
-@test "model 7 (deepseek-v4-flash) has no variants" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${MODEL_HAS_VARIANTS[6]}"'
-  [ "$status" -eq 0 ]
-  [ "$output" = "0" ]
-}
-
-@test "granite4.1 has 3 variants with correct metadata" {
-  run bash -c 'OLLAMA_LAUNCH_SKIP_MAIN=1 source ./ollama-launch; echo "${MODEL_VARIANTS_0[0]} ${MODEL_SIZES_0[0]} ${MODEL_CONTEXTS_0[0]} ${MODEL_INPUTS_0[0]}"'
-  [ "$status" -eq 0 ]
-  [ "$output" = "granite4.1:3b 2.1GB 128K Text" ]
-}
-```
-
-Save to `tests/test_data_inlined.bats`.
+Verifies:
+- `MODEL_NAMES` contains 100 models
+- Array lengths match (`MODEL_NAMES`, `MODEL_PULLS`, `MODEL_TAGS`, `MODEL_HAS_VARIANTS`)
+- First N models have variants
+- Specific model has expected variant count and metadata
+- Variant sub-array values are correct
 
 - [ ] **Step 2: Create test_end_to_end.bats**
 
-```bash
-#!/usr/bin/env bats
+Uses mocked `fzf` and `ollama` in `tests/mock_bin/` (created in `setup_file`, torn down in `teardown_file`).
 
-setup_file() {
-  mkdir -p "$BATS_TEST_DIRNAME/mock_bin"
+Tests:
+- fzf path with 0-variant model uses base name
+- fzf path with 1-variant model auto-selects variant
+- fzf path with multi-variant model (per-call `FZF_SELECT_N` for independent multi-stage selection)
+- Menu path with 0-variant model
+- Menu path with multi-variant model selects second variant
+- History isolation (per-test temp `HOME`)
 
-  cat > "$BATS_TEST_DIRNAME/mock_bin/fzf" <<'EOF'
-#!/usr/bin/env bash
-lines=$(cat)
-if [ -n "${FZF_SELECT:-}" ]; then
-  echo "$lines" | grep -F "$FZF_SELECT" | head -n 1
-else
-  echo "$lines" | head -n 1
-fi
-EOF
-  chmod +x "$BATS_TEST_DIRNAME/mock_bin/fzf"
-
-  cat > "$BATS_TEST_DIRNAME/mock_bin/ollama" <<'EOF'
-#!/usr/bin/env bash
-echo "ollama $*"
-EOF
-  chmod +x "$BATS_TEST_DIRNAME/mock_bin/ollama"
-}
-
-setup() {
-  export PATH="$BATS_TEST_DIRNAME/mock_bin:$PATH"
-}
-
-teardown_file() {
-  rm -rf "$BATS_TEST_DIRNAME/mock_bin"
-}
-
-@test "fzf path with 0-variant model uses base name" {
-  export FZF_SELECT="deepseek-v4-flash"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
-}
-
-@test "fzf path with 1-variant model auto-selects variant" {
-  export FZF_SELECT="kimi-k2.6"
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
-}
-
-@test "fzf path with 3-variant model selects first by default" {
-  unset FZF_SELECT
-  run bash -c 'OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model granite4.1:3b"* ]]
-}
-
-@test "menu path with 0-variant model" {
-  mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n7\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
-  mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model deepseek-v4-flash"* ]]
-}
-
-@test "menu path with 3-variant model selects second variant" {
-  mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  run bash -c 'echo -e "1\n1\n2\n" | OLLAMA_LAUNCH_TEST=1 ./ollama-launch 2>&1'
-  mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"ollama launch claude --model granite4.1:8b"* ]]
-}
-```
-
-Save to `tests/test_end_to_end.bats`.
+`setup()` overrides `HOME` to a per-file temp dir and clears `~/.ollama-launch-history` before each test.
 
 - [ ] **Step 3: Install bats if not present**
 
 ```bash
 if ! command -v bats &>/dev/null; then
-  git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-  sudo /tmp/bats-core/install.sh /usr/local
+  git clone --depth 1 https://github.com/bats-core/bats-core.git /tmp/bats
+  sudo /tmp/bats/install.sh /usr/local
 fi
 bats --version
 ```
-
-Expected: version output like `Bats 1.x.x`
 
 - [ ] **Step 4: Run tests**
 
@@ -657,7 +312,7 @@ Expected: version output like `Bats 1.x.x`
 bats tests/
 ```
 
-Expected: all 9 tests pass
+Expected: all tests pass
 
 - [ ] **Step 5: Commit**
 
@@ -701,8 +356,6 @@ jobs:
         run: bats tests/
 ```
 
-Save to `.github/workflows/test.yml`.
-
 - [ ] **Step 2: Verify workflow syntax**
 
 If `actionlint` is available:
@@ -710,8 +363,6 @@ If `actionlint` is available:
 ```bash
 actionlint .github/workflows/test.yml 2>&1 || true
 ```
-
-Otherwise, just visually confirm the YAML is valid.
 
 - [ ] **Step 3: Commit**
 
@@ -728,50 +379,16 @@ git commit -m "ci: add GitHub Actions workflow for bats tests"
 **Files:**
 - Modify: `README.md`
 
-- [ ] **Step 1: Add model selection section to README**
+- [ ] **Step 1: Add model selection section**
 
-Append to `README.md` (or update the relevant section):
-
-```markdown
-## Model Selection
-
-`ollama-launch` now shows a metadata-rich model picker with data from the Ollama library:
-
-- **Pulls** — how many times the model has been downloaded
-- **Tags** — capabilities like `vision`, `tools`, `thinking`, `audio`
-- **Input type** — Text, Image, Audio, etc.
-
-If a model has multiple size variants (e.g., `granite4.1:3b`, `:8b`, `:30b`), a second picker prompts for the exact variant, showing:
-- **Size** — download size in GB
-- **Context window** — max token context
-- **Input type** — per-variant capability
-
-Models without known variants use the base name directly.
-
-## Updating Model Data
-
-Model metadata is stored in `models.json`. To regenerate the embedded bash arrays in `ollama-launch`:
-
-```bash
-node scripts/generate-model-data.js
-```
-
-Then commit the updated `ollama-launch`.
-
-## Testing
-
-The test suite uses [bats](https://github.com/bats-core/bats-core):
-
-```bash
-bats tests/
-```
-
-Set `OLLAMA_LAUNCH_TEST=1` to print the command instead of executing it:
-
-```bash
-OLLAMA_LAUNCH_TEST=1 ./ollama-launch
-```
-```
+Covers:
+- Metadata-rich picker: pulls, tags, input type
+- Variant picker for models with multiple sizes
+- `cloud` tag appended at display time for models with `:cloud` variants
+- Updating model data (`node scripts/generate-model-data.js` after editing `models.json`)
+- `node scripts/fetch-models.js` to pull fresh top-100 from ollama.com
+- Testing with `bats tests/`
+- `OLLAMA_LAUNCH_TEST=1` and `OLLAMA_LAUNCH_SKIP_MAIN=1` for dev/testing
 
 - [ ] **Step 2: Commit**
 
@@ -790,10 +407,11 @@ git commit -m "docs: update README with model selection, build script, and testi
 |--------------|---------|
 | Data layer (parallel arrays, BEGIN/END markers) | Task 1, 2, 3 |
 | Selection layer (pick_fzf_raw, pick_menu_raw) | Task 1 |
-| Display format (metadata in lines) | Task 4 |
+| Display format (metadata in lines, cloud tag injection) | Task 4 |
 | Variant picker (0/1/2+ handling) | Task 5 |
 | Three-step flow (agent → model → variant → exec) | Task 6 |
-| Error handling (empty arrays, invalid input, TTY) | Task 1 (pick_menu_raw preserves existing behavior), Task 4, 5, 6 |
+| Recent quick-pick and history | Task 6 |
+| Error handling (empty arrays, invalid input, TTY) | Tasks 1, 4, 5, 6 |
 | Testing (bats, end-to-end, data validation) | Task 7 |
 | Build script (generate-model-data.js) | Task 2, 3 |
 | CI (GitHub Actions) | Task 8 |
@@ -805,13 +423,13 @@ No gaps identified.
 
 - No "TBD", "TODO", "implement later", or "fill in details" found.
 - Every step contains exact file paths, exact code blocks, exact commands with expected output.
-- No vague directives like "add appropriate error handling" — specific behaviors are coded.
 
 ### 3. Type Consistency
 
-- `pick_fzf_raw` and `pick_menu_raw` are used consistently in `pick_model` and `pick_variant`
+- `pick_fzf_raw` and `pick_menu_raw` are used consistently in `pick_model`, `pick_variant`, and `pick_recent`
 - `PICK_MODEL_INDEX` is set in `pick_model` and read in the main block
 - `MODEL_HAS_VARIANTS`, `MODEL_VARIANTS_N`, `MODEL_SIZES_N`, `MODEL_CONTEXTS_N`, `MODEL_INPUTS_N` naming is consistent throughout
 - `OLLAMA_LAUNCH_TEST` and `OLLAMA_LAUNCH_SKIP_MAIN` env vars are used consistently
+- `FZF_SELECT` / `FZF_SELECT_N` mock pattern is documented and used in end-to-end tests
 
 No inconsistencies found.
