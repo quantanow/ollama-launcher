@@ -1,76 +1,18 @@
 {
   "metadata": {
     "total_models": 100,
-    "collection_date": "2026-05-03",
+    "collection_date": "2026-05-10",
     "source": "https://ollama.com/search and https://ollama.com/library/<model>",
     "collection_method": "HTML scraping — search pages 1-5 + per-model variant pages"
   },
   "models": [
     {
       "rank": 1,
-      "name": "granite4.1",
-      "description": "",
-      "pulls": "19.2K",
-      "tags_count": "46",
-      "updated": "3 days ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "granite4.1:3b",
-          "size": "2.1GB",
-          "context_window": "128K",
-          "input_type": "Text"
-        },
-        {
-          "name": "granite4.1:8b",
-          "size": "5.3GB",
-          "context_window": "128K",
-          "input_type": "Text"
-        },
-        {
-          "name": "granite4.1:30b",
-          "size": "17GB",
-          "context_window": "128K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 2,
-      "name": "mistral-medium-3.5",
-      "description": "Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding in a single set of 128B weights.",
-      "pulls": "7,018",
-      "tags_count": "5",
-      "updated": "4 days ago",
-      "tags": [
-        "vision",
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "mistral-medium-3.5:latest",
-          "size": "80GB",
-          "context_window": "256K",
-          "input_type": "Text, Image"
-        },
-        {
-          "name": "mistral-medium-3.5:128b",
-          "size": "80GB",
-          "context_window": "256K",
-          "input_type": "Text, Image"
-        }
-      ]
-    },
-    {
-      "rank": 3,
       "name": "qwen3.6",
       "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation than previous Qwen models.",
-      "pulls": "755.8K",
+      "pulls": "1.1M",
       "tags_count": "22",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -146,12 +88,12 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 2,
       "name": "nemotron3",
       "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.",
-      "pulls": "246.5K",
+      "pulls": "571.9K",
       "tags_count": "4",
-      "updated": "5 days ago",
+      "updated": "1 week ago",
       "tags": [
         "vision",
         "tools",
@@ -168,12 +110,12 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 3,
       "name": "kimi-k2.6",
       "description": "Kimi K2.6 is an open-source, native multimodal agentic model that advances practical capabilities in long-horizon coding, coding-driven design, proactive autonomous execution, and swarm-based task orchestration.",
-      "pulls": "75.3K",
+      "pulls": "227.6K",
       "tags_count": "1",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -184,37 +126,48 @@
           "name": "kimi-k2.6:cloud",
           "size": "256K context window",
           "context_window": "Text, Image",
-          "input_type": "1 week ago"
+          "input_type": "2 weeks ago"
         }
       ]
     },
     {
-      "rank": 6,
-      "name": "glm-5.1",
-      "description": "GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.",
-      "pulls": "127.1K",
-      "tags_count": "1",
-      "updated": "3 weeks ago",
+      "rank": 4,
+      "name": "granite4.1",
+      "description": "IBM Granite Models are a family of enterprise-ready, open foundation models that support multilingual capabilities, coding, retrieval-augmented generation (RAG), tool use, and structured JSON output. Released under Apache 2.0 license.",
+      "pulls": "57.9K",
+      "tags_count": "46",
+      "updated": "1 week ago",
       "tags": [
-        "tools",
-        "thinking"
+        "tools"
       ],
       "variants": [
         {
-          "name": "glm-5.1:cloud",
-          "size": "198K context window",
-          "context_window": "Text",
-          "input_type": "3 weeks ago"
+          "name": "granite4.1:3b",
+          "size": "2.1GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4.1:8b",
+          "size": "5.3GB",
+          "context_window": "128K",
+          "input_type": "Text"
+        },
+        {
+          "name": "granite4.1:30b",
+          "size": "17GB",
+          "context_window": "128K",
+          "input_type": "Text"
         }
       ]
     },
     {
-      "rank": 7,
+      "rank": 5,
       "name": "deepseek-v4-flash",
       "description": "DeepSeek-V4-Flash is a preview of the DeepSeek-V4 series, a Mixture-of-Experts model with 284B total parameters and 13B activated, built for efficient reasoning across a 1M-token context window.",
-      "pulls": "39.4K",
+      "pulls": "56.1K",
       "tags_count": "1",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "tools",
         "thinking"
@@ -224,17 +177,17 @@
           "name": "deepseek-v4-flash:cloud",
           "size": "1M context window",
           "context_window": "Text",
-          "input_type": "1 week ago"
+          "input_type": "2 weeks ago"
         }
       ]
     },
     {
-      "rank": 8,
+      "rank": 6,
       "name": "deepseek-v4-pro",
       "description": "DeepSeek-V4-Pro is a frontier Mixture-of-Experts model with a 1M-token context window and three reasoning modes.",
-      "pulls": "30K",
+      "pulls": "46.6K",
       "tags_count": "1",
-      "updated": "6 days ago",
+      "updated": "1 week ago",
       "tags": [
         "tools",
         "thinking"
@@ -244,17 +197,44 @@
           "name": "deepseek-v4-pro:cloud",
           "size": "1M context window",
           "context_window": "Text",
-          "input_type": "6 days ago"
+          "input_type": "1 week ago"
         }
       ]
     },
     {
-      "rank": 9,
+      "rank": 7,
+      "name": "mistral-medium-3.5",
+      "description": "Mistral Medium 3.5 is the first flagship model of Mistral AI that merged instruction-following, reasoning, and coding in a single set of 128B weights.",
+      "pulls": "15.1K",
+      "tags_count": "5",
+      "updated": "4 days ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "mistral-medium-3.5:latest",
+          "size": "80GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "mistral-medium-3.5:128b",
+          "size": "80GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 8,
       "name": "medgemma",
       "description": "MedGemma is a collection of Gemma 3 variants that are trained for performance on medical text and image comprehension.",
-      "pulls": "19.2K",
+      "pulls": "24.5K",
       "tags_count": "9",
-      "updated": "2 weeks ago",
+      "updated": "3 weeks ago",
       "tags": [
         "vision"
       ],
@@ -280,12 +260,12 @@
       ]
     },
     {
-      "rank": 10,
+      "rank": 9,
       "name": "medgemma1.5",
       "description": "MedGemma 1.5 4B is an updated version of the MedGemma 4B model.",
-      "pulls": "11.1K",
+      "pulls": "14.4K",
       "tags_count": "5",
-      "updated": "2 weeks ago",
+      "updated": "3 weeks ago",
       "tags": [
         "vision"
       ],
@@ -305,12 +285,12 @@
       ]
     },
     {
-      "rank": 11,
+      "rank": 10,
       "name": "laguna-xs.2",
       "description": "Laguna XS.2 is a 33B total parameter Mixture-of-Experts model with 3B activated parameters per token designed for agentic coding and long-horizon work on a local machine.",
-      "pulls": "4,790",
+      "pulls": "7,995",
       "tags_count": "7",
-      "updated": "5 days ago",
+      "updated": "1 week ago",
       "tags": [
         "tools",
         "thinking"
@@ -361,12 +341,12 @@
       ]
     },
     {
-      "rank": 12,
+      "rank": 11,
       "name": "gemma4",
       "description": "Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.",
-      "pulls": "6.6M",
-      "tags_count": "29",
-      "updated": "2 weeks ago",
+      "pulls": "7.6M",
+      "tags_count": "30",
+      "updated": "4 days ago",
       "tags": [
         "vision",
         "tools",
@@ -408,15 +388,15 @@
           "name": "gemma4:31b-cloud",
           "size": "256K context window",
           "context_window": "Text, Image",
-          "input_type": "3 weeks ago"
+          "input_type": "1 month ago"
         }
       ]
     },
     {
-      "rank": 13,
+      "rank": 12,
       "name": "qwen3.5",
       "description": "Qwen 3.5 is a family of open-source multimodal models that delivers exceptional utility and performance.",
-      "pulls": "7.9M",
+      "pulls": "9.5M",
       "tags_count": "58",
       "updated": "1 month ago",
       "tags": [
@@ -488,6 +468,26 @@
       ]
     },
     {
+      "rank": 13,
+      "name": "glm-5.1",
+      "description": "GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.",
+      "pulls": "636.4K",
+      "tags_count": "1",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-5.1:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "1 month ago"
+        }
+      ]
+    },
+    {
       "rank": 14,
       "name": "lfm2",
       "description": "LFM2 is a family of hybrid models designed for on-device deployment. LFM2-24B-A2B is the largest model in the family, scaling the architecture to 24 billion parameters while keeping inference efficient.",
@@ -514,11 +514,31 @@
     },
     {
       "rank": 15,
+      "name": "minimax-m2.7",
+      "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
+      "pulls": "610.4K",
+      "tags_count": "1",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.7:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "1 month ago"
+        }
+      ]
+    },
+    {
+      "rank": 16,
       "name": "qwen3-coder-next",
       "description": "Qwen3-Coder-Next is a coding-focused language model from Alibaba&#39;s Qwen team, optimized for agentic coding workflows and local development.",
-      "pulls": "1.1M",
+      "pulls": "1.3M",
       "tags_count": "4",
-      "updated": "2 months ago",
+      "updated": "3 months ago",
       "tags": [
         "tools"
       ],
@@ -533,7 +553,7 @@
           "name": "qwen3-coder-next:cloud",
           "size": "256K context window",
           "context_window": "Text",
-          "input_type": "2 months ago"
+          "input_type": "3 months ago"
         },
         {
           "name": "qwen3-coder-next:q4_K_M",
@@ -550,10 +570,10 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 17,
       "name": "translategemma",
       "description": "A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.",
-      "pulls": "1.3M",
+      "pulls": "1.4M",
       "tags_count": "13",
       "updated": "3 months ago",
       "tags": [
@@ -587,7 +607,39 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 18,
+      "name": "nemotron-3-super",
+      "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
+      "pulls": "792.4K",
+      "tags_count": "7",
+      "updated": "1 month ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-3-super:latest",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:120b",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "1 month ago"
+        }
+      ]
+    },
+    {
+      "rank": 19,
       "name": "glm-4.7-flash",
       "description": "As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for lightweight deployment that balances performance and efficiency.",
       "pulls": "1.2M",
@@ -625,7 +677,7 @@
       ]
     },
     {
-      "rank": 18,
+      "rank": 20,
       "name": "lfm2.5-thinking",
       "description": "LFM2.5 is a new family of hybrid models designed for on-device deployment.",
       "pulls": "1.2M",
@@ -650,7 +702,47 @@
       ]
     },
     {
-      "rank": 19,
+      "rank": 21,
+      "name": "glm-5",
+      "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
+      "pulls": "701.1K",
+      "tags_count": "1",
+      "updated": "2 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-5:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "2 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 22,
+      "name": "minimax-m2.5",
+      "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
+      "pulls": "671.8K",
+      "tags_count": "1",
+      "updated": "2 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.5:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "2 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 23,
       "name": "ministral-3",
       "description": "The Ministral 3 family is designed for edge deployment, capable of running on a wide range of hardware.",
       "pulls": "1.1M",
@@ -706,10 +798,10 @@
       ]
     },
     {
-      "rank": 20,
+      "rank": 24,
       "name": "devstral-small-2",
       "description": "24B model that excels at using tools to explore codebases, editing multiple files and power software engineering agents.",
-      "pulls": "810.9K",
+      "pulls": "822.2K",
       "tags_count": "6",
       "updated": "4 months ago",
       "tags": [
@@ -738,44 +830,12 @@
       ]
     },
     {
-      "rank": 21,
-      "name": "nemotron-3-super",
-      "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
-      "pulls": "266.3K",
-      "tags_count": "7",
-      "updated": "1 month ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "nemotron-3-super:latest",
-          "size": "87GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "nemotron-3-super:120b",
-          "size": "87GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "nemotron-3-super:cloud",
-          "size": "256K context window",
-          "context_window": "Text",
-          "input_type": "1 month ago"
-        }
-      ]
-    },
-    {
-      "rank": 22,
+      "rank": 25,
       "name": "glm-ocr",
       "description": "GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.",
-      "pulls": "333.6K",
+      "pulls": "439.6K",
       "tags_count": "3",
-      "updated": "2 months ago",
+      "updated": "3 months ago",
       "tags": [
         "vision",
         "tools"
@@ -802,12 +862,98 @@
       ]
     },
     {
-      "rank": 23,
+      "rank": 26,
+      "name": "gemini-3-flash-preview",
+      "description": "Gemini 3 Flash offers frontier intelligence built for speed at a fraction of the cost.",
+      "pulls": "650.1K",
+      "tags_count": "2",
+      "updated": "4 months ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "gemini-3-flash-preview:latest",
+          "size": "1M context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        },
+        {
+          "name": "gemini-3-flash-preview:cloud",
+          "size": "1M context window",
+          "context_window": "Text, Image",
+          "input_type": "4 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 27,
+      "name": "glm-4.7",
+      "description": "Advancing the Coding Capability",
+      "pulls": "597.5K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-4.7:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 28,
+      "name": "minimax-m2.1",
+      "description": "Exceptional multilingual capabilities to elevate code engineering",
+      "pulls": "542.7K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.1:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 29,
+      "name": "deepseek-v3.2",
+      "description": "DeepSeek-V3.2, a model that harmonizes high computational efficiency with superior reasoning and agent performance.",
+      "pulls": "591.5K",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "deepseek-v3.2:cloud",
+          "size": "160K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 30,
       "name": "qwen3-next",
       "description": "The first installment in the Qwen3-Next series with strong performance in terms of both parameter efficiency and inference speed.",
-      "pulls": "533.2K",
+      "pulls": "545.3K",
       "tags_count": "10",
-      "updated": "4 months ago",
+      "updated": "5 months ago",
       "tags": [
         "tools",
         "thinking"
@@ -829,93 +975,15 @@
           "name": "qwen3-next:80b-cloud",
           "size": "256K context window",
           "context_window": "Text",
-          "input_type": "4 months ago"
+          "input_type": "5 months ago"
         }
       ]
     },
     {
-      "rank": 24,
-      "name": "nemotron-cascade-2",
-      "description": "An open 30B MoE model from NVIDIA with 3B activated parameters that delivers strong reasoning and agentic capabilities.",
-      "pulls": "109.3K",
-      "tags_count": "3",
-      "updated": "1 month ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "nemotron-cascade-2:latest",
-          "size": "24GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "nemotron-cascade-2:30b",
-          "size": "24GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 25,
-      "name": "rnj-1",
-      "description": "Rnj-1 is a family of 8B parameter open-weight, dense models trained from scratch by Essential AI, optimized for code and STEM with capabilities on par with SOTA open-weight models.",
-      "pulls": "453.2K",
-      "tags_count": "6",
-      "updated": "4 months ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "rnj-1:latest",
-          "size": "5.1GB",
-          "context_window": "32K",
-          "input_type": "Text"
-        },
-        {
-          "name": "rnj-1:8b",
-          "size": "5.1GB",
-          "context_window": "32K",
-          "input_type": "Text"
-        },
-        {
-          "name": "rnj-1:8b-cloud",
-          "size": "32K context window",
-          "context_window": "Text",
-          "input_type": "4 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 26,
-      "name": "kimi-k2.5",
-      "description": "Kimi K2.5 is an open-source, native multimodal agentic model that seamlessly integrates vision and language understanding with advanced agentic capabilities, instant and thinking modes, as well as conversational and agentic paradigms.",
-      "pulls": "267.7K",
-      "tags_count": "1",
-      "updated": "3 months ago",
-      "tags": [
-        "vision",
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "kimi-k2.5:cloud",
-          "size": "256K context window",
-          "context_window": "Text, Image",
-          "input_type": "3 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 27,
+      "rank": 31,
       "name": "nemotron-3-nano",
       "description": "Nemotron-3-Nano is a new Standard for Efficient, Open, and Intelligent Agentic Models, now updated with a 4B parameter count model.",
-      "pulls": "418.8K",
+      "pulls": "431.8K",
       "tags_count": "9",
       "updated": "1 month ago",
       "tags": [
@@ -950,10 +1018,62 @@
       ]
     },
     {
-      "rank": 28,
+      "rank": 32,
+      "name": "rnj-1",
+      "description": "Rnj-1 is a family of 8B parameter open-weight, dense models trained from scratch by Essential AI, optimized for code and STEM with capabilities on par with SOTA open-weight models.",
+      "pulls": "458.4K",
+      "tags_count": "6",
+      "updated": "4 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "rnj-1:latest",
+          "size": "5.1GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "rnj-1:8b",
+          "size": "5.1GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "rnj-1:8b-cloud",
+          "size": "32K context window",
+          "context_window": "Text",
+          "input_type": "4 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 33,
+      "name": "kimi-k2.5",
+      "description": "Kimi K2.5 is an open-source, native multimodal agentic model that seamlessly integrates vision and language understanding with advanced agentic capabilities, instant and thinking modes, as well as conversational and agentic paradigms.",
+      "pulls": "277K",
+      "tags_count": "1",
+      "updated": "3 months ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2.5:cloud",
+          "size": "256K context window",
+          "context_window": "Text, Image",
+          "input_type": "3 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 34,
       "name": "olmo-3",
       "description": "Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.",
-      "pulls": "419.6K",
+      "pulls": "424.5K",
       "tags_count": "15",
       "updated": "4 months ago",
       "tags": [],
@@ -979,11 +1099,11 @@
       ]
     },
     {
-      "rank": 29,
-      "name": "minimax-m2.7",
-      "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
-      "pulls": "105.8K",
-      "tags_count": "1",
+      "rank": 35,
+      "name": "nemotron-cascade-2",
+      "description": "An open 30B MoE model from NVIDIA with 3B activated parameters that delivers strong reasoning and agentic capabilities.",
+      "pulls": "112.9K",
+      "tags_count": "3",
       "updated": "1 month ago",
       "tags": [
         "tools",
@@ -991,38 +1111,24 @@
       ],
       "variants": [
         {
-          "name": "minimax-m2.7:cloud",
-          "size": "200K context window",
-          "context_window": "Text",
-          "input_type": "1 month ago"
-        }
-      ]
-    },
-    {
-      "rank": 30,
-      "name": "glm-5",
-      "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
-      "pulls": "199.7K",
-      "tags_count": "1",
-      "updated": "2 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
+          "name": "nemotron-cascade-2:latest",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
         {
-          "name": "glm-5:cloud",
-          "size": "198K context window",
-          "context_window": "Text",
-          "input_type": "2 months ago"
+          "name": "nemotron-cascade-2:30b",
+          "size": "24GB",
+          "context_window": "256K",
+          "input_type": "Text"
         }
       ]
     },
     {
-      "rank": 31,
+      "rank": 36,
       "name": "deepseek-ocr",
       "description": "DeepSeek-OCR is a vision-language model that can perform token-efficient OCR.",
-      "pulls": "434K",
+      "pulls": "440.2K",
       "tags_count": "3",
       "updated": "5 months ago",
       "tags": [
@@ -1044,30 +1150,10 @@
       ]
     },
     {
-      "rank": 32,
-      "name": "minimax-m2.5",
-      "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
-      "pulls": "170.5K",
-      "tags_count": "1",
-      "updated": "2 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "minimax-m2.5:cloud",
-          "size": "198K context window",
-          "context_window": "Text",
-          "input_type": "2 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 33,
+      "rank": 37,
       "name": "olmo-3.1",
       "description": "Olmo is a series of Open language models designed to enable the science of language models. These models are pre-trained on the Dolma 3 dataset and post-trained on the Dolci datasets.",
-      "pulls": "267.5K",
+      "pulls": "270.5K",
       "tags_count": "10",
       "updated": "4 months ago",
       "tags": [
@@ -1089,10 +1175,10 @@
       ]
     },
     {
-      "rank": 34,
+      "rank": 38,
       "name": "devstral-2",
       "description": "123B model that excels at using tools to explore codebases, editing multiple files and power software engineering agents.",
-      "pulls": "207.9K",
+      "pulls": "213.9K",
       "tags_count": "6",
       "updated": "4 months ago",
       "tags": [
@@ -1115,17 +1201,17 @@
           "name": "devstral-2:123b-cloud",
           "size": "256K context window",
           "context_window": "Text",
-          "input_type": "4 months ago"
+          "input_type": "5 months ago"
         }
       ]
     },
     {
-      "rank": 35,
+      "rank": 39,
       "name": "nomic-embed-text-v2-moe",
       "description": "nomic-embed-text-v2-moe is a multilingual MoE text embedding model that excels at multilingual retrieval.",
-      "pulls": "195.3K",
+      "pulls": "204.2K",
       "tags_count": "1",
-      "updated": "4 months ago",
+      "updated": "5 months ago",
       "tags": [
         "embedding"
       ],
@@ -1139,10 +1225,10 @@
       ]
     },
     {
-      "rank": 36,
+      "rank": 40,
       "name": "functiongemma",
       "description": "FunctionGemma is a specialized version of Google&#39;s Gemma 3 270M model fine-tuned explicitly for function calling.",
-      "pulls": "153.4K",
+      "pulls": "155.9K",
       "tags_count": "4",
       "updated": "4 months ago",
       "tags": [
@@ -1164,37 +1250,10 @@
       ]
     },
     {
-      "rank": 37,
-      "name": "gemini-3-flash-preview",
-      "description": "Gemini 3 Flash offers frontier intelligence built for speed at a fraction of the cost.",
-      "pulls": "147.2K",
-      "tags_count": "2",
-      "updated": "4 months ago",
-      "tags": [
-        "vision",
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "gemini-3-flash-preview:latest",
-          "size": "1M context window",
-          "context_window": "Text",
-          "input_type": "4 months ago"
-        },
-        {
-          "name": "gemini-3-flash-preview:cloud",
-          "size": "1M context window",
-          "context_window": "Text, Image",
-          "input_type": "4 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 38,
+      "rank": 41,
       "name": "cogito-2.1",
       "description": "The Cogito v2.1 LLMs are instruction tuned generative models. All models are released under MIT license for commercial use.",
-      "pulls": "177.9K",
+      "pulls": "182.2K",
       "tags_count": "6",
       "updated": "5 months ago",
       "tags": [],
@@ -1220,89 +1279,10 @@
       ]
     },
     {
-      "rank": 39,
-      "name": "glm-4.7",
-      "description": "Advancing the Coding Capability",
-      "pulls": "97.1K",
-      "tags_count": "1",
-      "updated": "4 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "glm-4.7:cloud",
-          "size": "198K context window",
-          "context_window": "Text",
-          "input_type": "4 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 40,
-      "name": "deepseek-v3.2",
-      "description": "DeepSeek-V3.2, a model that harmonizes high computational efficiency with superior reasoning and agent performance.",
-      "pulls": "90.7K",
-      "tags_count": "1",
-      "updated": "4 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "deepseek-v3.2:cloud",
-          "size": "160K context window",
-          "context_window": "Text",
-          "input_type": "4 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 41,
-      "name": "minimax-m2.1",
-      "description": "Exceptional multilingual capabilities to elevate code engineering",
-      "pulls": "43.9K",
-      "tags_count": "1",
-      "updated": "4 months ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "minimax-m2.1:cloud",
-          "size": "200K context window",
-          "context_window": "Text",
-          "input_type": "4 months ago"
-        }
-      ]
-    },
-    {
       "rank": 42,
-      "name": "kimi-k2-thinking",
-      "description": "Kimi K2 Thinking, Moonshot AI&#39;s best open-source thinking model.",
-      "pulls": "60.1K",
-      "tags_count": "1",
-      "updated": "5 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "kimi-k2-thinking:cloud",
-          "size": "256K context window",
-          "context_window": "Text",
-          "input_type": "5 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 43,
       "name": "mistral-large-3",
       "description": "A general-purpose multimodal mixture-of-experts model for production-grade tasks and enterprise workloads.",
-      "pulls": "46.1K",
+      "pulls": "49.4K",
       "tags_count": "1",
       "updated": "5 months ago",
       "tags": [
@@ -1319,12 +1299,12 @@
       ]
     },
     {
-      "rank": 44,
+      "rank": 43,
       "name": "gpt-oss",
       "description": "OpenAI’s open-weight models designed for powerful reasoning, agentic tasks, and versatile developer use cases.",
-      "pulls": "9.3M",
+      "pulls": "9.5M",
       "tags_count": "5",
-      "updated": "6 months ago",
+      "updated": "7 months ago",
       "tags": [
         "tools",
         "thinking"
@@ -1363,10 +1343,10 @@
       ]
     },
     {
-      "rank": 45,
+      "rank": 44,
       "name": "qwen3-vl",
       "description": "The most powerful vision-language model in the Qwen model family to date.",
-      "pulls": "3.6M",
+      "pulls": "3.7M",
       "tags_count": "59",
       "updated": "6 months ago",
       "tags": [
@@ -1432,10 +1412,10 @@
       ]
     },
     {
-      "rank": 46,
+      "rank": 45,
       "name": "qwen3-coder",
       "description": "Alibaba&#39;s performant long context models for agentic and coding tasks.",
-      "pulls": "5.1M",
+      "pulls": "5.3M",
       "tags_count": "10",
       "updated": "7 months ago",
       "tags": [
@@ -1469,10 +1449,10 @@
       ]
     },
     {
-      "rank": 47,
+      "rank": 46,
       "name": "qwen3-embedding",
       "description": "Building upon the foundational models of the Qwen3 series, Qwen3 Embedding provides a comprehensive range of text embeddings models in various sizes",
-      "pulls": "1.8M",
+      "pulls": "1.9M",
       "tags_count": "12",
       "updated": "7 months ago",
       "tags": [
@@ -1506,7 +1486,7 @@
       ]
     },
     {
-      "rank": 48,
+      "rank": 47,
       "name": "granite4",
       "description": "Granite 4 features improved instruction following (IF) and tool-calling capabilities, making them more effective in enterprise applications.",
       "pulls": "1.2M",
@@ -1543,10 +1523,10 @@
       ]
     },
     {
-      "rank": 49,
+      "rank": 48,
       "name": "mistral-small3.2",
       "description": "An update to Mistral Small that improves on function calling, instruction following, and less repetition errors.",
-      "pulls": "1.9M",
+      "pulls": "2M",
       "tags_count": "5",
       "updated": "10 months ago",
       "tags": [
@@ -1569,12 +1549,12 @@
       ]
     },
     {
-      "rank": 50,
+      "rank": 49,
       "name": "embeddinggemma",
       "description": "EmbeddingGemma is a 300M parameter embedding model from Google.",
       "pulls": "1.1M",
       "tags_count": "5",
-      "updated": "7 months ago",
+      "updated": "8 months ago",
       "tags": [
         "embedding"
       ],
@@ -1594,7 +1574,7 @@
       ]
     },
     {
-      "rank": 51,
+      "rank": 50,
       "name": "qwen2.5vl",
       "description": "Flagship vision-language model of Qwen and also a significant leap from the previous Qwen2-VL.",
       "pulls": "1.9M",
@@ -1637,7 +1617,7 @@
       ]
     },
     {
-      "rank": 52,
+      "rank": 51,
       "name": "gemma3n",
       "description": "Gemma 3n models are designed for efficient execution on everyday devices such as laptops, tablets or phones.",
       "pulls": "1.6M",
@@ -1666,7 +1646,7 @@
       ]
     },
     {
-      "rank": 53,
+      "rank": 52,
       "name": "magistral",
       "description": "Magistral is a small, efficient reasoning model with 24B parameters.",
       "pulls": "1.4M",
@@ -1692,10 +1672,70 @@
       ]
     },
     {
+      "rank": 53,
+      "name": "minimax-m2",
+      "description": "MiniMax M2 is a high-efficiency large language model built for coding and agentic workflows.",
+      "pulls": "604.6K",
+      "tags_count": "1",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2:cloud",
+          "size": "200K context window",
+          "context_window": "Text",
+          "input_type": "6 months ago"
+        }
+      ]
+    },
+    {
       "rank": 54,
+      "name": "kimi-k2-thinking",
+      "description": "Kimi K2 Thinking, Moonshot AI&#39;s best open-source thinking model.",
+      "pulls": "559.1K",
+      "tags_count": "1",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2-thinking:cloud",
+          "size": "256K context window",
+          "context_window": "Text",
+          "input_type": "6 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 55,
+      "name": "glm-4.6",
+      "description": "Advanced agentic, reasoning and coding capabilities.",
+      "pulls": "608.8K",
+      "tags_count": "1",
+      "updated": "6 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-4.6:cloud",
+          "size": "198K context window",
+          "context_window": "Text",
+          "input_type": "6 months ago"
+        }
+      ]
+    },
+    {
+      "rank": 56,
       "name": "deepseek-v3.1",
       "description": "DeepSeek-V3.1-Terminus is a hybrid model that supports both thinking mode and non-thinking mode.",
-      "pulls": "665.7K",
+      "pulls": "674K",
       "tags_count": "8",
       "updated": "7 months ago",
       "tags": [
@@ -1724,10 +1764,10 @@
       ]
     },
     {
-      "rank": 55,
+      "rank": 57,
       "name": "devstral",
       "description": "Devstral: the best open source model for coding agents",
-      "pulls": "932.1K",
+      "pulls": "937.5K",
       "tags_count": "5",
       "updated": "10 months ago",
       "tags": [
@@ -1749,10 +1789,10 @@
       ]
     },
     {
-      "rank": 56,
+      "rank": 58,
       "name": "gpt-oss-safeguard",
       "description": "gpt-oss-safeguard-20b and gpt-oss-safeguard-120b are safety reasoning models built-upon gpt-oss",
-      "pulls": "137.2K",
+      "pulls": "138.8K",
       "tags_count": "3",
       "updated": "6 months ago",
       "tags": [
@@ -1781,50 +1821,10 @@
       ]
     },
     {
-      "rank": 57,
-      "name": "minimax-m2",
-      "description": "MiniMax M2 is a high-efficiency large language model built for coding and agentic workflows.",
-      "pulls": "105.6K",
-      "tags_count": "1",
-      "updated": "6 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "minimax-m2:cloud",
-          "size": "200K context window",
-          "context_window": "Text",
-          "input_type": "6 months ago"
-        }
-      ]
-    },
-    {
-      "rank": 58,
-      "name": "glm-4.6",
-      "description": "Advanced agentic, reasoning and coding capabilities.",
-      "pulls": "109.8K",
-      "tags_count": "1",
-      "updated": "6 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "glm-4.6:cloud",
-          "size": "198K context window",
-          "context_window": "Text",
-          "input_type": "6 months ago"
-        }
-      ]
-    },
-    {
       "rank": 59,
       "name": "kimi-k2",
       "description": "A state-of-the-art mixture-of-experts (MoE) language model. Kimi K2-Instruct-0905 demonstrates significant improvements in performance on public benchmarks and real-world coding agent tasks.",
-      "pulls": "62.7K",
+      "pulls": "65.7K",
       "tags_count": "1",
       "updated": "7 months ago",
       "tags": [
@@ -1843,7 +1843,7 @@
       "rank": 60,
       "name": "deepseek-r1",
       "description": "DeepSeek-R1 is a family of open reasoning models with performance approaching that of leading models, such as O3 and Gemini 2.5 Pro.",
-      "pulls": "84.4M",
+      "pulls": "85M",
       "tags_count": "35",
       "updated": "10 months ago",
       "tags": [
@@ -1905,7 +1905,7 @@
       "rank": 61,
       "name": "llama3.1",
       "description": "Llama 3.1 is a new state-of-the-art model from Meta available in 8B, 70B and 405B parameter sizes.",
-      "pulls": "113.9M",
+      "pulls": "114.1M",
       "tags_count": "93",
       "updated": "1 year ago",
       "tags": [
@@ -1942,7 +1942,7 @@
       "rank": 62,
       "name": "llama3.2",
       "description": "Meta&#39;s Llama 3.2 goes small with 1B and 3B models.",
-      "pulls": "67.7M",
+      "pulls": "68.6M",
       "tags_count": "63",
       "updated": "1 year ago",
       "tags": [
@@ -1973,9 +1973,9 @@
       "rank": 63,
       "name": "gemma3",
       "description": "The current, most capable model that runs on a single GPU.",
-      "pulls": "36.3M",
+      "pulls": "36.5M",
       "tags_count": "29",
-      "updated": "4 months ago",
+      "updated": "5 months ago",
       "tags": [
         "vision"
       ],
@@ -2020,19 +2020,19 @@
           "name": "gemma3:4b-cloud",
           "size": "32K context window",
           "context_window": "Text, Image",
-          "input_type": "4 months ago"
+          "input_type": "5 months ago"
         },
         {
           "name": "gemma3:12b-cloud",
           "size": "32K context window",
           "context_window": "Text, Image",
-          "input_type": "4 months ago"
+          "input_type": "5 months ago"
         },
         {
           "name": "gemma3:27b-cloud",
           "size": "128K context window",
           "context_window": "Text, Image",
-          "input_type": "4 months ago"
+          "input_type": "5 months ago"
         }
       ]
     },
@@ -2040,9 +2040,9 @@
       "rank": 64,
       "name": "qwen3",
       "description": "Qwen3 is the latest generation of large language models in Qwen series, offering a comprehensive suite of dense and mixture-of-experts (MoE) models.",
-      "pulls": "28.2M",
+      "pulls": "28.5M",
       "tags_count": "58",
-      "updated": "6 months ago",
+      "updated": "7 months ago",
       "tags": [
         "tools",
         "thinking"
@@ -2108,7 +2108,7 @@
       "rank": 65,
       "name": "nomic-embed-text",
       "description": "A high-performing open embedding model with a large token context window.",
-      "pulls": "67.9M",
+      "pulls": "68.9M",
       "tags_count": "3",
       "updated": "2 years ago",
       "tags": [
@@ -2139,7 +2139,7 @@
       "rank": 66,
       "name": "qwen2.5",
       "description": "Qwen2.5 models are pretrained on Alibaba&#39;s latest large-scale dataset, encompassing up to 18 trillion tokens. The model supports up to 128K tokens and has multilingual support.",
-      "pulls": "29M",
+      "pulls": "29.6M",
       "tags_count": "133",
       "updated": "1 year ago",
       "tags": [
@@ -2200,7 +2200,7 @@
       "rank": 67,
       "name": "gemma2",
       "description": "Google Gemma 2 is a high-performing and efficient model available in three sizes: 2B, 9B, and 27B.",
-      "pulls": "22.2M",
+      "pulls": "22.7M",
       "tags_count": "94",
       "updated": "1 year ago",
       "tags": [],
@@ -2235,7 +2235,7 @@
       "rank": 68,
       "name": "llama3",
       "description": "Meta Llama 3: The most capable openly available LLM to date",
-      "pulls": "23.7M",
+      "pulls": "23.8M",
       "tags_count": "68",
       "updated": "1 year ago",
       "tags": [],
@@ -2264,7 +2264,7 @@
       "rank": 69,
       "name": "qwen2.5-coder",
       "description": "The latest series of Code-Specific Qwen models, with significant improvements in code generation, code reasoning, and code fixing.",
-      "pulls": "15M",
+      "pulls": "15.3M",
       "tags_count": "199",
       "updated": "11 months ago",
       "tags": [
@@ -2319,9 +2319,9 @@
       "rank": 70,
       "name": "mistral",
       "description": "The 7B model released by Mistral AI, updated to version 0.3.",
-      "pulls": "28.9M",
+      "pulls": "29.1M",
       "tags_count": "84",
-      "updated": "9 months ago",
+      "updated": "10 months ago",
       "tags": [
         "tools"
       ],
@@ -2344,7 +2344,7 @@
       "rank": 71,
       "name": "phi3",
       "description": "Phi-3 is a family of lightweight 3B (Mini) and 14B (Medium) state-of-the-art open models by Microsoft.",
-      "pulls": "17.4M",
+      "pulls": "17.5M",
       "tags_count": "72",
       "updated": "1 year ago",
       "tags": [],
@@ -2433,9 +2433,9 @@
       "rank": 74,
       "name": "mxbai-embed-large",
       "description": "State-of-the-art large embedding model from mixedbread.ai",
-      "pulls": "10.2M",
+      "pulls": "10.4M",
       "tags_count": "4",
-      "updated": "1 year ago",
+      "updated": "2 years ago",
       "tags": [
         "embedding"
       ],
@@ -2533,7 +2533,7 @@
       "rank": 78,
       "name": "llama3.2-vision",
       "description": "Llama 3.2 Vision is a collection of instruction-tuned image reasoning generative models in 11B and 90B sizes.",
-      "pulls": "4.4M",
+      "pulls": "4.5M",
       "tags_count": "9",
       "updated": "11 months ago",
       "tags": [
@@ -2657,7 +2657,7 @@
       "rank": 82,
       "name": "gemma",
       "description": "Gemma is a family of lightweight, state-of-the-art open models built by Google DeepMind. Updated to version 1.1",
-      "pulls": "6.9M",
+      "pulls": "7M",
       "tags_count": "102",
       "updated": "2 years ago",
       "tags": [],
@@ -2686,7 +2686,7 @@
       "rank": 83,
       "name": "qwen",
       "description": "Qwen 1.5 is a series of large language models by Alibaba Cloud spanning from 0.5B to 110B parameters",
-      "pulls": "6.6M",
+      "pulls": "6.7M",
       "tags_count": "379",
       "updated": "2 years ago",
       "tags": [],
@@ -2749,6 +2749,31 @@
     },
     {
       "rank": 84,
+      "name": "mistral-nemo",
+      "description": "A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.",
+      "pulls": "4.4M",
+      "tags_count": "17",
+      "updated": "9 months ago",
+      "tags": [
+        "tools"
+      ],
+      "variants": [
+        {
+          "name": "mistral-nemo:latest",
+          "size": "7.1GB",
+          "context_window": "1000K",
+          "input_type": "Text"
+        },
+        {
+          "name": "mistral-nemo:12b",
+          "size": "7.1GB",
+          "context_window": "1000K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 85,
       "name": "smollm2",
       "description": "SmolLM2 is a family of compact language models available in three size: 135M, 360M, and 1.7B parameters.",
       "pulls": "3.4M",
@@ -2785,7 +2810,7 @@
       ]
     },
     {
-      "rank": 85,
+      "rank": 86,
       "name": "granite3.1-moe",
       "description": "The IBM Granite 1B and 3B models are long-context mixture of experts (MoE) Granite models from IBM designed for low latency usage.",
       "pulls": "2.9M",
@@ -2816,35 +2841,10 @@
       ]
     },
     {
-      "rank": 86,
-      "name": "mistral-nemo",
-      "description": "A state-of-the-art 12B model with 128k context length, built by Mistral AI in collaboration with NVIDIA.",
-      "pulls": "4.3M",
-      "tags_count": "17",
-      "updated": "9 months ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "mistral-nemo:latest",
-          "size": "7.1GB",
-          "context_window": "1000K",
-          "input_type": "Text"
-        },
-        {
-          "name": "mistral-nemo:12b",
-          "size": "7.1GB",
-          "context_window": "1000K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
       "rank": 87,
       "name": "bge-m3",
       "description": "BGE-M3 is a new model from BAAI distinguished for its versatility in Multi-Functionality, Multi-Linguality, and Multi-Granularity.",
-      "pulls": "4M",
+      "pulls": "4.1M",
       "tags_count": "3",
       "updated": "1 year ago",
       "tags": [
@@ -2918,7 +2918,7 @@
       "rank": 89,
       "name": "falcon3",
       "description": "A family of efficient AI models under 10B parameters performant in science, math, and coding through innovative training techniques.",
-      "pulls": "2.5M",
+      "pulls": "2.6M",
       "tags_count": "17",
       "updated": "1 year ago",
       "tags": [],
