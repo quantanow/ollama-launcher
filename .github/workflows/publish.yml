@@ -44,6 +44,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
-        run: npm publish
+        run: |
+          npm publish --loglevel verbose 2>&1 || {
+            echo "::error::npm publish failed"
+            exit 1
+          }
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
