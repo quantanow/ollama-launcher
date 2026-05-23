@@ -16,6 +16,14 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Verify NPM_TOKEN is configured
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo 'Error: secrets.NPM_TOKEN is empty or missing.' >&2
+            echo 'Add a valid npm access token at GitHub → Settings → Secrets → Actions.' >&2
+            exit 1
+          fi
+
       - name: Verify tag matches package.json version
         run: |
           TAG="${GITHUB_REF_NAME#v}"
