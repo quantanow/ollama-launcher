@@ -1,0 +1,42 @@
+name: Update model data
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-models:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch fresh model list
+        run: node scripts/fetch-models.js
+
+      - name: Regenerate embedded bash arrays
+        run: node scripts/generate-model-data.js
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: refresh model data from ollama.com'
+          branch: auto/update-models
+          delete-branch: true
+          title: 'chore: refresh model data from ollama.com'
+          body: |
+            Automated weekly refresh of `models.json` and embedded bash arrays in `bin/ollama-launch`.
+
+            - Ran `node scripts/fetch-models.js`
+            - Ran `node scripts/generate-model-data.js`
+          labels: |
+            automated
+            data
