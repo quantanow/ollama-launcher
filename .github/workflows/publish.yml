@@ -8,21 +8,16 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Verify NPM_TOKEN is configured
-        run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
-            echo 'Error: secrets.NPM_TOKEN is empty or missing.' >&2
-            echo 'Add a valid npm access token at GitHub → Settings → Secrets → Actions.' >&2
-            exit 1
-          fi
 
       - name: Verify tag matches package.json version
         run: |
@@ -33,21 +28,5 @@ jobs:
             exit 1
           fi
 
-      - name: Verify npm auth
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Dry-run publish
-        run: npm publish --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish
-        run: |
-          npm publish --loglevel verbose 2>&1 || {
-            echo "::error::npm publish failed"
-            exit 1
-          }
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish with provenance
+        run: npm publish --provenance --access public
