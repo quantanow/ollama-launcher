@@ -10,9 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -24,19 +25,14 @@ jobs:
       - name: Regenerate embedded bash arrays
         run: node scripts/generate-model-data.js
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: refresh model data from ollama.com'
-          branch: auto/update-models
-          delete-branch: true
-          title: 'chore: refresh model data from ollama.com'
-          body: |
-            Automated weekly refresh of `models.json` and embedded bash arrays in `bin/ollama-launch`.
-
-            - Ran `node scripts/fetch-models.js`
-            - Ran `node scripts/generate-model-data.js`
-          labels: |
-            automated
-            data
+      - name: Commit and push changes to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add models.json bin/ollama-launch
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: refresh model data from ollama.com"
+          git push origin main
