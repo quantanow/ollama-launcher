@@ -21,11 +21,13 @@ Suite of bash script CLIs for working with Ollama. `ollama-launch` is the flagsh
 | `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
 | `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `bin/ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes all tools to `/usr/local/bin`) |
-| `package.json` | npm package config (`ollama-launch` v1.1.13) |
+| `package.json` | npm package config (`ollama-launch` v1.1.18) |
 | `index.html` | GitHub Pages site — usage and features landing page |
 | `tests/` | bats test suite |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
 | `.github/workflows/publish.yml` | CD: publishes to npm on `v*` tag push |
+| `.github/workflows/update-models.yml` | Scheduled weekly model data refresh (Mon 06:00 UTC) |
+| `scripts/update-npm-token.sh` | Helper to update GitHub `NPM_TOKEN` secret locally |
 
 ## Development Commands
 
@@ -251,7 +253,7 @@ End-to-end tests use a mock `fzf` and mock `ollama` in `tests/mock_bin/` (create
 
 ## Publishing to npm
 
-Requires an npm access token stored as a GitHub secret named `NPM_TOKEN`. Publish by bumping version (which creates a tag) and pushing:
+Requires an npm **Granular Access Token** with **Bypass 2FA enabled**, stored as a GitHub secret named `NPM_TOKEN`. Classic tokens with 2FA will fail with `EOTP`. Publish by bumping version (which creates a tag) and pushing:
 
 ```bash
 npm version patch -m "chore: bump version to %s"
@@ -260,6 +262,11 @@ git push origin v1.x.x
 ```
 
 The CI workflow verifies the tag matches `package.json` version before publishing.
+
+**Token setup:**
+1. https://www.npmjs.com/settings/YOUR_USERNAME/tokens → "Granular Access Token"
+2. Permissions: Read and write, package: `ollama-launch`, Bypass 2FA: enabled
+3. Update GitHub secret: https://github.com/quantanow/ollama-launcher/settings/secrets/actions
 
 **Note:** Both scripts read `VERSION` from `package.json` at runtime, checking `SCRIPT_DIR` then `SCRIPT_DIR/..` (resolves symlinks so it works under `npm install -g`). Do not hardcode the version string in either script.
 
