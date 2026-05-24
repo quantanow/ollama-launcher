@@ -1,0 +1,25 @@
+{
+  "name": "@quantanow/ollama-bench",
+  "version": "1.1.18",
+  "description": "Benchmark Ollama model inference speed",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quantanow/ollama-launcher.git",
+    "directory": "packages/ollama-bench"
+  },
+  "bin": {
+    "ollama-bench": "bin/ollama-bench"
+  },
+  "files": [
+    "bin/ollama-bench",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "bats tests/"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "preferGlobal": true
+}

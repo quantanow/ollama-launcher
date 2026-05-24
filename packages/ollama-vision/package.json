@@ -1,0 +1,25 @@
+{
+  "name": "@quantanow/ollama-vision",
+  "version": "1.1.18",
+  "description": "Vision-capable model picker for Ollama with image question support",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quantanow/ollama-launcher.git",
+    "directory": "packages/ollama-vision"
+  },
+  "bin": {
+    "ollama-vision": "bin/ollama-vision"
+  },
+  "files": [
+    "bin/ollama-vision",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "bats tests/"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "preferGlobal": true
+}
