@@ -1,28 +1,29 @@
 {
   "metadata": {
     "total_models": 20,
-    "collection_date": "2026-06-08",
+    "collection_date": "2026-06-15",
     "source": "https://ollama.com/search and https://ollama.com/library/<model>",
     "collection_method": "HTML scraping — search pages 1-1 + per-model variant pages"
   },
   "models": [
     {
       "rank": 1,
-      "name": "nemotron-3-ultra",
-      "description": "NVIDIA Nemotron 3 Ultra is built for high-throughput reasoning and long-running agent workflows.",
-      "pulls": "4,603",
+      "name": "kimi-k2.7-code",
+      "description": "Kimi K2.7 Code is Moonshot AI&#39;s coding-focused agentic model built upon Kimi K2.6, with substantial improvements on real-world long-horizon coding tasks and roughly 30% lower thinking-token usage.",
+      "pulls": "9,863",
       "tags_count": "1",
-      "updated": "4 days ago",
+      "updated": "2 days ago",
       "tags": [
+        "vision",
         "tools",
         "thinking"
       ],
       "variants": [
         {
-          "name": "nemotron-3-ultra:cloud",
+          "name": "kimi-k2.7-code:cloud",
           "size": "High Usage",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         }
       ]
     },
@@ -30,9 +31,9 @@
       "rank": 2,
       "name": "minimax-m3",
       "description": "MiniMax M3: Coding &amp; Agentic Frontier. 1M context window. Native Multimodality.",
-      "pulls": "32.1K",
+      "pulls": "51.4K",
       "tags_count": "1",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -51,9 +52,9 @@
       "rank": 3,
       "name": "lfm2.5",
       "description": "LFM2.5-8B-A1B, an edge model built for fast, reliable tool calling on consumer hardware.",
-      "pulls": "11.8K",
+      "pulls": "23.9K",
       "tags_count": "5",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "tools",
         "thinking"
@@ -75,11 +76,81 @@
     },
     {
       "rank": 4,
+      "name": "nemotron-3-ultra",
+      "description": "NVIDIA Nemotron 3 Ultra is built for high-throughput reasoning and long-running agent workflows.",
+      "pulls": "12.9K",
+      "tags_count": "1",
+      "updated": "1 week ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-3-ultra:cloud",
+          "size": "High Usage",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "minicpm-v4.6",
+      "description": "A Pocket-Sized MLLM for Ultra-Efficient Image and Video Understanding on Your Phone",
+      "pulls": "3,102",
+      "tags_count": "13",
+      "updated": "1 week ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "minicpm-v4.6:latest",
+          "size": "1.6GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "minicpm-v4.6:1b",
+          "size": "1.6GB",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "minicpm-v4.5",
+      "description": "A GPT-4o Level MLLM for Single Image, Multi Image and High-FPS Video Understanding on Your Phone",
+      "pulls": "2,087",
+      "tags_count": "13",
+      "updated": "1 week ago",
+      "tags": [
+        "vision"
+      ],
+      "variants": [
+        {
+          "name": "minicpm-v4.5:latest",
+          "size": "6.1GB",
+          "context_window": "40K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "minicpm-v4.5:8b",
+          "size": "6.1GB",
+          "context_window": "40K",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 7,
       "name": "gemma4",
       "description": "Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.",
-      "pulls": "12.5M",
-      "tags_count": "47",
-      "updated": "2 days ago",
+      "pulls": "14M",
+      "tags_count": "48",
+      "updated": "yesterday",
       "tags": [
         "vision",
         "tools",
@@ -137,8 +208,8 @@
         },
         {
           "name": "gemma4:12b-mlx",
-          "size": "10.0GB",
-          "context_window": "128K",
+          "size": "6.8GB",
+          "context_window": "256K",
           "input_type": "Text"
         },
         {
@@ -162,12 +233,12 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 8,
       "name": "qwen3.5",
       "description": "Qwen 3.5 is a family of open-source multimodal models that delivers exceptional utility and performance.",
-      "pulls": "13.2M",
+      "pulls": "13.6M",
       "tags_count": "64",
-      "updated": "2 weeks ago",
+      "updated": "3 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -273,12 +344,12 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 9,
       "name": "qwen3.6",
       "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation than previous Qwen models.",
-      "pulls": "2.1M",
+      "pulls": "2.4M",
       "tags_count": "30",
-      "updated": "6 days ago",
+      "updated": "1 week ago",
       "tags": [
         "vision",
         "tools",
@@ -318,7 +389,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 10,
       "name": "glm-5.1",
       "description": "GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.",
       "pulls": "2.2M",
@@ -338,7 +409,7 @@
       ]
     },
     {
-      "rank": 8,
+      "rank": 11,
       "name": "minimax-m2.7",
       "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
       "pulls": "2.2M",
@@ -358,104 +429,10 @@
       ]
     },
     {
-      "rank": 9,
-      "name": "nemotron-3-super",
-      "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
-      "pulls": "2.4M",
-      "tags_count": "7",
-      "updated": "2 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "nemotron-3-super:latest",
-          "size": "87GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "nemotron-3-super:120b",
-          "size": "87GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "nemotron-3-super:cloud",
-          "size": "Medium Usage",
-          "context_window": "256K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 10,
-      "name": "glm-5",
-      "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
-      "pulls": "2.3M",
-      "tags_count": "1",
-      "updated": "3 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "glm-5:cloud",
-          "size": "High Usage",
-          "context_window": "198K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 11,
-      "name": "nemotron3",
-      "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.",
-      "pulls": "600.7K",
-      "tags_count": "4",
-      "updated": "1 month ago",
-      "tags": [
-        "vision",
-        "tools",
-        "thinking",
-        "audio"
-      ],
-      "variants": [
-        {
-          "name": "nemotron3:33b",
-          "size": "28GB",
-          "context_window": "128K",
-          "input_type": "Text, Image"
-        }
-      ]
-    },
-    {
       "rank": 12,
-      "name": "minimax-m2.5",
-      "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
-      "pulls": "2.2M",
-      "tags_count": "1",
-      "updated": "3 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "minimax-m2.5:cloud",
-          "size": "Medium Usage",
-          "context_window": "198K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 13,
       "name": "glm-ocr",
       "description": "GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.",
-      "pulls": "2.3M",
+      "pulls": "3.4M",
       "tags_count": "3",
       "updated": "4 months ago",
       "tags": [
@@ -484,10 +461,104 @@
       ]
     },
     {
+      "rank": 13,
+      "name": "nemotron-3-super",
+      "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
+      "pulls": "2.4M",
+      "tags_count": "7",
+      "updated": "3 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "nemotron-3-super:latest",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:120b",
+          "size": "87GB",
+          "context_window": "256K",
+          "input_type": "Text"
+        },
+        {
+          "name": "nemotron-3-super:cloud",
+          "size": "Medium Usage",
+          "context_window": "256K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
       "rank": 14,
+      "name": "glm-5",
+      "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
+      "pulls": "2.3M",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "glm-5:cloud",
+          "size": "High Usage",
+          "context_window": "198K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 15,
+      "name": "minimax-m2.5",
+      "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
+      "pulls": "2.2M",
+      "tags_count": "1",
+      "updated": "4 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.5:cloud",
+          "size": "Medium Usage",
+          "context_window": "198K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 16,
+      "name": "nemotron3",
+      "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.",
+      "pulls": "604.6K",
+      "tags_count": "4",
+      "updated": "1 month ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking",
+        "audio"
+      ],
+      "variants": [
+        {
+          "name": "nemotron3:33b",
+          "size": "28GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 17,
       "name": "qwen3-coder-next",
       "description": "Qwen3-Coder-Next is a coding-focused language model from Alibaba&#39;s Qwen team, optimized for agentic coding workflows and local development.",
-      "pulls": "1.5M",
+      "pulls": "1.6M",
       "tags_count": "4",
       "updated": "4 months ago",
       "tags": [
@@ -521,7 +592,7 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 18,
       "name": "glm-4.7",
       "description": "Advancing the Coding Capability",
       "pulls": "2.2M",
@@ -541,7 +612,7 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 19,
       "name": "gemini-3-flash-preview",
       "description": "Gemini 3 Flash offers frontier intelligence built for speed at a fraction of the cost.",
       "pulls": "2.2M",
@@ -568,7 +639,7 @@
       ]
     },
     {
-      "rank": 17,
+      "rank": 20,
       "name": "minimax-m2.1",
       "description": "Exceptional multilingual capabilities to elevate code engineering",
       "pulls": "2.1M",
@@ -585,112 +656,12 @@
           "input_type": "Text"
         }
       ]
-    },
-    {
-      "rank": 18,
-      "name": "lfm2",
-      "description": "LFM2 is a family of hybrid models designed for on-device deployment. LFM2-24B-A2B is the largest model in the family, scaling the architecture to 24 billion parameters while keeping inference efficient.",
-      "pulls": "1.1M",
-      "tags_count": "6",
-      "updated": "3 months ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "lfm2:latest",
-          "size": "14GB",
-          "context_window": "32K",
-          "input_type": "Text"
-        },
-        {
-          "name": "lfm2:24b",
-          "size": "14GB",
-          "context_window": "32K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 19,
-      "name": "translategemma",
-      "description": "A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.",
-      "pulls": "1.6M",
-      "tags_count": "13",
-      "updated": "4 months ago",
-      "tags": [
-        "vision"
-      ],
-      "variants": [
-        {
-          "name": "translategemma:latest",
-          "size": "3.3GB",
-          "context_window": "128K",
-          "input_type": "Text, Image"
-        },
-        {
-          "name": "translategemma:4b",
-          "size": "3.3GB",
-          "context_window": "128K",
-          "input_type": "Text, Image"
-        },
-        {
-          "name": "translategemma:12b",
-          "size": "8.1GB",
-          "context_window": "128K",
-          "input_type": "Text, Image"
-        },
-        {
-          "name": "translategemma:27b",
-          "size": "17GB",
-          "context_window": "128K",
-          "input_type": "Text, Image"
-        }
-      ]
-    },
-    {
-      "rank": 20,
-      "name": "glm-4.7-flash",
-      "description": "As the strongest model in the 30B class, GLM-4.7-Flash offers a new option for lightweight deployment that balances performance and efficiency.",
-      "pulls": "1.3M",
-      "tags_count": "4",
-      "updated": "2 days ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "glm-4.7-flash:latest",
-          "size": "19GB",
-          "context_window": "198K",
-          "input_type": "Text"
-        },
-        {
-          "name": "glm-4.7-flash:q4_K_M",
-          "size": "19GB",
-          "context_window": "198K",
-          "input_type": "Text"
-        },
-        {
-          "name": "glm-4.7-flash:q8_0",
-          "size": "32GB",
-          "context_window": "198K",
-          "input_type": "Text"
-        },
-        {
-          "name": "glm-4.7-flash:bf16",
-          "size": "60GB",
-          "context_window": "198K",
-          "input_type": "Text"
-        }
-      ]
     }
   ],
   "summary": {
     "total_models": 20,
     "models_with_variants": 20,
-    "total_variants": 66,
+    "total_variants": 61,
     "capability_tags": [
       "audio",
       "thinking",
