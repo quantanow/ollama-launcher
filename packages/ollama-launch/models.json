@@ -1,39 +1,94 @@
 {
   "metadata": {
     "total_models": 20,
-    "collection_date": "2026-06-15",
+    "collection_date": "2026-06-22",
     "source": "https://ollama.com/search and https://ollama.com/library/<model>",
     "collection_method": "HTML scraping — search pages 1-1 + per-model variant pages"
   },
   "models": [
     {
       "rank": 1,
-      "name": "kimi-k2.7-code",
-      "description": "Kimi K2.7 Code is Moonshot AI&#39;s coding-focused agentic model built upon Kimi K2.6, with substantial improvements on real-world long-horizon coding tasks and roughly 30% lower thinking-token usage.",
-      "pulls": "9,863",
+      "name": "glm-5.2",
+      "description": "GLM-5.2 is Z.ai’s flagship model for the era of long-horizon tasks.",
+      "pulls": "43.4K",
       "tags_count": "1",
-      "updated": "2 days ago",
+      "updated": "5 days ago",
       "tags": [
-        "vision",
         "tools",
         "thinking"
       ],
       "variants": [
         {
-          "name": "kimi-k2.7-code:cloud",
+          "name": "glm-5.2:cloud",
           "size": "High Usage",
-          "context_window": "256K",
-          "input_type": "Text, Image"
+          "context_window": "976K",
+          "input_type": "Text"
         }
       ]
     },
     {
       "rank": 2,
+      "name": "north-mini-code-1.0",
+      "description": "North Mini Code is Cohere&#39;s first model for developers — a 30B Mixture-of-Experts model with 3B active parameters, built for agentic software engineering.",
+      "pulls": "5,543",
+      "tags_count": "7",
+      "updated": "4 days ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "north-mini-code-1.0:latest",
+          "size": "19GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:q4_K_M",
+          "size": "19GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:q8_0",
+          "size": "32GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:bf16",
+          "size": "61GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:mlx-mxfp8",
+          "size": "31GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:mlx-nvfp4",
+          "size": "20GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        },
+        {
+          "name": "north-mini-code-1.0:mlx-bf16",
+          "size": "61GB",
+          "context_window": "488K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 3,
       "name": "minimax-m3",
       "description": "MiniMax M3: Coding &amp; Agentic Frontier. 1M context window. Native Multimodality.",
-      "pulls": "51.4K",
+      "pulls": "62.6K",
       "tags_count": "1",
-      "updated": "2 weeks ago",
+      "updated": "3 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -49,12 +104,33 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 4,
+      "name": "kimi-k2.7-code",
+      "description": "Kimi K2.7 Code is Moonshot AI&#39;s coding-focused agentic model built upon Kimi K2.6, with substantial improvements on real-world long-horizon coding tasks and roughly 30% lower thinking-token usage.",
+      "pulls": "22.3K",
+      "tags_count": "1",
+      "updated": "1 week ago",
+      "tags": [
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "kimi-k2.7-code:cloud",
+          "size": "High Usage",
+          "context_window": "256K",
+          "input_type": "Text, Image"
+        }
+      ]
+    },
+    {
+      "rank": 5,
       "name": "lfm2.5",
       "description": "LFM2.5-8B-A1B, an edge model built for fast, reliable tool calling on consumer hardware.",
-      "pulls": "23.9K",
+      "pulls": "32.3K",
       "tags_count": "5",
-      "updated": "2 weeks ago",
+      "updated": "3 weeks ago",
       "tags": [
         "tools",
         "thinking"
@@ -75,12 +151,12 @@
       ]
     },
     {
-      "rank": 4,
+      "rank": 6,
       "name": "nemotron-3-ultra",
       "description": "NVIDIA Nemotron 3 Ultra is built for high-throughput reasoning and long-running agent workflows.",
-      "pulls": "12.9K",
+      "pulls": "13K",
       "tags_count": "1",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "tools",
         "thinking"
@@ -95,12 +171,12 @@
       ]
     },
     {
-      "rank": 5,
+      "rank": 7,
       "name": "minicpm-v4.6",
       "description": "A Pocket-Sized MLLM for Ultra-Efficient Image and Video Understanding on Your Phone",
-      "pulls": "3,102",
+      "pulls": "6,786",
       "tags_count": "13",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision"
       ],
@@ -120,12 +196,12 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 8,
       "name": "minicpm-v4.5",
       "description": "A GPT-4o Level MLLM for Single Image, Multi Image and High-FPS Video Understanding on Your Phone",
-      "pulls": "2,087",
+      "pulls": "4,475",
       "tags_count": "13",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision"
       ],
@@ -145,12 +221,12 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 9,
       "name": "gemma4",
       "description": "Gemma 4 models are designed to deliver frontier-level performance at each size. They are well-suited for reasoning, agentic workflows, coding, and multimodal understanding.",
-      "pulls": "14M",
+      "pulls": "15.1M",
       "tags_count": "48",
-      "updated": "yesterday",
+      "updated": "1 week ago",
       "tags": [
         "vision",
         "tools",
@@ -198,47 +274,47 @@
           "name": "gemma4:e2b-mlx",
           "size": "7.1GB",
           "context_window": "128K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "gemma4:e4b-mlx",
           "size": "9.6GB",
           "context_window": "128K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "gemma4:12b-mlx",
           "size": "6.8GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "gemma4:26b-mlx",
           "size": "17GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "gemma4:31b-mlx",
           "size": "20GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "gemma4:31b-cloud",
-          "size": "Low Usage",
+          "size": "Medium Usage",
           "context_window": "256K",
           "input_type": "Text, Image"
         }
       ]
     },
     {
-      "rank": 8,
+      "rank": 10,
       "name": "qwen3.5",
       "description": "Qwen 3.5 is a family of open-source multimodal models that delivers exceptional utility and performance.",
-      "pulls": "13.6M",
+      "pulls": "14M",
       "tags_count": "64",
-      "updated": "3 weeks ago",
+      "updated": "1 month ago",
       "tags": [
         "vision",
         "tools",
@@ -297,37 +373,37 @@
           "name": "qwen3.5:0.8b-mlx",
           "size": "1.2GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:2b-mlx",
           "size": "3.1GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:4b-mlx",
           "size": "4.0GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:9b-mlx",
           "size": "8.9GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:27b-mlx",
           "size": "20GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:35b-mlx",
           "size": "22GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.5:cloud",
@@ -344,12 +420,12 @@
       ]
     },
     {
-      "rank": 9,
+      "rank": 11,
       "name": "qwen3.6",
       "description": "Qwen3.6 delivers substantial upgrades in agentic coding and thinking preservation than previous Qwen models.",
-      "pulls": "2.4M",
+      "pulls": "2.9M",
       "tags_count": "30",
-      "updated": "1 week ago",
+      "updated": "2 weeks ago",
       "tags": [
         "vision",
         "tools",
@@ -378,18 +454,18 @@
           "name": "qwen3.6:27b-mlx",
           "size": "20GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         },
         {
           "name": "qwen3.6:35b-mlx",
           "size": "22GB",
           "context_window": "256K",
-          "input_type": "Text"
+          "input_type": "Text, Image"
         }
       ]
     },
     {
-      "rank": 10,
+      "rank": 12,
       "name": "glm-5.1",
       "description": "GLM-5.1 is our next-generation flagship model for agentic engineering, with significantly stronger coding capabilities than its predecessor. It achieves state-of-the-art performance on SWE-Bench Pro and leads GLM-5 by a wide margin.",
       "pulls": "2.2M",
@@ -409,30 +485,10 @@
       ]
     },
     {
-      "rank": 11,
-      "name": "minimax-m2.7",
-      "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
-      "pulls": "2.2M",
-      "tags_count": "1",
-      "updated": "2 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "minimax-m2.7:cloud",
-          "size": "Medium Usage",
-          "context_window": "200K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 12,
+      "rank": 13,
       "name": "glm-ocr",
       "description": "GLM-OCR is a multimodal OCR model for complex document understanding, built on the GLM-V encoder–decoder architecture.",
-      "pulls": "3.4M",
+      "pulls": "4.9M",
       "tags_count": "3",
       "updated": "4 months ago",
       "tags": [
@@ -461,7 +517,27 @@
       ]
     },
     {
-      "rank": 13,
+      "rank": 14,
+      "name": "minimax-m2.7",
+      "description": "MiniMax&#39;s M2-series model for coding, agentic workflows, and professional productivity.",
+      "pulls": "2.2M",
+      "tags_count": "1",
+      "updated": "3 months ago",
+      "tags": [
+        "tools",
+        "thinking"
+      ],
+      "variants": [
+        {
+          "name": "minimax-m2.7:cloud",
+          "size": "Medium Usage",
+          "context_window": "200K",
+          "input_type": "Text"
+        }
+      ]
+    },
+    {
+      "rank": 15,
       "name": "nemotron-3-super",
       "description": "NVIDIA Nemotron 3 Super is a 120B open MoE model activating just 12B parameters to deliver maximum compute efficiency and accuracy for complex multi-agent applications.",
       "pulls": "2.4M",
@@ -493,7 +569,7 @@
       ]
     },
     {
-      "rank": 14,
+      "rank": 16,
       "name": "glm-5",
       "description": "A strong reasoning and agentic model from Z.ai with 744B total parameters (40B active), built for complex systems engineering and long-horizon tasks.",
       "pulls": "2.3M",
@@ -513,10 +589,10 @@
       ]
     },
     {
-      "rank": 15,
+      "rank": 17,
       "name": "minimax-m2.5",
       "description": "MiniMax-M2.5 is a state-of-the-art large language model designed for real-world productivity and coding tasks.",
-      "pulls": "2.2M",
+      "pulls": "2.3M",
       "tags_count": "1",
       "updated": "4 months ago",
       "tags": [
@@ -533,10 +609,10 @@
       ]
     },
     {
-      "rank": 16,
+      "rank": 18,
       "name": "nemotron3",
       "description": "NVIDIA Nemotron 3 Nano Omni is a multimodal large language model that unifies video, audio, image, and text understanding to support enterprise-grade Q&amp;A, summarization, transcription, and document intelligence workflows.",
-      "pulls": "604.6K",
+      "pulls": "609.2K",
       "tags_count": "4",
       "updated": "1 month ago",
       "tags": [
@@ -555,104 +631,63 @@
       ]
     },
     {
-      "rank": 17,
-      "name": "qwen3-coder-next",
-      "description": "Qwen3-Coder-Next is a coding-focused language model from Alibaba&#39;s Qwen team, optimized for agentic coding workflows and local development.",
-      "pulls": "1.6M",
-      "tags_count": "4",
-      "updated": "4 months ago",
-      "tags": [
-        "tools"
-      ],
-      "variants": [
-        {
-          "name": "qwen3-coder-next:latest",
-          "size": "52GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "qwen3-coder-next:cloud",
-          "size": "Medium Usage",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "qwen3-coder-next:q4_K_M",
-          "size": "52GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        },
-        {
-          "name": "qwen3-coder-next:q8_0",
-          "size": "85GB",
-          "context_window": "256K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
-      "rank": 18,
-      "name": "glm-4.7",
-      "description": "Advancing the Coding Capability",
-      "pulls": "2.2M",
-      "tags_count": "1",
-      "updated": "5 months ago",
-      "tags": [
-        "tools",
-        "thinking"
-      ],
-      "variants": [
-        {
-          "name": "glm-4.7:cloud",
-          "size": "High Usage",
-          "context_window": "198K",
-          "input_type": "Text"
-        }
-      ]
-    },
-    {
       "rank": 19,
-      "name": "gemini-3-flash-preview",
-      "description": "Gemini 3 Flash offers frontier intelligence built for speed at a fraction of the cost.",
-      "pulls": "2.2M",
-      "tags_count": "2",
+      "name": "translategemma",
+      "description": "A new collection of open translation models built on Gemma 3, helping people communicate across 55 languages.",
+      "pulls": "1.7M",
+      "tags_count": "13",
       "updated": "5 months ago",
       "tags": [
-        "vision",
-        "tools",
-        "thinking"
+        "vision"
       ],
       "variants": [
         {
-          "name": "gemini-3-flash-preview:latest",
-          "size": "Extra High Usage",
-          "context_window": "1M",
-          "input_type": "Text"
+          "name": "translategemma:latest",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
         },
         {
-          "name": "gemini-3-flash-preview:cloud",
-          "size": "Extra High Usage",
-          "context_window": "1M",
+          "name": "translategemma:4b",
+          "size": "3.3GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "translategemma:12b",
+          "size": "8.1GB",
+          "context_window": "128K",
+          "input_type": "Text, Image"
+        },
+        {
+          "name": "translategemma:27b",
+          "size": "17GB",
+          "context_window": "128K",
           "input_type": "Text, Image"
         }
       ]
     },
     {
       "rank": 20,
-      "name": "minimax-m2.1",
-      "description": "Exceptional multilingual capabilities to elevate code engineering",
-      "pulls": "2.1M",
-      "tags_count": "1",
-      "updated": "5 months ago",
+      "name": "lfm2",
+      "description": "LFM2 is a family of hybrid models designed for on-device deployment. LFM2-24B-A2B is the largest model in the family, scaling the architecture to 24 billion parameters while keeping inference efficient.",
+      "pulls": "1.1M",
+      "tags_count": "6",
+      "updated": "3 months ago",
       "tags": [
         "tools"
       ],
       "variants": [
         {
-          "name": "minimax-m2.1:cloud",
-          "size": "Medium Usage",
-          "context_window": "200K",
+          "name": "lfm2:latest",
+          "size": "14GB",
+          "context_window": "32K",
+          "input_type": "Text"
+        },
+        {
+          "name": "lfm2:24b",
+          "size": "14GB",
+          "context_window": "32K",
           "input_type": "Text"
         }
       ]
@@ -661,7 +696,7 @@
   "summary": {
     "total_models": 20,
     "models_with_variants": 20,
-    "total_variants": 61,
+    "total_variants": 67,
     "capability_tags": [
       "audio",
       "thinking",
