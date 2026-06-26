@@ -22,7 +22,10 @@ function sleep(ms) {
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {
-      headers: { 'User-Agent': 'ollama-launcher/fetch-models (model data collector)' },
+      headers: {
+        'User-Agent': 'ollama-launcher/fetch-models (model data collector)',
+        'HX-Request': 'true',
+      },
     }, res => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         const redirectUrl = res.headers.location.startsWith('http')
