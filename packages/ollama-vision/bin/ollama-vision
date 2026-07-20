@@ -41,31 +41,23 @@ FZF_RST=$'\033[0m'
 
 # Embedded model arrays (subset with vision tag from models.json)
 MODEL_NAMES=(
-  "mistral-medium-3.5" "qwen3.6" "nemotron3" "kimi-k2.6"
-  "medgemma" "medgemma1.5" "gemma4" "qwen3.5"
-  "translategemma" "ministral-3" "devstral-small-2"
-  "nemotron-3-super" "glm-ocr" "qwen3-next"
-  "rnj-1" "kimi-k2.5" "olmo-3" "deepseek-ocr"
-  "olmo-3.1" "glm-4.7" "deepseek-v3.2" "kimi-k2-thinking"
-  "mistral-large-3" "gpt-oss" "qwen3-vl" "qwen2.5vl"
-  "gemma3n" "deepseek-v3.1" "devstral" "gpt-oss-safeguard"
-  "qwen3" "gemma3" "llama3.2-vision" "minicpm-v"
-  "llava" "qwen2" "gemma" "llama3.3"
-  "llama4" "phi4" "phi3"
+  "gemma4" "qwen3.5" "qwen3.6" "glm-ocr"
+  "nemotron3" "minimax-m3" "kimi-k2.7-code" "kimi-k2.6"
+  "mistral-medium-3.5" "medgemma" "kimi-k2.5" "medgemma1.5"
+  "minicpm-v4.6" "minicpm-v4.5" "qwen3-vl" "gemini-3-flash-preview"
+  "translategemma" "ministral-3" "devstral-small-2" "deepseek-ocr"
+  "mistral-large-3" "gemma3" "llava" "qwen2.5vl"
+  "llama3.2-vision" "minicpm-v" "mistral-small3.2" "llama4"
 )
 
 MODEL_TAGS=(
-  "vision tools thinking" "vision tools thinking" "vision tools thinking audio" "vision tools thinking"
-  "vision" "vision" "vision tools thinking audio" "vision tools thinking"
-  "vision" "vision tools" "vision tools"
-  "tools thinking" "vision tools" "tools thinking"
-  "tools" "vision tools thinking" "vision" "vision"
-  "vision" "vision" "vision" "vision"
-  "vision" "vision tools thinking" "vision tools" "vision"
-  "vision" "vision tools thinking" "vision" "vision tools thinking"
-  "vision" "vision" "vision tools thinking" "vision"
-  "vision" "vision" "vision" "vision"
-  "vision tools thinking" "vision tools" "vision"
+  "vision tools thinking audio" "vision tools thinking" "vision tools thinking" "vision tools"
+  "vision tools thinking audio" "vision tools thinking" "vision tools thinking" "vision tools thinking"
+  "vision tools thinking" "vision" "vision tools thinking" "vision"
+  "vision" "vision" "vision tools thinking" "vision tools thinking"
+  "vision" "vision tools" "vision tools" "vision"
+  "vision tools" "vision" "vision" "vision"
+  "vision" "vision" "vision tools" "vision tools"
 )
 
 # ── helpers ───────────────────────────────────────────────────────────────────

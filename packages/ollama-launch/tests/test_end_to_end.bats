@@ -61,8 +61,8 @@ teardown_file() {
 
 @test "menu path with 1-variant model auto-selects variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # agent=1 (claude), model=24 (deepseek-v4-flash, 1 variant — no sub-menu)
-  run bash -c 'echo -e "1\n24\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=19 (deepseek-v4-flash, 1 variant — no sub-menu)
+  run bash -c 'echo -e "1\n19\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash:cloud"* ]]
@@ -70,8 +70,8 @@ teardown_file() {
 
 @test "menu path with 3-variant model selects second variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # agent=1 (claude), model=21 (granite4.1), variant=2 (granite4.1:8b)
-  run bash -c 'echo -e "1\n21\n2\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=17 (granite4.1), variant=2 (granite4.1:8b)
+  run bash -c 'echo -e "1\n17\n2\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model granite4.1:8b"* ]]
@@ -93,8 +93,8 @@ teardown_file() {
 
 @test "menu path with 1-variant model (kimi-k2.6) auto-selects variant" {
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # agent=1 (claude), model=22 (kimi-k2.6, 1 variant — no sub-menu needed)
-  run bash -c 'echo -e "1\n22\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # agent=1 (claude), model=16 (kimi-k2.6, 1 variant — no sub-menu needed)
+  run bash -c 'echo -e "1\n16\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model kimi-k2.6:cloud"* ]]
@@ -144,8 +144,8 @@ teardown_file() {
   printf 'claude|qwen3:14b\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
   # menu: 1=recent(claude|qwen3:14b), 2=separator, 3=claude(agent), 4=codex...
-  # select 3 (claude agent), then model 24 (deepseek-v4-flash, 1 variant auto-select)
-  run bash -c 'echo -e "3\n24\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # select 3 (claude agent), then model 19 (deepseek-v4-flash, 1 variant auto-select)
+  run bash -c 'echo -e "3\n19\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   [[ "$output" == *"ollama launch claude --model deepseek-v4-flash:cloud"* ]]
@@ -165,8 +165,8 @@ teardown_file() {
 @test "history keeps at most 5 entries" {
   printf 'fake1|x1\nfake2|x2\nfake3|x3\nfake4|x4\nfake5|x5\n' > "$HOME/.ollama-launch-history"
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf" "$BATS_TEST_DIRNAME/mock_bin/fzf.bak"
-  # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model 1 (glm-5.2, 1 variant auto-select)
-  run bash -c 'echo -e "7\n1\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
+  # menu: 1-5=fake recents, 6=separator, 7=claude(agent); then model 11 (glm-5.2, 1 variant auto-select)
+  run bash -c 'echo -e "7\n11\n" | OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch 2>&1'
   mv "$BATS_TEST_DIRNAME/mock_bin/fzf.bak" "$BATS_TEST_DIRNAME/mock_bin/fzf"
   [ "$status" -eq 0 ]
   local lines; lines=$(wc -l < "$HOME/.ollama-launch-history")

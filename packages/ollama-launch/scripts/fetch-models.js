@@ -53,31 +53,37 @@ function fetchUrl(url) {
 // Returns array of { name, description, tags, pulls, tags_count, updated }
 function parseSearchPage(html) {
   const models = [];
-  // Each model card is inside <a href="/library/{name}" class="group w-full">
-  // Split HTML by that anchor to get per-model blocks
-  const parts = html.split(/<a href="\/library\/[^"?#]+?" class="group w-full">/);
+  // Each model card is inside <li class="flex items-baseline border-b border-neutral-200 py-6">
+  const parts = html.split(/<li[^>]*class="flex items-baseline border-b border-neutral-200 py-6"[^>]*>/);
 
   for (let i = 1; i < parts.length; i++) {
     const block = parts[i];
 
-    const nameMatch = block.match(/x-test-search-response-title>([^<]+)</);
+    // Name: find the <span > inside the model link or title div
+    // The first <span >text</span> after the <a href="/library/NAME"> is the model name
+    const nameMatch = block.match(/<a href="\/library\/([^"]+)"[^>]*>[\s\S]*?<span >([^<]+)<\/span>/);
     if (!nameMatch) continue;
-    const name = nameMatch[1].trim();
+    const name = nameMatch[2].trim();
 
-    const descMatch = block.match(/max-w-lg break-words[^>]+>\s*([^<]*?)\s*<\/p>/);
+    // Description
+    const descMatch = block.match(/<p class="max-w-lg break-words text-neutral-800 text-md">([^<]*)\s*<\/p>/);
     const description = descMatch ? descMatch[1].trim() : '';
 
-    const tags = [...block.matchAll(/x-test-capability[^>]+>([^<]+)</g)]
+    // Capability tags: bg-indigo-50 spans (not bg-[#ddf4ff] which are parameter tags like "9b")
+    const tags = [...block.matchAll(/<span[^>]*class="inline-flex my-1 items-center rounded-md bg-indigo-50[^"]*"[^>]*>([^<]+)<\/span>/g)]
       .map(m => m[1].trim()).filter(Boolean);
 
-    const pullMatch = block.match(/x-test-pull-count>([^<]+)</);
-    const pulls = pullMatch ? pullMatch[1].trim() : 'N/A';
-
-    const tagCountMatch = block.match(/x-test-tag-count>([^<]+)</);
-    const tags_count = tagCountMatch ? tagCountMatch[1].trim() : 'N/A';
-
-    const updatedMatch = block.match(/x-test-updated>([^<]+)</);
-    const updated = updatedMatch ? updatedMatch[1].trim() : 'N/A';
+    // Metadata: pulls, tags_count, updated — extracted in order from the metadata paragraph
+    const metaMatch = block.match(/<p class="my-1 flex space-x-5 text-\[13px\] font-medium text-neutral-500">([\s\S]*?)<\/p>/);
+    let pulls = 'N/A';
+    let tags_count = 'N/A';
+    let updated = 'N/A';
+    if (metaMatch) {
+      const values = [...metaMatch[1].matchAll(/<span >([^<]*)<\/span>/g)].map(m => m[1].trim());
+      if (values.length >= 1) pulls = values[0];
+      if (values.length >= 2) tags_count = values[1];
+      if (values.length >= 3) updated = values[2];
+    }
 
     models.push({ name, description, tags, pulls, tags_count, updated });
   }
