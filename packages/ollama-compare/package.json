@@ -1,6 +1,6 @@
 {
   "name": "@quantanow/ollama-compare",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "Run the same prompt across multiple Ollama models and compare outputs",
   "license": "MIT",
   "repository": {

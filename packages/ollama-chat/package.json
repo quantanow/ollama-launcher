@@ -1,6 +1,6 @@
 {
   "name": "@quantanow/ollama-chat",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "Persistent conversation manager for Ollama",
   "license": "MIT",
   "repository": {

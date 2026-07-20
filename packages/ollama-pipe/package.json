@@ -1,6 +1,6 @@
 {
   "name": "@quantanow/ollama-pipe",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "Chain Ollama model operations into multi-step pipelines",
   "license": "MIT",
   "repository": {
