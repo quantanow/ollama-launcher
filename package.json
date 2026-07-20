@@ -1,21 +1,52 @@
 {
-  "name": "ollama-launcher",
-  "private": true,
-  "description": "Monorepo for ollama-launcher CLI tools",
+  "name": "ollama-launch",
+  "version": "1.1.21",
+  "description": "A fast, polished CLI for picking and launching Ollama agents and models interactively",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/quantanow/ollama-launcher.git"
   },
-  "workspaces": [
-    "packages/*"
+  "homepage": "https://github.com/quantanow/ollama-launcher#readme",
+  "bugs": {
+    "url": "https://github.com/quantanow/ollama-launcher/issues"
+  },
+  "keywords": [
+    "ollama",
+    "llm",
+    "cli",
+    "launcher",
+    "ai",
+    "models"
+  ],
+  "bin": {
+    "ollama-launch": "bin/ollama-launch",
+    "ollama-clean": "bin/ollama-clean",
+    "ollama-compare": "bin/ollama-compare",
+    "ollama-batch": "bin/ollama-batch",
+    "ollama-bench": "bin/ollama-bench",
+    "ollama-chat": "bin/ollama-chat",
+    "ollama-modelfile": "bin/ollama-modelfile",
+    "ollama-vision": "bin/ollama-vision",
+    "ollama-pipe": "bin/ollama-pipe"
+  },
+  "files": [
+    "bin/ollama-launch",
+    "bin/ollama-clean",
+    "bin/ollama-compare",
+    "bin/ollama-batch",
+    "bin/ollama-bench",
+    "bin/ollama-chat",
+    "bin/ollama-modelfile",
+    "bin/ollama-vision",
+    "bin/ollama-pipe",
+    "models.json"
   ],
   "scripts": {
-    "test": "npm run test --workspaces",
-    "changeset": "changeset",
-    "version-packages": "changeset version"
+    "test": "bats tests/"
   },
-  "devDependencies": {
-    "@changesets/cli": "^2.27.0"
-  }
+  "engines": {
+    "node": ">=14"
+  },
+  "preferGlobal": true
 }

@@ -19,7 +19,7 @@ TOOLS=(
 echo "Installing ollama-launcher tools..."
 
 for tool in "${TOOLS[@]}"; do
-  src="${REPO_URL}/packages/${tool}/bin/${tool}"
+  src="${REPO_URL}/bin/${tool}"
   dst="${INSTALL_DIR}/${tool}"
 
   echo "  Downloading ${tool}..."

@@ -20,16 +20,16 @@ jobs:
           node-version: '20'
 
       - name: Fetch fresh model list
-        run: cd packages/ollama-launch && node scripts/fetch-models.js
+        run: node scripts/fetch-models.js
 
       - name: Regenerate embedded bash arrays
-        run: cd packages/ollama-launch && node scripts/generate-model-data.js
+        run: node scripts/generate-model-data.js
 
       - name: Commit and push changes to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add packages/ollama-launch/models.json packages/ollama-launch/bin/ollama-launch
+          git add models.json bin/ollama-launch
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0

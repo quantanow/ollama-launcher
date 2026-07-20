@@ -55,21 +55,11 @@ ollama launch openclaw --model mistral-medium-3.5:latest
 
 ### npm (recommended)
 
-Install individual tools as needed:
+Install all tools at once:
 
 ```bash
-npm install -g @quantanow/ollama-launch
-npm install -g @quantanow/ollama-clean
-npm install -g @quantanow/ollama-compare
-npm install -g @quantanow/ollama-batch
-npm install -g @quantanow/ollama-bench
-npm install -g @quantanow/ollama-chat
-npm install -g @quantanow/ollama-modelfile
-npm install -g @quantanow/ollama-vision
-npm install -g @quantanow/ollama-pipe
+npm install -g ollama-launch
 ```
-
-The original `ollama-launch` package is deprecated. Use `@quantanow/ollama-launch` instead.
 
 ### One-liner (no npm)
 

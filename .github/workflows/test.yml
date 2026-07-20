@@ -16,14 +16,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Install bats
         run: |
           git clone --depth 1 https://github.com/bats-core/bats-core.git /tmp/bats
           sudo /tmp/bats/install.sh /usr/local
           bats --version
 
-      - name: Run workspace tests
-        run: npm test
+      - name: Run tests
+        run: bats tests/

@@ -8,22 +8,22 @@ Suite of bash script CLIs for working with Ollama. `ollama-launch` is the flagsh
 
 | File | Purpose |
 |------|---------|
-| `packages/ollama-launch/bin/ollama-launch` | Interactive agent + model launcher |
-| `packages/ollama-clean/bin/ollama-clean` | Interactive local model remover |
-| `packages/ollama-compare/bin/ollama-compare` | Run same prompt across multiple models |
-| `packages/ollama-batch/bin/ollama-batch` | Process directory of files through one model |
-| `packages/ollama-bench/bin/ollama-bench` | Benchmark model inference speed |
-| `packages/ollama-chat/bin/ollama-chat` | Persistent conversation manager |
-| `packages/ollama-modelfile/bin/ollama-modelfile` | Interactive Modelfile builder |
-| `packages/ollama-vision/bin/ollama-vision` | Vision-capable model picker with image question support |
-| `packages/ollama-pipe/bin/ollama-pipe` | Multi-step model pipeline (chain operations) |
-| `packages/ollama-launch/models.json` | Source of truth for model metadata |
-| `packages/ollama-launch/scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
-| `packages/ollama-launch/scripts/generate-model-data.js` | Regenerates embedded bash arrays in `bin/ollama-launch` from `models.json` |
+| `bin/ollama-launch` | Interactive agent + model launcher |
+| `bin/ollama-clean` | Interactive local model remover |
+| `bin/ollama-compare` | Run same prompt across multiple models |
+| `bin/ollama-batch` | Process directory of files through one model |
+| `bin/ollama-bench` | Benchmark model inference speed |
+| `bin/ollama-chat` | Persistent conversation manager |
+| `bin/ollama-modelfile` | Interactive Modelfile builder |
+| `bin/ollama-vision` | Vision-capable model picker with image question support |
+| `bin/ollama-pipe` | Multi-step model pipeline (chain operations) |
+| `models.json` | Source of truth for model metadata |
+| `scripts/fetch-models.js` | Scrapes ollama.com for top 100 models + variant data, writes `models.json` |
+| `scripts/generate-model-data.js` | Regenerates embedded bash arrays in `bin/ollama-launch` from `models.json` |
 | `install.sh` | Curl one-liner installer (writes all tools to `/usr/local/bin`) |
-| `packages/ollama-launch/package.json` | npm package config (`ollama-launch` v1.1.18) |
+| `package.json` | npm package config (`ollama-launch` v1.1.21) |
 | `index.html` | GitHub Pages site — usage and features landing page |
-| `packages/*/tests/` | bats test suites (one per package) |
+| `tests/` | bats test suites |
 | `.github/workflows/test.yml` | CI: runs bats on push/PR to main |
 | `.github/workflows/publish.yml` | CD: publishes to npm on `v*` tag push |
 | `.github/workflows/update-models.yml` | Scheduled weekly model data refresh (Mon 06:00 UTC) |
@@ -32,38 +32,35 @@ Suite of bash script CLIs for working with Ollama. `ollama-launch` is the flagsh
 
 ```bash
 # Run the scripts locally
-./packages/ollama-launch/bin/ollama-launch
-./packages/ollama-clean/bin/ollama-clean
-./packages/ollama-compare/bin/ollama-compare
-./packages/ollama-batch/bin/ollama-batch
-./packages/ollama-bench/bin/ollama-bench
-./packages/ollama-chat/bin/ollama-chat
-./packages/ollama-modelfile/bin/ollama-modelfile
-./packages/ollama-vision/bin/ollama-vision
-./packages/ollama-pipe/bin/ollama-pipe
+./bin/ollama-launch
+./bin/ollama-clean
+./bin/ollama-compare
+./bin/ollama-batch
+./bin/ollama-bench
+./bin/ollama-chat
+./bin/ollama-modelfile
+./bin/ollama-vision
+./bin/ollama-pipe
 
 # Dry-run (prints command instead of executing)
-OLLAMA_LAUNCH_TEST=1 ./packages/ollama-launch/bin/ollama-launch
-OLLAMA_CLEAN_TEST=1 ./packages/ollama-clean/bin/ollama-clean
-OLLAMA_COMPARE_TEST=1 ./packages/ollama-compare/bin/ollama-compare
-OLLAMA_BATCH_TEST=1 ./packages/ollama-batch/bin/ollama-batch
-OLLAMA_BENCH_TEST=1 ./packages/ollama-bench/bin/ollama-bench
-OLLAMA_CHAT_TEST=1 ./packages/ollama-chat/bin/ollama-chat
-OLLAMA_MODELFILE_TEST=1 ./packages/ollama-modelfile/bin/ollama-modelfile
-OLLAMA_VISION_TEST=1 ./packages/ollama-vision/bin/ollama-vision
-OLLAMA_PIPE_TEST=1 ./packages/ollama-pipe/bin/ollama-pipe
+OLLAMA_LAUNCH_TEST=1 ./bin/ollama-launch
+OLLAMA_CLEAN_TEST=1 ./bin/ollama-clean
+OLLAMA_COMPARE_TEST=1 ./bin/ollama-compare
+OLLAMA_BATCH_TEST=1 ./bin/ollama-batch
+OLLAMA_BENCH_TEST=1 ./bin/ollama-bench
+OLLAMA_CHAT_TEST=1 ./bin/ollama-chat
+OLLAMA_MODELFILE_TEST=1 ./bin/ollama-modelfile
+OLLAMA_VISION_TEST=1 ./bin/ollama-vision
+OLLAMA_PIPE_TEST=1 ./bin/ollama-pipe
 
 # Source without running main (for unit testing)
-OLLAMA_LAUNCH_SKIP_MAIN=1 source ./packages/ollama-launch/bin/ollama-launch
+OLLAMA_LAUNCH_SKIP_MAIN=1 source ./bin/ollama-launch
 
-# Run tests for all packages
-npm test
-
-# Run tests for a single package
-cd packages/ollama-launch && bats tests/
+# Run tests
+bats tests/
 
 # Regenerate embedded model data after editing models.json
-cd packages/ollama-launch && node scripts/generate-model-data.js
+node scripts/generate-model-data.js
 ```
 
 ## Architecture
@@ -118,7 +115,7 @@ Unknown flags exit 1.
 
 ## ollama-clean
 
-`packages/ollama-clean/bin/ollama-clean` — interactively remove local models.
+`bin/ollama-clean` — interactively remove local models.
 
 - Runs `ollama list`, parses NAME and SIZE columns
 - fzf multi-select (`--multi`, Tab to select multiple) or numbered menu with comma-separated input
@@ -127,7 +124,7 @@ Unknown flags exit 1.
 
 ## ollama-compare
 
-`packages/ollama-compare/bin/ollama-compare` — run the same prompt across multiple local models and display outputs side-by-side.
+`bin/ollama-compare` — run the same prompt across multiple local models and display outputs side-by-side.
 
 - Select models via fzf multi-select or numbered menu (needs at least 2)
 - Prompt from `--prompt "text"`, piped stdin, or interactive input
@@ -137,7 +134,7 @@ Unknown flags exit 1.
 
 ## ollama-batch
 
-`packages/ollama-batch/bin/ollama-batch` — process a directory of text files through a single model.
+`bin/ollama-batch` — process a directory of text files through a single model.
 
 - Pick model interactively or via `--model <name>`
 - Input directory via `--dir <path>` or interactive prompt
@@ -149,7 +146,7 @@ Unknown flags exit 1.
 
 ## ollama-bench
 
-`packages/ollama-bench/bin/ollama-bench` — benchmark model inference speed.
+`bin/ollama-bench` — benchmark model inference speed.
 
 - Pick model interactively or via `--model <name>`
 - Custom prompt via `--prompt <text>` (default: built-in story prompt)
@@ -162,7 +159,7 @@ Unknown flags exit 1.
 
 ## ollama-chat
 
-`packages/ollama-chat/bin/ollama-chat` — persistent conversation manager.
+`bin/ollama-chat` — persistent conversation manager.
 
 - Chats stored as plain text in `~/.ollama-chats/<name>.txt`
 - Each chat has a model and optional system prompt
@@ -180,7 +177,7 @@ Unknown flags exit 1.
 
 ## ollama-modelfile
 
-`packages/ollama-modelfile/bin/ollama-modelfile` — interactive Modelfile builder for creating custom ollama models.
+`bin/ollama-modelfile` — interactive Modelfile builder for creating custom ollama models.
 
 - Pick base model interactively or via `--from <model>`
 - Set model name via `--name <name>` or interactive prompt
@@ -194,7 +191,7 @@ Unknown flags exit 1.
 
 ## ollama-vision
 
-`packages/ollama-vision/bin/ollama-vision` — vision-capable model picker. Select a vision model, provide image file(s), ask a question, and get a response.
+`bin/ollama-vision` — vision-capable model picker. Select a vision model, provide image file(s), ask a question, and get a response.
 
 - Embedded vision model arrays filter only models tagged with `vision`
 - Cross-references `ollama list` to highlight installed models
@@ -207,7 +204,7 @@ Unknown flags exit 1.
 
 ## ollama-pipe
 
-`packages/ollama-pipe/bin/ollama-pipe` — chain model operations into multi-step pipelines. Pipe text through a series of model instructions where the output of each step feeds into the next.
+`bin/ollama-pipe` — chain model operations into multi-step pipelines. Pipe text through a series of model instructions where the output of each step feeds into the next.
 
 - Input from `--input <file>`, piped stdin, or interactive typing
 - `--step "model prompt"` defines a custom pipeline step (repeatable)
@@ -222,20 +219,20 @@ Unknown flags exit 1.
 To pull a fresh top-100 list from ollama.com:
 
 ```bash
-cd packages/ollama-launch && node scripts/fetch-models.js              # fetches 100 models, writes models.json
-cd packages/ollama-launch && node scripts/fetch-models.js --dry-run    # preview without writing
-cd packages/ollama-launch && node scripts/fetch-models.js --count 50  # fetch fewer models
-cd packages/ollama-launch && node scripts/generate-model-data.js       # regenerate bash arrays from models.json
+node scripts/fetch-models.js              # fetches 100 models, writes models.json
+node scripts/fetch-models.js --dry-run    # preview without writing
+node scripts/fetch-models.js --count 50  # fetch fewer models
+node scripts/generate-model-data.js       # regenerate bash arrays from models.json
 ```
 
 To add or edit a model manually:
-1. Edit `packages/ollama-launch/models.json`
-2. Run `cd packages/ollama-launch && node scripts/generate-model-data.js` — rewrites the `# MODEL DATA BEGIN … END` block in `packages/ollama-launch/bin/ollama-launch`
-3. Commit the updated `packages/ollama-launch/bin/ollama-launch`
+1. Edit `models.json`
+2. Run `node scripts/generate-model-data.js` — rewrites the `# MODEL DATA BEGIN … END` block in `bin/ollama-launch`
+3. Commit the updated `bin/ollama-launch`
 
 ## Testing
 
-Eleven bats files across `packages/*/tests/`:
+Eleven bats files across `tests/`:
 
 | File | What it covers |
 |------|---------------|
@@ -251,14 +248,14 @@ Eleven bats files across `packages/*/tests/`:
 | `test_data_inlined.bats` | Array lengths, variant sub-array consistency, specific metadata values |
 | `test_end_to_end.bats` | fzf and menu interactive flows, agent selection, variant selection, `check_ollama` error path |
 
-End-to-end tests use a mock `fzf` and mock `ollama` in `packages/ollama-launch/tests/mock_bin/` (created/torn down by `setup_file`/`teardown_file`). Set `FZF_SELECT=<substring>` to control which item the mock fzf selects (grep match; falls back to first line). `setup()` overrides `HOME` to a per-file temp dir and clears `~/.ollama-launch-history` before each test to isolate history state.
+End-to-end tests use a mock `fzf` and mock `ollama` in `tests/mock_bin/` (created/torn down by `setup_file`/`teardown_file`). Set `FZF_SELECT=<substring>` to control which item the mock fzf selects (grep match; falls back to first line). `setup()` overrides `HOME` to a per-file temp dir and clears `~/.ollama-launch-history` before each test to isolate history state.
 
 ## Publishing to npm
 
 Requires an npm **Granular Access Token** with **Bypass 2FA enabled**, stored as a GitHub secret named `NPM_TOKEN`. Classic tokens with 2FA will fail with `EOTP`. Publish by bumping version (which creates a tag) and pushing:
 
 ```bash
-cd packages/ollama-launch && npm version patch -m "chore: bump version to %s"
+npm version patch -m "chore: bump version to %s"
 git push origin main
 git push origin v1.x.x
 ```
