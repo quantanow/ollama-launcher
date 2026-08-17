@@ -57,10 +57,10 @@ MODEL_NAMES=(
   "glm-5.2"
   "deepseek-v4-flash"
   "kimi-k3"
-  "muse-glimmer"
+  "qwen3.8"
   "nemotron-3.5-lightning"
+  "muse-glimmer"
   "gemma4"
-  "qwen3.5"
   "qwen3.6"
   "glm-5.1"
   "minimax-m2.7"
@@ -86,6 +86,7 @@ MODEL_NAMES=(
   "minicpm-v4.5"
   "laguna-xs.2"
   "granite4.1-guardian"
+  "qwen3.5"
   "glm-ocr"
   "qwen3-vl"
   "translategemma"
@@ -128,21 +129,21 @@ MODEL_NAMES=(
   "llava"
   "qwen2.5vl"
   "llama3.2-vision"
-  "minicpm-v"
   "bge-m3"
+  "minicpm-v"
   "dolphin3"
   "mistral-small3.2"
   "deepseek-v3"
   "mistral-nemo"
+  "qwen2"
   "llama3.3"
   "olmo2"
-  "qwen2"
   "gemma"
   "qwen"
   "smollm2"
   "gemma3n"
-  "granite3.1-moe"
   "llama2"
+  "granite3.1-moe"
   "cogito"
   "tinyllama"
   "falcon3"
@@ -153,110 +154,109 @@ MODEL_NAMES=(
   "magistral"
   "qwen3-coder-next"
   "qwq"
-  "deepseek-coder"
 )
 
 MODEL_PULLS=(
-  "311.2K"
-  "361K"
-  "35.3K"
-  "64.6K"
-  "21.4K"
-  "22M"
-  "17.4M"
-  "5.7M"
+  "317.1K"
+  "371.2K"
+  "38.7K"
+  "167.5K"
+  "32.7K"
+  "112.2K"
+  "22.5M"
+  "5.8M"
   "2.3M"
-  "2.3M"
+  "2.4M"
   "2.9M"
-  "373.4K"
-  "406.8K"
-  "642.6K"
+  "387.1K"
+  "424.8K"
+  "645.3K"
   "1.1M"
-  "214K"
-  "333.8K"
-  "322.3K"
-  "430.5K"
-  "324.9K"
-  "74.7K"
-  "89.4K"
-  "267.6K"
-  "114K"
-  "125.8K"
-  "140.9K"
-  "40.2K"
-  "47K"
-  "32.5K"
-  "25.4K"
-  "25.1K"
-  "8,849"
+  "216.8K"
+  "344.5K"
+  "332.5K"
+  "435.5K"
+  "335.4K"
+  "87.7K"
+  "92.1K"
+  "279.6K"
+  "117K"
+  "131.5K"
+  "142K"
+  "41.7K"
+  "50.2K"
+  "34.1K"
+  "26.7K"
+  "25.6K"
+  "9,743"
+  "17.6M"
   "7M"
   "5.2M"
-  "2M"
-  "3.6M"
-  "1.4M"
+  "2.1M"
+  "3.7M"
+  "1.5M"
   "1.3M"
   "1.4M"
   "1.7M"
   "1.4M"
-  "935.2K"
-  "704K"
-  "686.7K"
-  "501.7K"
-  "511.7K"
-  "448.5K"
-  "720.5K"
-  "579.2K"
-  "351.2K"
-  "284.5K"
-  "220.2K"
-  "180K"
-  "150.8K"
-  "90.2K"
-  "91.3M"
-  "118.4M"
-  "80M"
-  "34.1M"
-  "39.5M"
-  "82.2M"
-  "36.8M"
-  "11.7M"
-  "30.1M"
-  "8.2M"
-  "20.3M"
+  "939K"
+  "730.2K"
+  "692.7K"
+  "502.4K"
+  "514K"
+  "449.5K"
+  "721.3K"
+  "580K"
+  "351.5K"
+  "285.1K"
+  "220.5K"
+  "181.2K"
+  "151.3K"
+  "91.4K"
+  "91.5M"
+  "118.5M"
+  "80.3M"
+  "34.5M"
+  "39.6M"
+  "82.6M"
+  "37.1M"
+  "11.8M"
+  "30.4M"
+  "8.3M"
+  "20.4M"
   "25M"
   "31.9M"
   "18M"
   "7.7M"
-  "13.5M"
+  "13.6M"
   "14.6M"
-  "4.1M"
+  "4.3M"
   "5M"
+  "5.9M"
   "5.4M"
-  "5.8M"
   "4M"
   "2.4M"
   "3.8M"
   "5.6M"
+  "6.1M"
   "4.1M"
   "3.7M"
-  "6.1M"
   "7.3M"
-  "7.5M"
+  "7.6M"
   "3.9M"
   "2M"
+  "7.4M"
   "3M"
-  "7.3M"
   "2.1M"
   "5.4M"
   "2.6M"
   "3.1M"
-  "5.9M"
+  "6M"
   "1.8M"
   "1.7M"
-  "1.4M"
+  "1.5M"
   "2M"
   "2.3M"
-  "4.5M"
 )
 
 MODEL_TAGS=(
@@ -265,9 +265,9 @@ MODEL_TAGS=(
   "vision tools thinking"
   "vision tools thinking"
   "tools thinking"
+  "vision tools thinking"
   "vision tools thinking audio"
   "vision tools thinking"
-  "vision tools thinking"
   "tools thinking"
   "tools thinking"
   "tools thinking"
@@ -292,6 +292,7 @@ MODEL_TAGS=(
   "vision"
   "tools thinking"
   "tools thinking"
+  "vision tools thinking"
   "vision tools"
   "vision tools thinking"
   "vision"
@@ -334,21 +335,21 @@ MODEL_TAGS=(
   "vision"
   "vision"
   "vision"
-  "vision"
   "embedding"
+  "vision"
   ""
   "vision tools"
   ""
   "tools"
   "tools"
+  "tools"
+  ""
+  ""
   ""
   "tools"
   ""
   ""
   "tools"
-  ""
-  "tools"
-  ""
   "tools"
   ""
   ""
@@ -359,7 +360,6 @@ MODEL_TAGS=(
   "tools thinking"
   "tools"
   "tools"
-  ""
 )
 
 MODEL_HAS_VARIANTS=(
@@ -522,21 +522,21 @@ MODEL_INPUTS_2=(
 )
 
 MODEL_VARIANTS_3=(
-  "muse-glimmer:latest"
-  "muse-glimmer:30b"
-  "muse-glimmer:30b-mlx"
+  "qwen3.8:latest"
+  "qwen3.8:27b"
+  "qwen3.8:27b-mlx"
 )
 
 MODEL_SIZES_3=(
   "18GB"
   "18GB"
-  "21GB"
+  "18GB"
 )
 
 MODEL_CONTEXTS_3=(
-  "128K"
-  "128K"
-  "128K"
+  "256K"
+  "256K"
+  "256K"
 )
 
 MODEL_INPUTS_3=(
@@ -570,6 +570,30 @@ MODEL_INPUTS_4=(
 )
 
 MODEL_VARIANTS_5=(
+  "muse-glimmer:latest"
+  "muse-glimmer:30b"
+  "muse-glimmer:30b-mlx"
+)
+
+MODEL_SIZES_5=(
+  "18GB"
+  "18GB"
+  "21GB"
+)
+
+MODEL_CONTEXTS_5=(
+  "128K"
+  "128K"
+  "128K"
+)
+
+MODEL_INPUTS_5=(
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+)
+
+MODEL_VARIANTS_6=(
   "gemma4:latest"
   "gemma4:e2b"
   "gemma4:e4b"
@@ -585,7 +609,7 @@ MODEL_VARIANTS_5=(
   "gemma4:31b-cloud"
 )
 
-MODEL_SIZES_5=(
+MODEL_SIZES_6=(
   "9.6GB"
   "7.2GB"
   "9.6GB"
@@ -601,88 +625,15 @@ MODEL_SIZES_5=(
   "Low Usage"
 )
 
-MODEL_CONTEXTS_5=(
-  "128K"
-  "128K"
-  "128K"
-  "256K"
-  "256K"
-  "256K"
-  "128K"
-  "128K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-)
-
-MODEL_INPUTS_5=(
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-)
-
-MODEL_VARIANTS_6=(
-  "qwen3.5:latest"
-  "qwen3.5:0.8b"
-  "qwen3.5:2b"
-  "qwen3.5:4b"
-  "qwen3.5:9b"
-  "qwen3.5:27b"
-  "qwen3.5:35b"
-  "qwen3.5:122b"
-  "qwen3.5:0.8b-mlx"
-  "qwen3.5:2b-mlx"
-  "qwen3.5:4b-mlx"
-  "qwen3.5:9b-mlx"
-  "qwen3.5:27b-mlx"
-  "qwen3.5:35b-mlx"
-  "qwen3.5:cloud"
-  "qwen3.5:397b-cloud"
-)
-
-MODEL_SIZES_6=(
-  "6.6GB"
-  "1.0GB"
-  "2.7GB"
-  "3.4GB"
-  "6.6GB"
-  "17GB"
-  "24GB"
-  "81GB"
-  "1.2GB"
-  "3.1GB"
-  "4.0GB"
-  "8.9GB"
-  "20GB"
-  "22GB"
-  "Medium Usage"
-  "Medium Usage"
-)
-
 MODEL_CONTEXTS_6=(
+  "128K"
+  "128K"
+  "128K"
   "256K"
   "256K"
   "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
+  "128K"
+  "128K"
   "256K"
   "256K"
   "256K"
@@ -691,9 +642,6 @@ MODEL_CONTEXTS_6=(
 )
 
 MODEL_INPUTS_6=(
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
   "Text, Image"
   "Text, Image"
   "Text, Image"
@@ -951,17 +899,25 @@ MODEL_INPUTS_18=(
 
 MODEL_VARIANTS_19=(
   "deepseek-v4-pro:cloud"
+  "deepseek-v4-pro:0813-cloud"
+  "deepseek-v4-pro:preview-cloud"
 )
 
 MODEL_SIZES_19=(
+  "Extra High Usage"
+  "Extra High Usage"
   "Extra High Usage"
 )
 
 MODEL_CONTEXTS_19=(
   "1M"
+  "1M"
+  "1M"
 )
 
 MODEL_INPUTS_19=(
+  "Text"
+  "Text"
   "Text"
 )
 
@@ -1282,30 +1238,106 @@ MODEL_INPUTS_31=(
 )
 
 MODEL_VARIANTS_32=(
-  "glm-ocr:latest"
-  "glm-ocr:q8_0"
-  "glm-ocr:bf16"
+  "qwen3.5:latest"
+  "qwen3.5:0.8b"
+  "qwen3.5:2b"
+  "qwen3.5:4b"
+  "qwen3.5:9b"
+  "qwen3.5:27b"
+  "qwen3.5:35b"
+  "qwen3.5:122b"
+  "qwen3.5:0.8b-mlx"
+  "qwen3.5:2b-mlx"
+  "qwen3.5:4b-mlx"
+  "qwen3.5:9b-mlx"
+  "qwen3.5:27b-mlx"
+  "qwen3.5:35b-mlx"
+  "qwen3.5:cloud"
+  "qwen3.5:397b-cloud"
 )
 
 MODEL_SIZES_32=(
-  "2.2GB"
-  "1.6GB"
-  "2.2GB"
+  "6.6GB"
+  "1.0GB"
+  "2.7GB"
+  "3.4GB"
+  "6.6GB"
+  "17GB"
+  "24GB"
+  "81GB"
+  "1.2GB"
+  "3.1GB"
+  "4.0GB"
+  "8.9GB"
+  "20GB"
+  "22GB"
+  "Medium Usage"
+  "Medium Usage"
 )
 
 MODEL_CONTEXTS_32=(
-  "128K"
-  "128K"
-  "128K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
 )
 
 MODEL_INPUTS_32=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
 )
 
 MODEL_VARIANTS_33=(
+  "glm-ocr:latest"
+  "glm-ocr:q8_0"
+  "glm-ocr:bf16"
+)
+
+MODEL_SIZES_33=(
+  "2.2GB"
+  "1.6GB"
+  "2.2GB"
+)
+
+MODEL_CONTEXTS_33=(
+  "128K"
+  "128K"
+  "128K"
+)
+
+MODEL_INPUTS_33=(
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+)
+
+MODEL_VARIANTS_34=(
   "qwen3-vl:latest"
   "qwen3-vl:2b"
   "qwen3-vl:4b"
@@ -1315,7 +1347,7 @@ MODEL_VARIANTS_33=(
   "qwen3-vl:235b"
 )
 
-MODEL_SIZES_33=(
+MODEL_SIZES_34=(
   "6.1GB"
   "1.9GB"
   "3.3GB"
@@ -1325,45 +1357,14 @@ MODEL_SIZES_33=(
   "143GB"
 )
 
-MODEL_CONTEXTS_33=(
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-  "256K"
-)
-
-MODEL_INPUTS_33=(
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-)
-
-MODEL_VARIANTS_34=(
-  "translategemma:latest"
-  "translategemma:4b"
-  "translategemma:12b"
-  "translategemma:27b"
-)
-
-MODEL_SIZES_34=(
-  "3.3GB"
-  "3.3GB"
-  "8.1GB"
-  "17GB"
-)
-
 MODEL_CONTEXTS_34=(
-  "128K"
-  "128K"
-  "128K"
-  "128K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
+  "256K"
 )
 
 MODEL_INPUTS_34=(
@@ -1371,55 +1372,58 @@ MODEL_INPUTS_34=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
 )
 
 MODEL_VARIANTS_35=(
+  "translategemma:latest"
+  "translategemma:4b"
+  "translategemma:12b"
+  "translategemma:27b"
+)
+
+MODEL_SIZES_35=(
+  "3.3GB"
+  "3.3GB"
+  "8.1GB"
+  "17GB"
+)
+
+MODEL_CONTEXTS_35=(
+  "128K"
+  "128K"
+  "128K"
+  "128K"
+)
+
+MODEL_INPUTS_35=(
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+  "Text, Image"
+)
+
+MODEL_VARIANTS_36=(
   "qwen3-embedding:latest"
   "qwen3-embedding:0.6b"
   "qwen3-embedding:4b"
   "qwen3-embedding:8b"
 )
 
-MODEL_SIZES_35=(
+MODEL_SIZES_36=(
   "4.7GB"
   "639MB"
   "2.5GB"
   "4.7GB"
 )
 
-MODEL_CONTEXTS_35=(
+MODEL_CONTEXTS_36=(
   "40K"
   "32K"
   "40K"
   "40K"
-)
-
-MODEL_INPUTS_35=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_36=(
-  "glm-4.7-flash:latest"
-  "glm-4.7-flash:q4_K_M"
-  "glm-4.7-flash:q8_0"
-  "glm-4.7-flash:bf16"
-)
-
-MODEL_SIZES_36=(
-  "19GB"
-  "19GB"
-  "32GB"
-  "60GB"
-)
-
-MODEL_CONTEXTS_36=(
-  "198K"
-  "198K"
-  "198K"
-  "198K"
 )
 
 MODEL_INPUTS_36=(
@@ -1430,266 +1434,274 @@ MODEL_INPUTS_36=(
 )
 
 MODEL_VARIANTS_37=(
-  "lfm2.5-thinking:latest"
-  "lfm2.5-thinking:1.2b"
+  "glm-4.7-flash:latest"
+  "glm-4.7-flash:q4_K_M"
+  "glm-4.7-flash:q8_0"
+  "glm-4.7-flash:bf16"
 )
 
 MODEL_SIZES_37=(
-  "731MB"
-  "731MB"
+  "19GB"
+  "19GB"
+  "32GB"
+  "60GB"
 )
 
 MODEL_CONTEXTS_37=(
-  "125K"
-  "125K"
+  "198K"
+  "198K"
+  "198K"
+  "198K"
 )
 
 MODEL_INPUTS_37=(
   "Text"
   "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_38=(
+  "lfm2.5-thinking:latest"
+  "lfm2.5-thinking:1.2b"
+)
+
+MODEL_SIZES_38=(
+  "731MB"
+  "731MB"
+)
+
+MODEL_CONTEXTS_38=(
+  "125K"
+  "125K"
+)
+
+MODEL_INPUTS_38=(
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_39=(
   "ministral-3:latest"
   "ministral-3:3b"
   "ministral-3:8b"
   "ministral-3:14b"
 )
 
-MODEL_SIZES_38=(
+MODEL_SIZES_39=(
   "6.0GB"
   "3.0GB"
   "6.0GB"
   "9.1GB"
 )
 
-MODEL_CONTEXTS_38=(
+MODEL_CONTEXTS_39=(
   "256K"
   "256K"
   "256K"
   "256K"
 )
 
-MODEL_INPUTS_38=(
+MODEL_INPUTS_39=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
   "Text, Image"
 )
 
-MODEL_VARIANTS_39=(
+MODEL_VARIANTS_40=(
   "embeddinggemma:latest"
   "embeddinggemma:300m"
 )
 
-MODEL_SIZES_39=(
+MODEL_SIZES_40=(
   "622MB"
   "622MB"
 )
 
-MODEL_CONTEXTS_39=(
+MODEL_CONTEXTS_40=(
   "2K"
   "2K"
 )
 
-MODEL_INPUTS_39=(
+MODEL_INPUTS_40=(
   "Text"
   "Text"
 )
 
-MODEL_VARIANTS_40=(
+MODEL_VARIANTS_41=(
   "granite4:latest"
   "granite4:350m"
   "granite4:1b"
   "granite4:3b"
 )
 
-MODEL_SIZES_40=(
+MODEL_SIZES_41=(
   "2.1GB"
   "708MB"
   "3.3GB"
   "2.1GB"
 )
 
-MODEL_CONTEXTS_40=(
+MODEL_CONTEXTS_41=(
   "128K"
   "32K"
   "128K"
   "128K"
 )
 
-MODEL_INPUTS_40=(
+MODEL_INPUTS_41=(
   "Text"
   "Text"
   "Text"
   "Text"
 )
 
-MODEL_VARIANTS_41=(
+MODEL_VARIANTS_42=(
   "devstral-small-2:latest"
   "devstral-small-2:24b"
   "devstral-small-2:24b-cloud"
 )
 
-MODEL_SIZES_41=(
+MODEL_SIZES_42=(
   "15GB"
   "15GB"
   "· 256K context window"
 )
 
-MODEL_CONTEXTS_41=(
+MODEL_CONTEXTS_42=(
   "384K"
   "384K"
   "Text, Image"
 )
 
-MODEL_INPUTS_41=(
+MODEL_INPUTS_42=(
   "Text, Image"
   "Text, Image"
   "8 months ago"
 )
 
-MODEL_VARIANTS_42=(
+MODEL_VARIANTS_43=(
   "nomic-embed-text-v2-moe:latest"
 )
 
-MODEL_SIZES_42=(
+MODEL_SIZES_43=(
   "958MB"
 )
 
-MODEL_CONTEXTS_42=(
+MODEL_CONTEXTS_43=(
   "512"
 )
 
-MODEL_INPUTS_42=(
+MODEL_INPUTS_43=(
   "Text"
 )
 
-MODEL_VARIANTS_43=(
+MODEL_VARIANTS_44=(
   "nemotron-3-nano:latest"
   "nemotron-3-nano:4b"
   "nemotron-3-nano:30b"
   "nemotron-3-nano:30b-cloud"
 )
 
-MODEL_SIZES_43=(
+MODEL_SIZES_44=(
   "24GB"
   "2.8GB"
   "24GB"
   "Low Usage"
 )
 
-MODEL_CONTEXTS_43=(
+MODEL_CONTEXTS_44=(
   "1M"
   "256K"
   "1M"
   "1M"
-)
-
-MODEL_INPUTS_43=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_44=(
-  "rnj-1:latest"
-  "rnj-1:8b"
-)
-
-MODEL_SIZES_44=(
-  "5.1GB"
-  "5.1GB"
-)
-
-MODEL_CONTEXTS_44=(
-  "32K"
-  "32K"
 )
 
 MODEL_INPUTS_44=(
   "Text"
   "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_45=(
+  "rnj-1:latest"
+  "rnj-1:8b"
+)
+
+MODEL_SIZES_45=(
+  "5.1GB"
+  "5.1GB"
+)
+
+MODEL_CONTEXTS_45=(
+  "32K"
+  "32K"
+)
+
+MODEL_INPUTS_45=(
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_46=(
   "deepseek-ocr:latest"
   "deepseek-ocr:3b"
 )
 
-MODEL_SIZES_45=(
+MODEL_SIZES_46=(
   "6.7GB"
   "6.7GB"
 )
 
-MODEL_CONTEXTS_45=(
+MODEL_CONTEXTS_46=(
   "8K"
   "8K"
 )
 
-MODEL_INPUTS_45=(
+MODEL_INPUTS_46=(
   "Text, Image"
   "Text, Image"
 )
 
-MODEL_VARIANTS_46=(
+MODEL_VARIANTS_47=(
   "olmo-3:latest"
   "olmo-3:7b"
   "olmo-3:32b"
 )
 
-MODEL_SIZES_46=(
+MODEL_SIZES_47=(
   "4.5GB"
   "4.5GB"
   "19GB"
 )
 
-MODEL_CONTEXTS_46=(
-  "64K"
-  "64K"
-  "64K"
-)
-
-MODEL_INPUTS_46=(
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_47=(
-  "deepseek-v3.1:latest"
-  "deepseek-v3.1:671b"
-)
-
-MODEL_SIZES_47=(
-  "404GB"
-  "404GB"
-)
-
 MODEL_CONTEXTS_47=(
-  "160K"
-  "160K"
+  "64K"
+  "64K"
+  "64K"
 )
 
 MODEL_INPUTS_47=(
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_48=(
-  "qwen3-next:latest"
-  "qwen3-next:80b"
+  "deepseek-v3.1:latest"
+  "deepseek-v3.1:671b"
 )
 
 MODEL_SIZES_48=(
-  "50GB"
-  "50GB"
+  "404GB"
+  "404GB"
 )
 
 MODEL_CONTEXTS_48=(
-  "256K"
-  "256K"
+  "160K"
+  "160K"
 )
 
 MODEL_INPUTS_48=(
@@ -1698,13 +1710,13 @@ MODEL_INPUTS_48=(
 )
 
 MODEL_VARIANTS_49=(
-  "devstral-2:latest"
-  "devstral-2:123b"
+  "qwen3-next:latest"
+  "qwen3-next:80b"
 )
 
 MODEL_SIZES_49=(
-  "75GB"
-  "75GB"
+  "50GB"
+  "50GB"
 )
 
 MODEL_CONTEXTS_49=(
@@ -1718,18 +1730,18 @@ MODEL_INPUTS_49=(
 )
 
 MODEL_VARIANTS_50=(
-  "olmo-3.1:latest"
-  "olmo-3.1:32b"
+  "devstral-2:latest"
+  "devstral-2:123b"
 )
 
 MODEL_SIZES_50=(
-  "19GB"
-  "19GB"
+  "75GB"
+  "75GB"
 )
 
 MODEL_CONTEXTS_50=(
-  "64K"
-  "64K"
+  "256K"
+  "256K"
 )
 
 MODEL_INPUTS_50=(
@@ -1738,18 +1750,18 @@ MODEL_INPUTS_50=(
 )
 
 MODEL_VARIANTS_51=(
-  "cogito-2.1:latest"
-  "cogito-2.1:671b"
+  "olmo-3.1:latest"
+  "olmo-3.1:32b"
 )
 
 MODEL_SIZES_51=(
-  "1.3TB"
-  "1.3TB"
+  "19GB"
+  "19GB"
 )
 
 MODEL_CONTEXTS_51=(
-  "160K"
-  "160K"
+  "64K"
+  "64K"
 )
 
 MODEL_INPUTS_51=(
@@ -1758,18 +1770,18 @@ MODEL_INPUTS_51=(
 )
 
 MODEL_VARIANTS_52=(
-  "functiongemma:latest"
-  "functiongemma:270m"
+  "cogito-2.1:latest"
+  "cogito-2.1:671b"
 )
 
 MODEL_SIZES_52=(
-  "301MB"
-  "301MB"
+  "1.3TB"
+  "1.3TB"
 )
 
 MODEL_CONTEXTS_52=(
-  "32K"
-  "32K"
+  "160K"
+  "160K"
 )
 
 MODEL_INPUTS_52=(
@@ -1778,46 +1790,66 @@ MODEL_INPUTS_52=(
 )
 
 MODEL_VARIANTS_53=(
-  "gpt-oss-safeguard:latest"
-  "gpt-oss-safeguard:20b"
-  "gpt-oss-safeguard:120b"
+  "functiongemma:latest"
+  "functiongemma:270m"
 )
 
 MODEL_SIZES_53=(
-  "14GB"
-  "14GB"
-  "65GB"
+  "301MB"
+  "301MB"
 )
 
 MODEL_CONTEXTS_53=(
-  "128K"
-  "128K"
-  "128K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_53=(
   "Text"
   "Text"
-  "Text"
 )
 
 MODEL_VARIANTS_54=(
-  "mistral-large-3:675b-cloud"
+  "gpt-oss-safeguard:latest"
+  "gpt-oss-safeguard:20b"
+  "gpt-oss-safeguard:120b"
 )
 
 MODEL_SIZES_54=(
-  "Medium Usage"
+  "14GB"
+  "14GB"
+  "65GB"
 )
 
 MODEL_CONTEXTS_54=(
-  "256K"
+  "128K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_54=(
-  "Text, Image"
+  "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_55=(
+  "mistral-large-3:675b-cloud"
+)
+
+MODEL_SIZES_55=(
+  "Medium Usage"
+)
+
+MODEL_CONTEXTS_55=(
+  "256K"
+)
+
+MODEL_INPUTS_55=(
+  "Text, Image"
+)
+
+MODEL_VARIANTS_56=(
   "deepseek-r1:latest"
   "deepseek-r1:1.5b"
   "deepseek-r1:7b"
@@ -1828,7 +1860,7 @@ MODEL_VARIANTS_55=(
   "deepseek-r1:671b"
 )
 
-MODEL_SIZES_55=(
+MODEL_SIZES_56=(
   "5.2GB"
   "1.1GB"
   "4.7GB"
@@ -1839,7 +1871,7 @@ MODEL_SIZES_55=(
   "404GB"
 )
 
-MODEL_CONTEXTS_55=(
+MODEL_CONTEXTS_56=(
   "128K"
   "128K"
   "128K"
@@ -1850,39 +1882,11 @@ MODEL_CONTEXTS_55=(
   "160K"
 )
 
-MODEL_INPUTS_55=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_56=(
-  "llama3.1:latest"
-  "llama3.1:8b"
-  "llama3.1:70b"
-  "llama3.1:405b"
-)
-
-MODEL_SIZES_56=(
-  "4.9GB"
-  "4.9GB"
-  "43GB"
-  "243GB"
-)
-
-MODEL_CONTEXTS_56=(
-  "128K"
-  "128K"
-  "128K"
-  "128K"
-)
-
 MODEL_INPUTS_56=(
+  "Text"
+  "Text"
+  "Text"
+  "Text"
   "Text"
   "Text"
   "Text"
@@ -1890,18 +1894,21 @@ MODEL_INPUTS_56=(
 )
 
 MODEL_VARIANTS_57=(
-  "llama3.2:latest"
-  "llama3.2:1b"
-  "llama3.2:3b"
+  "llama3.1:latest"
+  "llama3.1:8b"
+  "llama3.1:70b"
+  "llama3.1:405b"
 )
 
 MODEL_SIZES_57=(
-  "2.0GB"
-  "1.3GB"
-  "2.0GB"
+  "4.9GB"
+  "4.9GB"
+  "43GB"
+  "243GB"
 )
 
 MODEL_CONTEXTS_57=(
+  "128K"
   "128K"
   "128K"
   "128K"
@@ -1911,9 +1918,34 @@ MODEL_INPUTS_57=(
   "Text"
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_58=(
+  "llama3.2:latest"
+  "llama3.2:1b"
+  "llama3.2:3b"
+)
+
+MODEL_SIZES_58=(
+  "2.0GB"
+  "1.3GB"
+  "2.0GB"
+)
+
+MODEL_CONTEXTS_58=(
+  "128K"
+  "128K"
+  "128K"
+)
+
+MODEL_INPUTS_58=(
+  "Text"
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_59=(
   "qwen3:latest"
   "qwen3:0.6b"
   "qwen3:1.7b"
@@ -1925,7 +1957,7 @@ MODEL_VARIANTS_58=(
   "qwen3:235b"
 )
 
-MODEL_SIZES_58=(
+MODEL_SIZES_59=(
   "5.2GB"
   "523MB"
   "1.4GB"
@@ -1937,7 +1969,7 @@ MODEL_SIZES_58=(
   "142GB"
 )
 
-MODEL_CONTEXTS_58=(
+MODEL_CONTEXTS_59=(
   "40K"
   "40K"
   "40K"
@@ -1949,7 +1981,7 @@ MODEL_CONTEXTS_58=(
   "256K"
 )
 
-MODEL_INPUTS_58=(
+MODEL_INPUTS_59=(
   "Text"
   "Text"
   "Text"
@@ -1961,7 +1993,7 @@ MODEL_INPUTS_58=(
   "Text"
 )
 
-MODEL_VARIANTS_59=(
+MODEL_VARIANTS_60=(
   "gemma3:latest"
   "gemma3:270m"
   "gemma3:1b"
@@ -1970,7 +2002,7 @@ MODEL_VARIANTS_59=(
   "gemma3:27b"
 )
 
-MODEL_SIZES_59=(
+MODEL_SIZES_60=(
   "3.3GB"
   "292MB"
   "815MB"
@@ -1979,7 +2011,7 @@ MODEL_SIZES_59=(
   "17GB"
 )
 
-MODEL_CONTEXTS_59=(
+MODEL_CONTEXTS_60=(
   "128K"
   "32K"
   "32K"
@@ -1988,7 +2020,7 @@ MODEL_CONTEXTS_59=(
   "128K"
 )
 
-MODEL_INPUTS_59=(
+MODEL_INPUTS_60=(
   "Text, Image"
   "Text"
   "Text"
@@ -1997,31 +2029,31 @@ MODEL_INPUTS_59=(
   "Text, Image"
 )
 
-MODEL_VARIANTS_60=(
+MODEL_VARIANTS_61=(
   "nomic-embed-text:latest"
   "nomic-embed-text:v1.5"
   "nomic-embed-text:137m-v1.5-fp16"
 )
 
-MODEL_SIZES_60=(
+MODEL_SIZES_61=(
   "274MB"
   "274MB"
   "274MB"
 )
 
-MODEL_CONTEXTS_60=(
+MODEL_CONTEXTS_61=(
   "2K"
   "2K"
   "2K"
 )
 
-MODEL_INPUTS_60=(
+MODEL_INPUTS_61=(
   "Text"
   "Text"
   "Text"
 )
 
-MODEL_VARIANTS_61=(
+MODEL_VARIANTS_62=(
   "qwen2.5:latest"
   "qwen2.5:0.5b"
   "qwen2.5:1.5b"
@@ -2032,7 +2064,7 @@ MODEL_VARIANTS_61=(
   "qwen2.5:72b"
 )
 
-MODEL_SIZES_61=(
+MODEL_SIZES_62=(
   "4.7GB"
   "398MB"
   "986MB"
@@ -2043,50 +2075,15 @@ MODEL_SIZES_61=(
   "47GB"
 )
 
-MODEL_CONTEXTS_61=(
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-)
-
-MODEL_INPUTS_61=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_62=(
-  "gpt-oss:latest"
-  "gpt-oss:20b"
-  "gpt-oss:120b"
-  "gpt-oss:20b-cloud"
-  "gpt-oss:120b-cloud"
-)
-
-MODEL_SIZES_62=(
-  "14GB"
-  "14GB"
-  "65GB"
-  "Low Usage"
-  "Medium Usage"
-)
-
 MODEL_CONTEXTS_62=(
-  "128K"
-  "128K"
-  "128K"
-  "128K"
-  "128K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_62=(
@@ -2095,27 +2092,33 @@ MODEL_INPUTS_62=(
   "Text"
   "Text"
   "Text"
+  "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_63=(
-  "gemma2:latest"
-  "gemma2:2b"
-  "gemma2:9b"
-  "gemma2:27b"
+  "gpt-oss:latest"
+  "gpt-oss:20b"
+  "gpt-oss:120b"
+  "gpt-oss:20b-cloud"
+  "gpt-oss:120b-cloud"
 )
 
 MODEL_SIZES_63=(
-  "5.4GB"
-  "1.6GB"
-  "5.4GB"
-  "16GB"
+  "14GB"
+  "14GB"
+  "65GB"
+  "Low Usage"
+  "Medium Usage"
 )
 
 MODEL_CONTEXTS_63=(
-  "8K"
-  "8K"
-  "8K"
-  "8K"
+  "128K"
+  "128K"
+  "128K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_63=(
@@ -2123,33 +2126,62 @@ MODEL_INPUTS_63=(
   "Text"
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_64=(
-  "qwen3-coder:latest"
-  "qwen3-coder:30b"
-  "qwen3-coder:480b"
+  "gemma2:latest"
+  "gemma2:2b"
+  "gemma2:9b"
+  "gemma2:27b"
 )
 
 MODEL_SIZES_64=(
-  "19GB"
-  "19GB"
-  "290GB"
+  "5.4GB"
+  "1.6GB"
+  "5.4GB"
+  "16GB"
 )
 
 MODEL_CONTEXTS_64=(
-  "256K"
-  "256K"
-  "256K"
+  "8K"
+  "8K"
+  "8K"
+  "8K"
 )
 
 MODEL_INPUTS_64=(
   "Text"
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_65=(
+  "qwen3-coder:latest"
+  "qwen3-coder:30b"
+  "qwen3-coder:480b"
+)
+
+MODEL_SIZES_65=(
+  "19GB"
+  "19GB"
+  "290GB"
+)
+
+MODEL_CONTEXTS_65=(
+  "256K"
+  "256K"
+  "256K"
+)
+
+MODEL_INPUTS_65=(
+  "Text"
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_66=(
   "qwen2.5-coder:latest"
   "qwen2.5-coder:0.5b"
   "qwen2.5-coder:1.5b"
@@ -2159,7 +2191,7 @@ MODEL_VARIANTS_65=(
   "qwen2.5-coder:32b"
 )
 
-MODEL_SIZES_65=(
+MODEL_SIZES_66=(
   "4.7GB"
   "398MB"
   "986MB"
@@ -2169,127 +2201,107 @@ MODEL_SIZES_65=(
   "20GB"
 )
 
-MODEL_CONTEXTS_65=(
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-)
-
-MODEL_INPUTS_65=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_66=(
-  "llama3:latest"
-  "llama3:8b"
-  "llama3:70b"
-)
-
-MODEL_SIZES_66=(
-  "4.7GB"
-  "4.7GB"
-  "40GB"
-)
-
 MODEL_CONTEXTS_66=(
-  "8K"
-  "8K"
-  "8K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_66=(
   "Text"
   "Text"
   "Text"
+  "Text"
+  "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_67=(
-  "mistral:latest"
-  "mistral:7b"
+  "llama3:latest"
+  "llama3:8b"
+  "llama3:70b"
 )
 
 MODEL_SIZES_67=(
-  "4.4GB"
-  "4.4GB"
+  "4.7GB"
+  "4.7GB"
+  "40GB"
 )
 
 MODEL_CONTEXTS_67=(
-  "32K"
-  "32K"
+  "8K"
+  "8K"
+  "8K"
 )
 
 MODEL_INPUTS_67=(
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_68=(
-  "phi3:latest"
-  "phi3:3.8b"
-  "phi3:14b"
+  "mistral:latest"
+  "mistral:7b"
 )
 
 MODEL_SIZES_68=(
-  "2.2GB"
-  "2.2GB"
-  "7.9GB"
+  "4.4GB"
+  "4.4GB"
 )
 
 MODEL_CONTEXTS_68=(
-  "128K"
-  "128K"
-  "128K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_68=(
   "Text"
   "Text"
-  "Text"
 )
 
 MODEL_VARIANTS_69=(
-  "phi4:latest"
-  "phi4:14b"
+  "phi3:latest"
+  "phi3:3.8b"
+  "phi3:14b"
 )
 
 MODEL_SIZES_69=(
-  "9.1GB"
-  "9.1GB"
+  "2.2GB"
+  "2.2GB"
+  "7.9GB"
 )
 
 MODEL_CONTEXTS_69=(
-  "16K"
-  "16K"
+  "128K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_69=(
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_70=(
-  "mxbai-embed-large:latest"
-  "mxbai-embed-large:335m"
+  "phi4:latest"
+  "phi4:14b"
 )
 
 MODEL_SIZES_70=(
-  "670MB"
-  "670MB"
+  "9.1GB"
+  "9.1GB"
 )
 
 MODEL_CONTEXTS_70=(
-  "512"
-  "512"
+  "16K"
+  "16K"
 )
 
 MODEL_INPUTS_70=(
@@ -2298,55 +2310,44 @@ MODEL_INPUTS_70=(
 )
 
 MODEL_VARIANTS_71=(
+  "mxbai-embed-large:latest"
+  "mxbai-embed-large:335m"
+)
+
+MODEL_SIZES_71=(
+  "670MB"
+  "670MB"
+)
+
+MODEL_CONTEXTS_71=(
+  "512"
+  "512"
+)
+
+MODEL_INPUTS_71=(
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_72=(
   "llava:latest"
   "llava:7b"
   "llava:13b"
   "llava:34b"
 )
 
-MODEL_SIZES_71=(
+MODEL_SIZES_72=(
   "4.7GB"
   "4.7GB"
   "8.0GB"
   "20GB"
 )
 
-MODEL_CONTEXTS_71=(
-  "32K"
-  "32K"
-  "4K"
-  "4K"
-)
-
-MODEL_INPUTS_71=(
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-  "Text, Image"
-)
-
-MODEL_VARIANTS_72=(
-  "qwen2.5vl:latest"
-  "qwen2.5vl:3b"
-  "qwen2.5vl:7b"
-  "qwen2.5vl:32b"
-  "qwen2.5vl:72b"
-)
-
-MODEL_SIZES_72=(
-  "6.0GB"
-  "3.2GB"
-  "6.0GB"
-  "21GB"
-  "49GB"
-)
-
 MODEL_CONTEXTS_72=(
-  "125K"
-  "125K"
-  "125K"
-  "125K"
-  "125K"
+  "32K"
+  "32K"
+  "4K"
+  "4K"
 )
 
 MODEL_INPUTS_72=(
@@ -2354,49 +2355,60 @@ MODEL_INPUTS_72=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
-  "Text, Image"
 )
 
 MODEL_VARIANTS_73=(
-  "llama3.2-vision:latest"
-  "llama3.2-vision:11b"
-  "llama3.2-vision:90b"
+  "qwen2.5vl:latest"
+  "qwen2.5vl:3b"
+  "qwen2.5vl:7b"
+  "qwen2.5vl:32b"
+  "qwen2.5vl:72b"
 )
 
 MODEL_SIZES_73=(
-  "7.8GB"
-  "7.8GB"
-  "55GB"
+  "6.0GB"
+  "3.2GB"
+  "6.0GB"
+  "21GB"
+  "49GB"
 )
 
 MODEL_CONTEXTS_73=(
-  "128K"
-  "128K"
-  "128K"
+  "125K"
+  "125K"
+  "125K"
+  "125K"
+  "125K"
 )
 
 MODEL_INPUTS_73=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
+  "Text, Image"
+  "Text, Image"
 )
 
 MODEL_VARIANTS_74=(
-  "minicpm-v:latest"
-  "minicpm-v:8b"
+  "llama3.2-vision:latest"
+  "llama3.2-vision:11b"
+  "llama3.2-vision:90b"
 )
 
 MODEL_SIZES_74=(
-  "5.5GB"
-  "5.5GB"
+  "7.8GB"
+  "7.8GB"
+  "55GB"
 )
 
 MODEL_CONTEXTS_74=(
-  "32K"
-  "32K"
+  "128K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_74=(
+  "Text, Image"
   "Text, Image"
   "Text, Image"
 )
@@ -2422,33 +2434,33 @@ MODEL_INPUTS_75=(
 )
 
 MODEL_VARIANTS_76=(
+  "minicpm-v:latest"
+  "minicpm-v:8b"
+)
+
+MODEL_SIZES_76=(
+  "5.5GB"
+  "5.5GB"
+)
+
+MODEL_CONTEXTS_76=(
+  "32K"
+  "32K"
+)
+
+MODEL_INPUTS_76=(
+  "Text, Image"
+  "Text, Image"
+)
+
+MODEL_VARIANTS_77=(
   "dolphin3:latest"
   "dolphin3:8b"
 )
 
-MODEL_SIZES_76=(
-  "4.9GB"
-  "4.9GB"
-)
-
-MODEL_CONTEXTS_76=(
-  "128K"
-  "128K"
-)
-
-MODEL_INPUTS_76=(
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_77=(
-  "mistral-small3.2:latest"
-  "mistral-small3.2:24b"
-)
-
 MODEL_SIZES_77=(
-  "15GB"
-  "15GB"
+  "4.9GB"
+  "4.9GB"
 )
 
 MODEL_CONTEXTS_77=(
@@ -2457,43 +2469,43 @@ MODEL_CONTEXTS_77=(
 )
 
 MODEL_INPUTS_77=(
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_78=(
+  "mistral-small3.2:latest"
+  "mistral-small3.2:24b"
+)
+
+MODEL_SIZES_78=(
+  "15GB"
+  "15GB"
+)
+
+MODEL_CONTEXTS_78=(
+  "128K"
+  "128K"
+)
+
+MODEL_INPUTS_78=(
   "Text, Image"
   "Text, Image"
 )
 
-MODEL_VARIANTS_78=(
+MODEL_VARIANTS_79=(
   "deepseek-v3:latest"
   "deepseek-v3:671b"
 )
 
-MODEL_SIZES_78=(
-  "404GB"
-  "404GB"
-)
-
-MODEL_CONTEXTS_78=(
-  "160K"
-  "160K"
-)
-
-MODEL_INPUTS_78=(
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_79=(
-  "mistral-nemo:latest"
-  "mistral-nemo:12b"
-)
-
 MODEL_SIZES_79=(
-  "7.1GB"
-  "7.1GB"
+  "404GB"
+  "404GB"
 )
 
 MODEL_CONTEXTS_79=(
-  "1000K"
-  "1000K"
+  "160K"
+  "160K"
 )
 
 MODEL_INPUTS_79=(
@@ -2502,18 +2514,18 @@ MODEL_INPUTS_79=(
 )
 
 MODEL_VARIANTS_80=(
-  "llama3.3:latest"
-  "llama3.3:70b"
+  "mistral-nemo:latest"
+  "mistral-nemo:12b"
 )
 
 MODEL_SIZES_80=(
-  "43GB"
-  "43GB"
+  "7.1GB"
+  "7.1GB"
 )
 
 MODEL_CONTEXTS_80=(
-  "128K"
-  "128K"
+  "1000K"
+  "1000K"
 )
 
 MODEL_INPUTS_80=(
@@ -2522,30 +2534,6 @@ MODEL_INPUTS_80=(
 )
 
 MODEL_VARIANTS_81=(
-  "olmo2:latest"
-  "olmo2:7b"
-  "olmo2:13b"
-)
-
-MODEL_SIZES_81=(
-  "4.5GB"
-  "4.5GB"
-  "8.4GB"
-)
-
-MODEL_CONTEXTS_81=(
-  "4K"
-  "4K"
-  "4K"
-)
-
-MODEL_INPUTS_81=(
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_82=(
   "qwen2:latest"
   "qwen2:0.5b"
   "qwen2:1.5b"
@@ -2553,7 +2541,7 @@ MODEL_VARIANTS_82=(
   "qwen2:72b"
 )
 
-MODEL_SIZES_82=(
+MODEL_SIZES_81=(
   "4.4GB"
   "352MB"
   "935MB"
@@ -2561,38 +2549,58 @@ MODEL_SIZES_82=(
   "41GB"
 )
 
+MODEL_CONTEXTS_81=(
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+)
+
+MODEL_INPUTS_81=(
+  "Text"
+  "Text"
+  "Text"
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_82=(
+  "llama3.3:latest"
+  "llama3.3:70b"
+)
+
+MODEL_SIZES_82=(
+  "43GB"
+  "43GB"
+)
+
 MODEL_CONTEXTS_82=(
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_82=(
   "Text"
   "Text"
-  "Text"
-  "Text"
-  "Text"
 )
 
 MODEL_VARIANTS_83=(
-  "gemma:latest"
-  "gemma:2b"
-  "gemma:7b"
+  "olmo2:latest"
+  "olmo2:7b"
+  "olmo2:13b"
 )
 
 MODEL_SIZES_83=(
-  "5.0GB"
-  "1.7GB"
-  "5.0GB"
+  "4.5GB"
+  "4.5GB"
+  "8.4GB"
 )
 
 MODEL_CONTEXTS_83=(
-  "8K"
-  "8K"
-  "8K"
+  "4K"
+  "4K"
+  "4K"
 )
 
 MODEL_INPUTS_83=(
@@ -2602,6 +2610,30 @@ MODEL_INPUTS_83=(
 )
 
 MODEL_VARIANTS_84=(
+  "gemma:latest"
+  "gemma:2b"
+  "gemma:7b"
+)
+
+MODEL_SIZES_84=(
+  "5.0GB"
+  "1.7GB"
+  "5.0GB"
+)
+
+MODEL_CONTEXTS_84=(
+  "8K"
+  "8K"
+  "8K"
+)
+
+MODEL_INPUTS_84=(
+  "Text"
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_85=(
   "qwen:latest"
   "qwen:0.5b"
   "qwen:1.8b"
@@ -2613,7 +2645,7 @@ MODEL_VARIANTS_84=(
   "qwen:110b"
 )
 
-MODEL_SIZES_84=(
+MODEL_SIZES_85=(
   "2.3GB"
   "395MB"
   "1.1GB"
@@ -2625,49 +2657,16 @@ MODEL_SIZES_84=(
   "63GB"
 )
 
-MODEL_CONTEXTS_84=(
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-  "32K"
-)
-
-MODEL_INPUTS_84=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_85=(
-  "smollm2:latest"
-  "smollm2:135m"
-  "smollm2:360m"
-  "smollm2:1.7b"
-)
-
-MODEL_SIZES_85=(
-  "1.8GB"
-  "271MB"
-  "726MB"
-  "1.8GB"
-)
-
 MODEL_CONTEXTS_85=(
-  "8K"
-  "8K"
-  "8K"
-  "8K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_85=(
@@ -2675,48 +2674,57 @@ MODEL_INPUTS_85=(
   "Text"
   "Text"
   "Text"
+  "Text"
+  "Text"
+  "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_86=(
-  "gemma3n:latest"
-  "gemma3n:e2b"
-  "gemma3n:e4b"
+  "smollm2:latest"
+  "smollm2:135m"
+  "smollm2:360m"
+  "smollm2:1.7b"
 )
 
 MODEL_SIZES_86=(
-  "7.5GB"
-  "5.6GB"
-  "7.5GB"
+  "1.8GB"
+  "271MB"
+  "726MB"
+  "1.8GB"
 )
 
 MODEL_CONTEXTS_86=(
-  "32K"
-  "32K"
-  "32K"
+  "8K"
+  "8K"
+  "8K"
+  "8K"
 )
 
 MODEL_INPUTS_86=(
   "Text"
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_87=(
-  "granite3.1-moe:latest"
-  "granite3.1-moe:1b"
-  "granite3.1-moe:3b"
+  "gemma3n:latest"
+  "gemma3n:e2b"
+  "gemma3n:e4b"
 )
 
 MODEL_SIZES_87=(
-  "2.0GB"
-  "1.4GB"
-  "2.0GB"
+  "7.5GB"
+  "5.6GB"
+  "7.5GB"
 )
 
 MODEL_CONTEXTS_87=(
-  "128K"
-  "128K"
-  "128K"
+  "32K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_87=(
@@ -2754,27 +2762,18 @@ MODEL_INPUTS_88=(
 )
 
 MODEL_VARIANTS_89=(
-  "cogito:latest"
-  "cogito:3b"
-  "cogito:8b"
-  "cogito:14b"
-  "cogito:32b"
-  "cogito:70b"
+  "granite3.1-moe:latest"
+  "granite3.1-moe:1b"
+  "granite3.1-moe:3b"
 )
 
 MODEL_SIZES_89=(
-  "4.9GB"
-  "2.2GB"
-  "4.9GB"
-  "9.0GB"
-  "20GB"
-  "43GB"
+  "2.0GB"
+  "1.4GB"
+  "2.0GB"
 )
 
 MODEL_CONTEXTS_89=(
-  "128K"
-  "128K"
-  "128K"
   "128K"
   "128K"
   "128K"
@@ -2784,32 +2783,65 @@ MODEL_INPUTS_89=(
   "Text"
   "Text"
   "Text"
-  "Text"
-  "Text"
-  "Text"
 )
 
 MODEL_VARIANTS_90=(
-  "tinyllama:latest"
-  "tinyllama:1.1b"
+  "cogito:latest"
+  "cogito:3b"
+  "cogito:8b"
+  "cogito:14b"
+  "cogito:32b"
+  "cogito:70b"
 )
 
 MODEL_SIZES_90=(
-  "638MB"
-  "638MB"
+  "4.9GB"
+  "2.2GB"
+  "4.9GB"
+  "9.0GB"
+  "20GB"
+  "43GB"
 )
 
 MODEL_CONTEXTS_90=(
-  "2K"
-  "2K"
+  "128K"
+  "128K"
+  "128K"
+  "128K"
+  "128K"
+  "128K"
 )
 
 MODEL_INPUTS_90=(
   "Text"
   "Text"
+  "Text"
+  "Text"
+  "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_91=(
+  "tinyllama:latest"
+  "tinyllama:1.1b"
+)
+
+MODEL_SIZES_91=(
+  "638MB"
+  "638MB"
+)
+
+MODEL_CONTEXTS_91=(
+  "2K"
+  "2K"
+)
+
+MODEL_INPUTS_91=(
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_92=(
   "falcon3:latest"
   "falcon3:1b"
   "falcon3:3b"
@@ -2817,7 +2849,7 @@ MODEL_VARIANTS_91=(
   "falcon3:10b"
 )
 
-MODEL_SIZES_91=(
+MODEL_SIZES_92=(
   "4.6GB"
   "1.8GB"
   "2.0GB"
@@ -2825,7 +2857,7 @@ MODEL_SIZES_91=(
   "6.3GB"
 )
 
-MODEL_CONTEXTS_91=(
+MODEL_CONTEXTS_92=(
   "32K"
   "8K"
   "32K"
@@ -2833,39 +2865,39 @@ MODEL_CONTEXTS_91=(
   "32K"
 )
 
-MODEL_INPUTS_91=(
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_92=(
-  "mistral-small:latest"
-  "mistral-small:22b"
-  "mistral-small:24b"
-)
-
-MODEL_SIZES_92=(
-  "14GB"
-  "13GB"
-  "14GB"
-)
-
-MODEL_CONTEXTS_92=(
-  "32K"
-  "128K"
-  "32K"
-)
-
 MODEL_INPUTS_92=(
+  "Text"
+  "Text"
   "Text"
   "Text"
   "Text"
 )
 
 MODEL_VARIANTS_93=(
+  "mistral-small:latest"
+  "mistral-small:22b"
+  "mistral-small:24b"
+)
+
+MODEL_SIZES_93=(
+  "14GB"
+  "13GB"
+  "14GB"
+)
+
+MODEL_CONTEXTS_93=(
+  "32K"
+  "128K"
+  "32K"
+)
+
+MODEL_INPUTS_93=(
+  "Text"
+  "Text"
+  "Text"
+)
+
+MODEL_VARIANTS_94=(
   "codellama:latest"
   "codellama:7b"
   "codellama:13b"
@@ -2873,7 +2905,7 @@ MODEL_VARIANTS_93=(
   "codellama:70b"
 )
 
-MODEL_SIZES_93=(
+MODEL_SIZES_94=(
   "3.8GB"
   "3.8GB"
   "7.4GB"
@@ -2881,7 +2913,7 @@ MODEL_SIZES_93=(
   "39GB"
 )
 
-MODEL_CONTEXTS_93=(
+MODEL_CONTEXTS_94=(
   "16K"
   "16K"
   "16K"
@@ -2889,7 +2921,7 @@ MODEL_CONTEXTS_93=(
   "2K"
 )
 
-MODEL_INPUTS_93=(
+MODEL_INPUTS_94=(
   "Text"
   "Text"
   "Text"
@@ -2897,63 +2929,43 @@ MODEL_INPUTS_93=(
   "Text"
 )
 
-MODEL_VARIANTS_94=(
+MODEL_VARIANTS_95=(
   "llama4:latest"
   "llama4:16x17b"
   "llama4:128x17b"
 )
 
-MODEL_SIZES_94=(
+MODEL_SIZES_95=(
   "67GB"
   "67GB"
   "245GB"
 )
 
-MODEL_CONTEXTS_94=(
+MODEL_CONTEXTS_95=(
   "10M"
   "10M"
   "1M"
 )
 
-MODEL_INPUTS_94=(
+MODEL_INPUTS_95=(
   "Text, Image"
   "Text, Image"
   "Text, Image"
 )
 
-MODEL_VARIANTS_95=(
+MODEL_VARIANTS_96=(
   "phi4-reasoning:latest"
   "phi4-reasoning:14b"
 )
 
-MODEL_SIZES_95=(
-  "11GB"
-  "11GB"
-)
-
-MODEL_CONTEXTS_95=(
-  "32K"
-  "32K"
-)
-
-MODEL_INPUTS_95=(
-  "Text"
-  "Text"
-)
-
-MODEL_VARIANTS_96=(
-  "magistral:latest"
-  "magistral:24b"
-)
-
 MODEL_SIZES_96=(
-  "14GB"
-  "14GB"
+  "11GB"
+  "11GB"
 )
 
 MODEL_CONTEXTS_96=(
-  "39K"
-  "39K"
+  "32K"
+  "32K"
 )
 
 MODEL_INPUTS_96=(
@@ -2962,78 +2974,71 @@ MODEL_INPUTS_96=(
 )
 
 MODEL_VARIANTS_97=(
-  "qwen3-coder-next:latest"
-  "qwen3-coder-next:q4_K_M"
-  "qwen3-coder-next:q8_0"
+  "magistral:latest"
+  "magistral:24b"
 )
 
 MODEL_SIZES_97=(
-  "52GB"
-  "52GB"
-  "85GB"
+  "14GB"
+  "14GB"
 )
 
 MODEL_CONTEXTS_97=(
-  "256K"
-  "256K"
-  "256K"
+  "39K"
+  "39K"
 )
 
 MODEL_INPUTS_97=(
   "Text"
   "Text"
-  "Text"
 )
 
 MODEL_VARIANTS_98=(
-  "qwq:latest"
-  "qwq:32b"
+  "qwen3-coder-next:latest"
+  "qwen3-coder-next:q4_K_M"
+  "qwen3-coder-next:q8_0"
 )
 
 MODEL_SIZES_98=(
-  "20GB"
-  "20GB"
+  "52GB"
+  "52GB"
+  "85GB"
 )
 
 MODEL_CONTEXTS_98=(
-  "40K"
-  "40K"
+  "256K"
+  "256K"
+  "256K"
 )
 
 MODEL_INPUTS_98=(
   "Text"
   "Text"
+  "Text"
 )
 
 MODEL_VARIANTS_99=(
-  "deepseek-coder:latest"
-  "deepseek-coder:1.3b"
-  "deepseek-coder:6.7b"
-  "deepseek-coder:33b"
+  "qwq:latest"
+  "qwq:32b"
 )
 
 MODEL_SIZES_99=(
-  "776MB"
-  "776MB"
-  "3.8GB"
-  "19GB"
+  "20GB"
+  "20GB"
 )
 
 MODEL_CONTEXTS_99=(
-  "16K"
-  "16K"
-  "16K"
-  "16K"
+  "40K"
+  "40K"
 )
 
 MODEL_INPUTS_99=(
   "Text"
   "Text"
-  "Text"
-  "Text"
 )
 
 # MODEL DATA END
+
 
 
 
