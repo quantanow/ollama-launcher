@@ -1,7 +1,7 @@
 {
   "metadata": {
     "total_models": 0,
-    "collection_date": "2026-10-19",
+    "collection_date": "2026-10-26",
     "source": "https://ollama.com/search and https://ollama.com/library/<model>",
     "collection_method": "HTML scraping — search pages 1-0 + per-model variant pages"
   },
